@@ -1,0 +1,9 @@
+<nav class="navbar">
+    <div class="card flex justify-center">
+    <p-menu #menu [model]="items" [popup]="true" />
+    <p-button (click)="menu.toggle($event)" icon="pi pi-bars"/>
+    </div>
+  <h1>DPC Director </h1>
+</nav>
+
+<router-outlet></router-outlet>

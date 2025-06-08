@@ -1,0 +1,33 @@
+.navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #990202;
+  padding: 0.5rem;
+  padding-left:  0.5rem;
+  color: white;
+  box-sizing: border-box;
+}
+
+.navbar h1 {
+  margin-left: 1rem;
+  font-size: 30px;
+  flex-grow: 1;
+}
+
+.text-link-button {
+  margin-left: 25px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.text-link-button:hover {
+  text-decoration: underline;
+  transform: scale(1.2);
+}
+

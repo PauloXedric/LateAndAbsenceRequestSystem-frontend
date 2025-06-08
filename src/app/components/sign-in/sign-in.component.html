@@ -1,0 +1,49 @@
+<div class="main-container">
+
+  <div class="content">
+    <h3>DPC Late and Absence</h3>
+    <h3>Request System</h3>
+    <p>Sign in to your account</p>
+
+  <form [formGroup]="userLoginForm" (ngSubmit)="submitUserLogin()" class="form-container">
+      
+          <div class="field">
+            <label for="username" class="block" >Username:</label>
+            <input 
+              type="text" 
+              pInputText 
+              formControlName="username" 
+            />
+            <small 
+              class="p-error block" 
+              *ngIf="userLoginForm.get('username')?.invalid && userLoginForm.get('username')?.touched">
+               Username is required.
+            </small>
+          </div>
+
+
+          <div class="field">
+            <label for="password" class="block" >Password:</label>
+            <input 
+              type="text" 
+              pInputText 
+              formControlName="password" 
+            />
+            <small
+              class="p-error block"
+              *ngIf="userLoginForm.get('password')?.invalid && userLoginForm.get('password')?.touched">
+              Password is required.
+            </small> 
+          </div>
+        
+        <p-button label="Sign In" type="submit" [disabled]="userLoginForm.invalid"/>  
+
+    </form>
+
+</div>
+
+
+  <div class="image-section">
+    <img src="assets/images/dpcimage1.png" alt="Background Image" />
+  </div>
+
