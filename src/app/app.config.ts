@@ -7,6 +7,7 @@ import { routes } from './app.routes';
 import { MyPreset } from '../assets/presets/aura-preset';
 import { authInterceptor } from './_interceptors/auth.interceptor';
 import { API_CONFIG } from './_config/api.config';
+import { environment } from '../enviroments/environment';
 
 
 
@@ -30,7 +31,7 @@ export const appConfig: ApplicationConfig = {
     {
       provide: API_CONFIG,
       useValue: {
-        baseUrl: 'http://localhost:51564/api'
+        baseUrl: environment.baseUrl
       }
     }
   ]
