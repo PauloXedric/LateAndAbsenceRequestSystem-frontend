@@ -3,6 +3,8 @@ import { RequestCreateModel } from '../_models/request-create.model';
 import { ApiService } from './api.service';
 import { RequestReadModel } from '../_models/request-read.model';
 import { PaginatedResult } from '../_models/paginated-result.model';
+import { ReadRequestParams } from '../_params/read-request-params';
+
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +20,7 @@ export class StudentRequestService {
         return this.api.post('Request/AddRequest', data);
     }
 
-    readRequest(params: { statusId: number; pageNumber: number; pageSize: number }) {
+    readRequest(params: ReadRequestParams) {
     return this.api.get<PaginatedResult<RequestReadModel>>('Request/DisplayRequest', params);
   }
 }
