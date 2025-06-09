@@ -1,0 +1,21 @@
+
+<p-dialog
+  header="View Student Request"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '30rem' }"
+  (onHide)="closeDialog()"
+>
+  <div *ngIf="request">
+    <p><strong>Student Number:</strong> {{ request.studentNumber }}</p>
+    <p><strong>Student Name:</strong> {{ request.studentName }}</p>
+    <p><strong>Course/Year/Section:</strong> {{ request.courseYearSection }}</p>
+    <p><strong>Date of Absence:</strong> {{ request.dateOfAbsence | date: 'MM/dd/yyyy' }}</p>
+    <p><strong>Date of Attendance:</strong> {{ request.dateOfAttendance | date: 'MM/dd/yyyy' }}</p>
+    <p><strong>Reason:</strong> {{ request.reason }}</p>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Close" (click)="closeDialog()" />
+  </ng-template>
+</p-dialog>

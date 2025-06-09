@@ -4,6 +4,8 @@ import { ApiService } from './api.service';
 import { RequestReadModel } from '../_models/request-read.model';
 import { PaginatedResult } from '../_models/paginated-result.model';
 import { ReadRequestParams } from '../_params/read-request-params';
+import { RequestUpdateModel } from '../_models/request-update-model';
+
 
 
 @Injectable({
@@ -22,6 +24,10 @@ export class StudentRequestService {
 
     readRequest(params: ReadRequestParams) {
     return this.api.get<PaginatedResult<RequestReadModel>>('Request/DisplayRequest', params);
+  }
+
+   updateRequestStatus(request: RequestUpdateModel) {
+    return this.api.put(`Request/UpdateStatus`, request);
   }
 }
 

@@ -10,12 +10,15 @@ import { InputIcon } from 'primeng/inputicon';
 import { IconField } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+
+import { forkJoin, of, Subject, Subscription } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { ViewRequestDialogComponent } from '../../../_dialogs/view-request-dialog/view-request-dialog.component';
+import { RequestUpdateModel } from '../../../../_models/request-update-model';
 
 @Component({
   selector: 'app-secretary-initial-request',
-  imports: [TableModule, CommonModule, PaginatorModule, ButtonModule, Toolbar, InputIcon, IconField, InputTextModule],
+  imports: [TableModule, CommonModule, PaginatorModule, ButtonModule, Toolbar, InputIcon, IconField, InputTextModule, ViewRequestDialogComponent],
   standalone: true,
   templateUrl: './secretary-initial-request.component.html',
   styleUrl: './secretary-initial-request.component.css'
@@ -25,20 +28,25 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 export class SecretaryInitialRequestComponent implements OnInit, OnDestroy {
 
+  isViewDialogVisible = false;
+
   requestReadData: RequestReadModel[] = [];
-  selectedRequestReadData!: RequestReadModel;
+  selectedRequestReadData: RequestReadModel[] = [];
+  selectedRequestToView: RequestReadModel | null = null;
+  
   statusId = 1;
   page = 0;
   pageSize = 3;
   totalRecords = 0;
   filterStudentNumber: string = '';
 
-
-
   private filterSubject = new Subject<string>();
   private filterSubscription!: Subscription;
+  isLoading = false;
+
 
   constructor(private studentRequestService: StudentRequestService) {}
+
 
   ngOnInit(): void {
     this.filterSubscription = this.filterSubject.pipe(
@@ -84,5 +92,58 @@ export class SecretaryInitialRequestComponent implements OnInit, OnDestroy {
     this.filterSubject.next(value);
 }
 
+ //Button enabling
+ get selectionCount(): number {
+    return this.selectedRequestReadData?.length || 0;
+  }
+
+  get isViewDisabled(): boolean {
+    return this.selectionCount !== 1;
+  }
+
+  get isActionDisabled(): boolean {
+    return this.selectionCount < 1;
+  }
+
+//Data Viewing for each rows
+ onViewRequest(): void {
+  if (this.selectedRequestReadData.length === 1) {
+    this.selectedRequestToView = this.selectedRequestReadData[0];
+    this.isViewDialogVisible = true;
+  }
+ }
+
+ //Request Status Updation
+ onUpdateStatus(newStatusId: number): void {
+    if (this.selectedRequestReadData.length === 0) return;
+
+    const updates: RequestUpdateModel[] = this.selectedRequestReadData.map(req => ({
+      requestId: req.requestId,  
+      statusId: newStatusId
+    }));
+
+    this.isLoading = true;
+
+    const updateCalls = updates.map(update =>
+      this.studentRequestService.updateRequestStatus(update).pipe(
+        catchError(error => {
+          console.error(`Failed to update request ${update.requestId}`, error);
+          return of(null); 
+        })
+      )
+    );
+
+    forkJoin(updateCalls).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.selectedRequestReadData = [];
+        this.loadRequest(); 
+      },
+      error: () => {
+        this.isLoading = false;
+        console.error('Some requests failed to update.');
+      }
+    });
+  }
 
 }

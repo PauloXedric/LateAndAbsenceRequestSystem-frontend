@@ -1,5 +1,6 @@
 
 export interface RequestReadModel {
+    requestId: number;
     studentNumber: string;
     studentName: string;
     courseYearSection: string;

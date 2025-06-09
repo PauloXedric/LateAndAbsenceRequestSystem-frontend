@@ -6,7 +6,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { MyPreset } from '../assets/presets/aura-preset';
 import { authInterceptor } from './_interceptors/auth.interceptor';
-import { API_CONFIG } from './config/api.config';
+import { API_CONFIG } from './_config/api.config';
 
 
 
