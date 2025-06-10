@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { RequestReadModel } from '../../../../_models/request-read.model';
 import { StudentRequestService } from '../../../../_services/student-request.service';
@@ -10,90 +10,100 @@ import { InputIcon } from 'primeng/inputicon';
 import { IconField } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
 
-
-import { forkJoin, of, Subject, Subscription } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, forkJoin, of, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, switchMap, take, tap } from 'rxjs/operators';
 import { ViewRequestDialogComponent } from '../../../_dialogs/view-request-dialog/view-request-dialog.component';
 import { RequestUpdateModel } from '../../../../_models/request-update-model';
+import { ConfirmationDialogComponent } from '../../../_dialogs/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogService } from '../../../../_services/confirmation-dialog-service';
 
 @Component({
   selector: 'app-secretary-initial-request',
-  imports: [TableModule, CommonModule, PaginatorModule, ButtonModule, Toolbar, InputIcon, IconField, InputTextModule, ViewRequestDialogComponent],
   standalone: true,
+  imports: [
+    TableModule, CommonModule, PaginatorModule, ButtonModule,
+    Toolbar, InputIcon, IconField, InputTextModule,
+    ViewRequestDialogComponent, ConfirmationDialogComponent
+  ],
   templateUrl: './secretary-initial-request.component.html',
   styleUrl: './secretary-initial-request.component.css'
 })
 
 
-
-export class SecretaryInitialRequestComponent implements OnInit, OnDestroy {
+export class SecretaryInitialRequestComponent implements OnInit {
+  @ViewChild('confirmationDialog') confirmationDialog!: ConfirmationDialogComponent;
 
   isViewDialogVisible = false;
-
-  requestReadData: RequestReadModel[] = [];
   selectedRequestReadData: RequestReadModel[] = [];
   selectedRequestToView: RequestReadModel | null = null;
+
+  
+  private filterSubject = new BehaviorSubject<string>('');
+  private pageSubject = new BehaviorSubject<number>(0);
+  private pageSizeSubject = new BehaviorSubject<number>(3);
+
+   get pageSize(): number {
+    return this.pageSizeSubject.value;
+  }
   
   statusId = 1;
-  page = 0;
-  pageSize = 3;
   totalRecords = 0;
-  filterStudentNumber: string = '';
-
-  private filterSubject = new Subject<string>();
-  private filterSubscription!: Subscription;
   isLoading = false;
 
+  constructor(
+    private studentRequestService: StudentRequestService,
+    private confirmationDialogService: ConfirmationDialogService,
+  ) {}  
 
-  constructor(private studentRequestService: StudentRequestService) {}
+
+  
+  filteredRequests$ = combineLatest([
+    this.filterSubject.pipe(debounceTime(500), distinctUntilChanged()),
+    this.pageSubject,
+    this.pageSizeSubject
+  ]).pipe(
+    tap(() => this.isLoading = true),
+    switchMap(([filter, page, pageSize]) =>
+      this.studentRequestService.readRequest({
+        statusId: this.statusId,
+        pageNumber: page + 1,
+        pageSize: pageSize,
+        filter: filter.trim()
+      }).pipe(
+        catchError(err => {
+          console.error('Failed to load requests', err);
+          return of({ items: [], totalCount: 0 });
+        })
+      )
+    ),
+    tap(() => this.isLoading = false)
+  );
+
 
 
   ngOnInit(): void {
-    this.filterSubscription = this.filterSubject.pipe(
-      debounceTime(500),         
-      distinctUntilChanged()    
-    ).subscribe(value => {
-      this.filterStudentNumber = value.trim();
-      this.page = 0;           
-      this.loadRequest();
-    });
+    this.filterSubject.next('');
 
-    this.loadRequest();
-  }
-
-  ngOnDestroy(): void {
-    this.filterSubscription.unsubscribe();
-  }
-
-  loadRequest(): void {
-    this.studentRequestService.readRequest({
-      statusId: this.statusId,
-      pageNumber: this.page + 1,
-      pageSize: this.pageSize,
-      filter: this.filterStudentNumber
-    }).subscribe({
-      next: (res) => {
-        this.requestReadData = res.items;
-        this.totalRecords = res.totalCount;
-      },
-      error: (err) => console.error('Failed to load requests', err)
-    });
-  }
-
-  onPageChange(event: any): void {
-    this.page = event.first / event.rows;
-    this.pageSize = event.rows;
-    this.loadRequest();
+    this.filteredRequests$.subscribe(response => {
+    this.totalRecords = response.totalCount;
+  });
   }
 
   onFilterChange(event: Event): void {
-    const input = event.target as HTMLInputElement | null;
+    const input = event.target as HTMLInputElement;
     const value = input?.value ?? '';
     this.filterSubject.next(value);
-}
+    this.pageSubject.next(0); 
+  }
 
- //Button enabling
- get selectionCount(): number {
+  onPageChange(event: { first: number; rows: number }): void {
+    this.pageSubject.next(event.first / event.rows);
+    this.pageSizeSubject.next(event.rows);
+  }
+
+
+  //Button Enabling
+  get selectionCount(): number {
     return this.selectedRequestReadData?.length || 0;
   }
 
@@ -105,20 +115,22 @@ export class SecretaryInitialRequestComponent implements OnInit, OnDestroy {
     return this.selectionCount < 1;
   }
 
-//Data Viewing for each rows
- onViewRequest(): void {
-  if (this.selectedRequestReadData.length === 1) {
-    this.selectedRequestToView = this.selectedRequestReadData[0];
-    this.isViewDialogVisible = true;
-  }
- }
 
- //Request Status Updation
- onUpdateStatus(newStatusId: number): void {
+  //View Request Data
+  onViewRequest(): void {
+    if (this.selectionCount === 1) {
+      this.selectedRequestToView = this.selectedRequestReadData[0];
+      this.isViewDialogVisible = true;
+    }
+  }
+
+
+  // Request Status Updation
+  executeStatusChange(newStatusId: number, actionLabel: string): void {
     if (this.selectedRequestReadData.length === 0) return;
 
     const updates: RequestUpdateModel[] = this.selectedRequestReadData.map(req => ({
-      requestId: req.requestId,  
+      requestId: req.requestId,
       statusId: newStatusId
     }));
 
@@ -128,7 +140,7 @@ export class SecretaryInitialRequestComponent implements OnInit, OnDestroy {
       this.studentRequestService.updateRequestStatus(update).pipe(
         catchError(error => {
           console.error(`Failed to update request ${update.requestId}`, error);
-          return of(null); 
+          return of(null);
         })
       )
     );
@@ -137,7 +149,7 @@ export class SecretaryInitialRequestComponent implements OnInit, OnDestroy {
       next: () => {
         this.isLoading = false;
         this.selectedRequestReadData = [];
-        this.loadRequest(); 
+        this.filterSubject.next(this.filterSubject.value); 
       },
       error: () => {
         this.isLoading = false;
@@ -145,5 +157,25 @@ export class SecretaryInitialRequestComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  // Confirmation Dialog Logic
+  confirmStatusChange(statusId: number, label: 'Approve' | 'Decline'): void {
+  if (this.selectedRequestReadData.length === 0) return;
+
+  const response$ = new Subject<boolean>();
+
+  this.confirmationDialogService.requestConfirmation({
+    header: `Confirm ${label}`,
+    message: `Are you sure you want to ${label.toLowerCase()} the selected request(s)?`,
+    actionLabel: label,
+    response$: response$
+  });
+
+  response$.pipe(take(1)).subscribe(confirmed => {
+    if (confirmed) {
+      this.executeStatusChange(statusId, label);
+    }
+  });
+}
 
 }
