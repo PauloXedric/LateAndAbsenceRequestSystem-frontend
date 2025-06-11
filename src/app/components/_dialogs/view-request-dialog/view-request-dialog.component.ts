@@ -9,11 +9,11 @@ import { RequestReadModel } from '../../../_models/request-read.model';
   standalone: true,
   imports: [CommonModule, DialogModule, ButtonModule],
   templateUrl: './view-request-dialog.component.html',
-  styleUrls: ['./view-request-dialog.component.css']
+  styleUrls: ['./view-request-dialog.component.css'],
 })
 export class ViewRequestDialogComponent {
   @Input() visible = false;
-  @Input() request!: RequestReadModel | null; 
+  @Input() request!: RequestReadModel | null;
   @Output() visibleChange = new EventEmitter<boolean>();
 
   closeDialog(): void {
