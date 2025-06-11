@@ -1,165 +1,167 @@
 <div class="content">
+  <section class="spacer">
+    <img src="assets/images/dpcimage1.png" alt="Background Image" />
+  </section>
 
-<section class="spacer">
-  <img src="assets/images/dpcimage1.png" alt="Background Image" />
-</section>
+  <h1>Request Form</h1>
 
-<h1>Request Form</h1>
-
-<form [formGroup]="requestForm" (ngSubmit)="submitRequestForm()" class="form-container" >
-
-  <div class="form-columns">
-  <div class="form-column">
+  <form
+    [formGroup]="requestForm"
+    (ngSubmit)="submitRequestForm()"
+    class="form-container"
+  >
+    <div class="form-columns">
+      <div class="form-column">
+        <div class="field">
+          <label for="studentNumber" class="block">Student Number:</label>
+          <input type="text" pInputText formControlName="studentNumber" />
+          <small
+            class="p-error block"
+            *ngIf="
+              requestForm.get('studentNumber')?.invalid &&
+              requestForm.get('studentNumber')?.touched
+            "
+          >
+            Student Number is required.
+          </small>
+        </div>
 
         <div class="field">
-            <label for="studentNumber" class="block" >Student Number:</label>
-            <input 
-              type="text" 
-              pInputText 
-              formControlName="studentNumber" 
-            />
-            <small 
-              class="p-error block" 
-              *ngIf="requestForm.get('studentNumber')?.invalid && requestForm.get('studentNumber')?.touched">
-               Student Number is required.
-            </small>
-          </div>
+          <label for="studentName" class="block">Student Name:</label>
+          <input type="text" pInputText formControlName="studentName" />
+          <small
+            class="p-error block"
+            *ngIf="
+              requestForm.get('studentName')?.invalid &&
+              requestForm.get('studentName')?.touched
+            "
+          >
+            Student Name is required.
+          </small>
+        </div>
 
+        <div class="field">
+          <label for="courseYearSection" class="block"
+            >Course Yr. & Sec.:</label
+          >
+          <input type="text" pInputText formControlName="courseYearSection" />
+          <small
+            class="p-error block"
+            *ngIf="
+              requestForm.get('courseYearSection')?.invalid &&
+              requestForm.get('courseYearSection')?.touched
+            "
+          >
+            Course, Year, and Section is required.
+          </small>
+        </div>
 
-           <div class="field">
-            <label for="studentName" class="block" >Student Name:</label>
-            <input 
-              type="text" 
-              pInputText 
-              formControlName="studentName" 
-            />
-            <small 
-              class="p-error block" 
-              *ngIf="requestForm.get('studentName')?.invalid && requestForm.get('studentName')?.touched">
-               Student Name is required.
-            </small>
-          </div>
+        <div class="field">
+          <label for="teacher" class="block">Teacher:</label>
+          <input type="text" pInputText formControlName="teacher" />
+          <small
+            class="p-error block"
+            *ngIf="
+              requestForm.get('teacher')?.invalid &&
+              requestForm.get('teacher')?.touched
+            "
+          >
+            Teacher is required.
+          </small>
+        </div>
 
+        <div class="field">
+          <label for="subjectCode" class="block">Subject Code:</label>
+          <input type="text" pInputText formControlName="subjectCode" />
+          <small
+            class="p-error block"
+            *ngIf="
+              requestForm.get('subjectCode')?.invalid &&
+              requestForm.get('subjectCode')?.touched
+            "
+          >
+            Subject Code is required.
+          </small>
+        </div>
+      </div>
 
-          <div class="field">
-            <label for="courseYearSection" class="block" >Course Yr. & Sec.:</label>
-            <input 
-              type="text" 
-              pInputText 
-              formControlName="courseYearSection" 
-            />
-            <small 
-              class="p-error block" 
-              *ngIf="requestForm.get('courseYearSection')?.invalid && requestForm.get('courseYearSection')?.touched">
-               Course, Year, and Section is required.
-            </small>
-          </div>
+      <div class="form-column">
+        <div class="field">
+          <label for="dateOfAbsence" class="block">Date of Absence:</label>
+          <p-datepicker
+            [showIcon]="true"
+            inputId="buttondisplay"
+            [showOnFocus]="false"
+            formControlName="dateOfAbsence"
+          />
+          <small
+            class="p-error block"
+            *ngIf="
+              requestForm.get('dateOfAbsence')?.invalid &&
+              requestForm.get('dateOfAbsence')?.touched
+            "
+          >
+            Date of Absence is required.
+          </small>
+        </div>
 
+        <div class="field">
+          <label for="dateOfAttendance" class="block"
+            >Date of Attendance:</label
+          >
+          <p-datepicker
+            [showIcon]="true"
+            inputId="buttondisplay"
+            [showOnFocus]="false"
+            formControlName="dateOfAttendance"
+          />
+          <small
+            class="p-error block"
+            *ngIf="
+              requestForm.get('dateOfAttendance')?.invalid &&
+              requestForm.get('dateOfAttendance')?.touched
+            "
+          >
+            Date of Attendance is required.
+          </small>
+        </div>
 
-          <div class="field">
-            <label for="teacher" class="block" >Teacher:</label>
-            <input 
-              type="text" 
-              pInputText 
-              formControlName="teacher" 
-            />
-            <small 
-              class="p-error block" 
-              *ngIf="requestForm.get('teacher')?.invalid && requestForm.get('teacher')?.touched">
-               Teacher is required.
-            </small>
-          </div>
+        <div class="field">
+          <label for="parentsCpNumber" class="block"
+            >Parent's Mobile No.:</label
+          >
+          <input type="text" pInputText formControlName="parentsCpNumber" />
+          <small
+            class="p-error block"
+            *ngIf="
+              requestForm.get('parentsCpNumber')?.invalid &&
+              requestForm.get('parentsCpNumber')?.touched
+            "
+          >
+            Parent's Mobile Number is required.
+          </small>
+        </div>
 
+        <div class="field">
+          <label for="reason" class="block">Reason:</label>
+          <input type="text" pInputText formControlName="reason" />
+          <small
+            class="p-error block"
+            *ngIf="
+              requestForm.get('reason')?.invalid &&
+              requestForm.get('reason')?.touched
+            "
+          >
+            Reason is required.
+          </small>
+        </div>
 
-          <div class="field">
-            <label for="subjectCode" class="block" >Subject Code:</label>
-            <input 
-              type="text" 
-              pInputText 
-              formControlName="subjectCode" 
-            />
-            <small 
-              class="p-error block" 
-              *ngIf="requestForm.get('subjectCode')?.invalid && requestForm.get('subjectCode')?.touched">
-               Subject Code is required.
-            </small>
-          </div>
-
-  </div>
-  
-  <div class="form-column">
-
-          <div class="field">
-            <label for="dateOfAbsence" class="block" >Date of Absence:</label>
-            <p-datepicker 
-              [showIcon]="true" 
-              inputId="buttondisplay" 
-              [showOnFocus]="false"
-              formControlName="dateOfAbsence" 
-            />
-            <small 
-              class="p-error block" 
-              *ngIf="requestForm.get('dateOfAbsence')?.invalid && requestForm.get('dateOfAbsence')?.touched">
-               Date of Absence is required.
-            </small>
-          </div>
-
-
-          <div class="field">
-            <label for="dateOfAttendance" class="block" >Date of Attendance:</label>
-           <p-datepicker 
-              [showIcon]="true" 
-              inputId="buttondisplay" 
-              [showOnFocus]="false"
-              formControlName="dateOfAttendance" 
-            />
-            <small 
-              class="p-error block" 
-              *ngIf="requestForm.get('dateOfAttendance')?.invalid && requestForm.get('dateOfAttendance')?.touched">
-               Date of Attendance is required.
-            </small>
-          </div>
-
-
-          <div class="field">
-            <label for="parentsCpNumber" class="block" >Parent's Mobile No.:</label>
-            <input 
-              type="text" 
-              pInputText 
-              formControlName="parentsCpNumber" 
-            />
-            <small 
-              class="p-error block" 
-              *ngIf="requestForm.get('parentsCpNumber')?.invalid && requestForm.get('parentsCpNumber')?.touched">
-               Parent's Mobile Number is required.
-            </small>
-          </div>
-
-
-          <div class="field">
-            <label for="reason" class="block" >Reason:</label>
-            <input 
-              type="text" 
-              pInputText 
-              formControlName="reason" 
-            />
-            <small 
-              class="p-error block" 
-              *ngIf="requestForm.get('reason')?.invalid && requestForm.get('reason')?.touched">
-               Reason is required.
-            </small>
-          </div>
-
-      <p-button label="Request" type="submit" [disabled]="requestForm.invalid"/>  
-  </div> 
-  </div>
-
-</form>
+        <p-button
+          label="Request"
+          type="submit"
+          [disabled]="requestForm.invalid"
+        />
+      </div>
+    </div>
+  </form>
 </div>
-
-
-
-
-
-
-

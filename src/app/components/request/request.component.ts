@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
-import { RequestCreateModel } from '../../_models/request-create.model';  
+import { RequestCreateModel } from '../../_models/request-create.model';
 import { StudentRequestService } from '../../_services/student-request.service';
 import { NgIf } from '@angular/common';
 
@@ -12,38 +17,39 @@ import { NgIf } from '@angular/common';
   selector: 'request-form',
   standalone: true,
   templateUrl: './request.component.html',
-  imports: [InputTextModule, FloatLabelModule, ButtonModule, NgIf, ReactiveFormsModule, DatePickerModule],
-  styleUrls: ['./request.component.css']
-
-
+  imports: [
+    InputTextModule,
+    FloatLabelModule,
+    ButtonModule,
+    NgIf,
+    ReactiveFormsModule,
+    DatePickerModule,
+  ],
+  styleUrls: ['./request.component.css'],
 })
-export class RequestComponent implements OnInit{
-
+export class RequestComponent implements OnInit {
   dateOfAbsence: Date | undefined;
   dateOfAttendance: Date | undefined;
-  
-  
-  requestForm! : FormGroup;
+
+  requestForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private studentRequestService: StudentRequestService
-  ){}
- 
-  
+  ) {}
+
   ngOnInit(): void {
     this.requestForm = this.fb.group({
-        studentNumber: ['', Validators.required],
-        studentName: ['', Validators.required],
-        courseYearSection: ['', Validators.required],
-        teacher: ['', Validators.required],
-        subjectCode: ['', Validators.required],
-        dateOfAbsence: ['', Validators.required],
-        dateOfAttendance: ['', Validators.required],
-        parentsCpNumber: ['', Validators.required],
-        reason: ['', Validators.required]
-     });
-
+      studentNumber: ['', Validators.required],
+      studentName: ['', Validators.required],
+      courseYearSection: ['', Validators.required],
+      teacher: ['', Validators.required],
+      subjectCode: ['', Validators.required],
+      dateOfAbsence: ['', Validators.required],
+      dateOfAttendance: ['', Validators.required],
+      parentsCpNumber: ['', Validators.required],
+      reason: ['', Validators.required],
+    });
   }
 
   submitRequestForm(): void {
@@ -52,15 +58,12 @@ export class RequestComponent implements OnInit{
       return;
     }
 
-   const newRequest: RequestCreateModel = this.requestForm.value;
-   console.log('Data being sent to backend:', newRequest);
+    const newRequest: RequestCreateModel = this.requestForm.value;
+    console.log('Data being sent to backend:', newRequest);
 
-   this.studentRequestService.addNewRequest(newRequest).subscribe({
-        next: (response) => console.log('✅ API response:', response),
-       error: (err) => console.error('❌ API error:', err)
-   });
+    this.studentRequestService.addNewRequest(newRequest).subscribe({
+      next: (response) => console.log('✅ API response:', response),
+      error: (err) => console.error('❌ API error:', err),
+    });
   }
-
-
-  
 }

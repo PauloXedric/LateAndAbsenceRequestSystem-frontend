@@ -1,4 +1,8 @@
-import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideZoneChangeDetection,
+  importProvidersFrom,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
@@ -9,11 +13,8 @@ import { authInterceptor } from './_interceptors/auth.interceptor';
 import { API_CONFIG } from './_config/api.config';
 import { environment } from '../enviroments/environment';
 
-
-
 export const appConfig: ApplicationConfig = {
   providers: [
-    
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
@@ -21,20 +22,16 @@ export const appConfig: ApplicationConfig = {
       theme: {
         preset: MyPreset,
         options: {
-            darkModeSelector: false || 'none'
-        }
-      }
+          darkModeSelector: false || 'none',
+        },
+      },
     }),
- provideHttpClient(
-   withInterceptors([authInterceptor])
- ),
+    provideHttpClient(withInterceptors([authInterceptor])),
     {
       provide: API_CONFIG,
       useValue: {
-        baseUrl: environment.baseUrl
-      }
-    }
-  ]
-}; 
-
-
+        baseUrl: environment.baseUrl,
+      },
+    },
+  ],
+};

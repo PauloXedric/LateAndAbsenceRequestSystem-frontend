@@ -11,7 +11,14 @@ import { IconField } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
 
 import { BehaviorSubject, combineLatest, forkJoin, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, switchMap, take, tap } from 'rxjs/operators';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs/operators';
 import { ViewRequestDialogComponent } from '../../../_dialogs/view-request-dialog/view-request-dialog.component';
 import { RequestUpdateModel } from '../../../../_models/request-update-model';
 import { ConfirmationDialogComponent } from '../../../_dialogs/confirmation-dialog/confirmation-dialog.component';
@@ -21,86 +28,88 @@ import { ConfirmationDialogService } from '../../../../_services/confirmation-di
   selector: 'app-secretary-initial-request',
   standalone: true,
   imports: [
-    TableModule, CommonModule, PaginatorModule, ButtonModule,
-    Toolbar, InputIcon, IconField, InputTextModule,
-    ViewRequestDialogComponent, ConfirmationDialogComponent
+    TableModule,
+    CommonModule,
+    PaginatorModule,
+    ButtonModule,
+    Toolbar,
+    InputIcon,
+    IconField,
+    InputTextModule,
+    ViewRequestDialogComponent,
+    ConfirmationDialogComponent,
   ],
   templateUrl: './secretary-initial-request.component.html',
-  styleUrl: './secretary-initial-request.component.css'
+  styleUrl: './secretary-initial-request.component.css',
 })
-
-
 export class SecretaryInitialRequestComponent implements OnInit {
-  @ViewChild('confirmationDialog') confirmationDialog!: ConfirmationDialogComponent;
+  @ViewChild('confirmationDialog')
+  confirmationDialog!: ConfirmationDialogComponent;
 
   isViewDialogVisible = false;
   selectedRequestReadData: RequestReadModel[] = [];
   selectedRequestToView: RequestReadModel | null = null;
 
-  
   private filterSubject = new BehaviorSubject<string>('');
   private pageSubject = new BehaviorSubject<number>(0);
   private pageSizeSubject = new BehaviorSubject<number>(3);
 
-   get pageSize(): number {
+  get pageSize(): number {
     return this.pageSizeSubject.value;
   }
-  
+
   statusId = 1;
   totalRecords = 0;
   isLoading = false;
 
   constructor(
     private studentRequestService: StudentRequestService,
-    private confirmationDialogService: ConfirmationDialogService,
-  ) {}  
+    private confirmationDialogService: ConfirmationDialogService
+  ) {}
 
-
-  
   filteredRequests$ = combineLatest([
     this.filterSubject.pipe(debounceTime(500), distinctUntilChanged()),
     this.pageSubject,
-    this.pageSizeSubject
+    this.pageSizeSubject,
   ]).pipe(
-    tap(() => this.isLoading = true),
+    tap(() => (this.isLoading = true)),
     switchMap(([filter, page, pageSize]) =>
-      this.studentRequestService.readRequest({
-        statusId: this.statusId,
-        pageNumber: page + 1,
-        pageSize: pageSize,
-        filter: filter.trim()
-      }).pipe(
-        catchError(err => {
-          console.error('Failed to load requests', err);
-          return of({ items: [], totalCount: 0 });
+      this.studentRequestService
+        .readRequest({
+          statusId: this.statusId,
+          pageNumber: page + 1,
+          pageSize: pageSize,
+          filter: filter.trim(),
         })
-      )
+        .pipe(
+          catchError((err) => {
+            console.error('Failed to load requests', err);
+            return of({ items: [], totalCount: 0 });
+          })
+        )
     ),
-    tap(() => this.isLoading = false)
+    tap(() => (this.isLoading = false))
   );
-
-
 
   ngOnInit(): void {
     this.filterSubject.next('');
 
-    this.filteredRequests$.subscribe(response => {
-    this.totalRecords = response.totalCount;
-  });
+    this.filteredRequests$.subscribe((response) => {
+      this.totalRecords = response.totalCount;
+    });
   }
 
   onFilterChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     const value = input?.value ?? '';
     this.filterSubject.next(value);
-    this.pageSubject.next(0); 
+    this.pageSubject.next(0);
   }
 
   onPageChange(event: { first: number; rows: number }): void {
     this.pageSubject.next(event.first / event.rows);
     this.pageSizeSubject.next(event.rows);
   }
-
 
   //Button Enabling
   get selectionCount(): number {
@@ -115,7 +124,6 @@ export class SecretaryInitialRequestComponent implements OnInit {
     return this.selectionCount < 1;
   }
 
-
   //View Request Data
   onViewRequest(): void {
     if (this.selectionCount === 1) {
@@ -124,21 +132,22 @@ export class SecretaryInitialRequestComponent implements OnInit {
     }
   }
 
-
   // Request Status Updation
   executeStatusChange(newStatusId: number, actionLabel: string): void {
     if (this.selectedRequestReadData.length === 0) return;
 
-    const updates: RequestUpdateModel[] = this.selectedRequestReadData.map(req => ({
-      requestId: req.requestId,
-      statusId: newStatusId
-    }));
+    const updates: RequestUpdateModel[] = this.selectedRequestReadData.map(
+      (req) => ({
+        requestId: req.requestId,
+        statusId: newStatusId,
+      })
+    );
 
     this.isLoading = true;
 
-    const updateCalls = updates.map(update =>
+    const updateCalls = updates.map((update) =>
       this.studentRequestService.updateRequestStatus(update).pipe(
-        catchError(error => {
+        catchError((error) => {
           console.error(`Failed to update request ${update.requestId}`, error);
           return of(null);
         })
@@ -149,33 +158,32 @@ export class SecretaryInitialRequestComponent implements OnInit {
       next: () => {
         this.isLoading = false;
         this.selectedRequestReadData = [];
-        this.filterSubject.next(this.filterSubject.value); 
+        this.filterSubject.next(this.filterSubject.value);
       },
       error: () => {
         this.isLoading = false;
         console.error('Some requests failed to update.');
-      }
+      },
     });
   }
 
   // Confirmation Dialog Logic
   confirmStatusChange(statusId: number, label: 'Approve' | 'Decline'): void {
-  if (this.selectedRequestReadData.length === 0) return;
+    if (this.selectedRequestReadData.length === 0) return;
 
-  const response$ = new Subject<boolean>();
+    const response$ = new Subject<boolean>();
 
-  this.confirmationDialogService.requestConfirmation({
-    header: `Confirm ${label}`,
-    message: `Are you sure you want to ${label.toLowerCase()} the selected request(s)?`,
-    actionLabel: label,
-    response$: response$
-  });
+    this.confirmationDialogService.requestConfirmation({
+      header: `Confirm ${label}`,
+      message: `Are you sure you want to ${label.toLowerCase()} the selected request(s)?`,
+      actionLabel: label,
+      response$: response$,
+    });
 
-  response$.pipe(take(1)).subscribe(confirmed => {
-    if (confirmed) {
-      this.executeStatusChange(statusId, label);
-    }
-  });
-}
-
+    response$.pipe(take(1)).subscribe((confirmed) => {
+      if (confirmed) {
+        this.executeStatusChange(statusId, label);
+      }
+    });
+  }
 }
