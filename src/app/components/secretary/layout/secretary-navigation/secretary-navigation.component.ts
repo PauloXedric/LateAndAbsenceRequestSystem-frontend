@@ -1,21 +1,23 @@
-import { Component, HostListener, signal } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Component, HostListener, OnInit, signal } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
-import { DirectorSidebarComponent } from '../director-sidebar/director-sidebar.component';
 import { MainComponent } from '../../../_layouts/main/main.component';
+import { SecretarySidebarComponent } from '../secretary-sidebar/secretary-sidebar.component';
 
 @Component({
-  selector: 'app-director-navigation',
+  selector: 'app-secretary-navigation',
+  standalone: true,
   imports: [
     ButtonModule,
     RouterModule,
-    DirectorSidebarComponent,
     MainComponent,
+    SecretarySidebarComponent,
   ],
-  templateUrl: './director-navigation.component.html',
-  styleUrl: './director-navigation.component.css',
+  templateUrl: './secretary-navigation.component.html',
+  styleUrl: './secretary-navigation.component.css',
 })
-export class DirectorNavigationComponent {
+export class SecretaryNavigationComponent {
   isLeftSidebarCollapsed = signal<boolean>(false);
   screenWidth = signal<number>(window.innerWidth);
 

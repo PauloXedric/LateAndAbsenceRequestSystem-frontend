@@ -3,7 +3,6 @@ import { RequestComponent } from './components/request/request.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { roleGuard } from './_guards/role.guard';
 import { authGuard } from './_guards/auth.guard';
-import { SecretaryNavigationComponent } from './components/secretary/secretary-navigation/secretary-navigation.component';
 import { PublicLayoutComponent } from './components/_layouts/public-layout/public-layout.component';
 import { PrivateLayoutComponent } from './components/_layouts/private-layout/private-layout.component';
 import { SecretaryInitialRequestComponent } from './components/secretary/request/secretary-initial-request/secretary-initial-request.component';
@@ -15,6 +14,7 @@ import { DirectorRequestComponent } from './components/director/director-request
 import { AccountManagementComponent } from './components/account-management/account-management.component';
 import { DirectorNavigationComponent } from './components/director/layout/director-navigation/director-navigation.component';
 import { ChairpersonNavigationComponent } from './components/chairperson/layout/chairperson-navigation/chairperson-navigation.component';
+import { SecretaryNavigationComponent } from './components/secretary/layout/secretary-navigation/secretary-navigation.component';
 
 export const routes: Routes = [
   {
