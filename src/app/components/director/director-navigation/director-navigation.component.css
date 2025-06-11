@@ -5,9 +5,10 @@
   justify-content: space-between;
   background-color: #990202;
   padding: 0.5rem;
-  padding-left:  0.5rem;
+  padding-left: 0.5rem;
   color: white;
   box-sizing: border-box;
+  position: fixed;
 }
 
 .navbar h1 {
@@ -30,4 +31,3 @@
   text-decoration: underline;
   transform: scale(1.2);
 }
-

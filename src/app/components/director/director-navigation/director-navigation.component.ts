@@ -1,43 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, signal } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
+import { DirectorSidebarComponent } from '../director-sidebar/director-sidebar.component';
+import { MainComponent } from '../../_layouts/main/main.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-director-navigation',
-  imports: [ButtonModule, RouterModule, MenuModule],
+  imports: [
+    ButtonModule,
+    RouterModule,
+    MenuModule,
+    DirectorSidebarComponent,
+    MainComponent,
+  ],
   templateUrl: './director-navigation.component.html',
-  styleUrl: './director-navigation.component.css'
+  styleUrl: './director-navigation.component.css',
 })
 export class DirectorNavigationComponent {
+  isLeftSidebarCollapsed = signal<boolean>(false);
+  screenWidth = signal<number>(window.innerWidth);
 
+  @HostListener('window:resize')
+  onResize() {
+    this.screenWidth.set(window.innerWidth);
+    if (this.screenWidth() < 768) {
+      this.isLeftSidebarCollapsed.set(true);
+    }
+  }
 
-    items: MenuItem[] | undefined;
-    
-        ngOnInit() {
-            this.items = [
-                {
-                    items: [
-                        {
-                            label: 'Request',
-                            routerLink: ['director-request']
-                        },
-                        {
-                            label: 'Instructors and Courses',
-                              routerLink: ['instructors']
-                        },
-                        {
-                            label: 'History',
-                              routerLink: ['history']
-                        },
-                        {
-                            label: 'Account Management',
-                              routerLink: ['account-management']
-                        },
-  
-                    ]
-                }
-            ];
-        }
+  ngOnInit(): void {
+    this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
+  }
+
+  changeIsLeftSidebarCollapsed(isLeftSidebarCollapsed: boolean): void {
+    this.isLeftSidebarCollapsed.set(isLeftSidebarCollapsed);
+  }
 }

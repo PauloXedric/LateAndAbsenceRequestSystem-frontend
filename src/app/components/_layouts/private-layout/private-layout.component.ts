@@ -3,10 +3,8 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-private-layout',
+  standalone: true,
   imports: [RouterModule, RouterOutlet],
-  templateUrl: './private-layout.component.html',
-  styleUrl: './private-layout.component.css'
+  template: '<router-outlet></router-outlet>',
 })
-export class PrivateLayoutComponent {
-
-}
+export class PrivateLayoutComponent {}
