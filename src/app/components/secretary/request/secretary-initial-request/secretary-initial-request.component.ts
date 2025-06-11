@@ -52,7 +52,8 @@ export class SecretaryInitialRequestComponent implements OnInit {
 
   private filterSubject = new BehaviorSubject<string>('');
   private pageSubject = new BehaviorSubject<number>(0);
-  private pageSizeSubject = new BehaviorSubject<number>(3);
+  private pageSizeSubject = new BehaviorSubject<number>(8);
+  private refreshSubject = new BehaviorSubject<void>(undefined);
 
   get pageSize(): number {
     return this.pageSizeSubject.value;
@@ -71,6 +72,7 @@ export class SecretaryInitialRequestComponent implements OnInit {
     this.filterSubject.pipe(debounceTime(500), distinctUntilChanged()),
     this.pageSubject,
     this.pageSizeSubject,
+    this.refreshSubject,
   ]).pipe(
     tap(() => (this.isLoading = true)),
     switchMap(([filter, page, pageSize]) =>
@@ -158,7 +160,7 @@ export class SecretaryInitialRequestComponent implements OnInit {
       next: () => {
         this.isLoading = false;
         this.selectedRequestReadData = [];
-        this.filterSubject.next(this.filterSubject.value);
+        this.refreshSubject.next();
       },
       error: () => {
         this.isLoading = false;

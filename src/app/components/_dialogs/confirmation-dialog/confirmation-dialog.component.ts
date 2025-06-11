@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfirmationDialogService, ConfirmationData } from '../../../_services/confirmation-dialog-service';
+import {
+  ConfirmationDialogService,
+  ConfirmationData,
+} from '../../../_services/confirmation-dialog-service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { Subject } from 'rxjs';
@@ -11,51 +14,55 @@ import { ConfirmationService, MessageService } from 'primeng/api';
   imports: [ConfirmDialogModule, ToastModule],
   providers: [MessageService, ConfirmationService],
   templateUrl: './confirmation-dialog.component.html',
-  styleUrl: './confirmation-dialog.component.css'
+  styleUrl: './confirmation-dialog.component.css',
 })
 export class ConfirmationDialogComponent implements OnInit {
-
-header = '';
-  message = '';
-  actionLabel = '';
-  isVisible = false;
   private responseSubject!: Subject<boolean>;
 
-  constructor(private confirmationService: ConfirmationDialogService) {}
+  constructor(
+    private confirmationService: ConfirmationDialogService,
+    private confirmationServicePrimeng: ConfirmationService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit() {
-    this.confirmationService.confirmationRequests$.subscribe((data: ConfirmationData) => {
-      this.header = data.header;
-      this.message = data.message;
-      this.actionLabel = data.actionLabel;
-      this.isVisible = true;
-      this.responseSubject = data.response$;
-    });
-  }
+    this.confirmationService.confirmationRequests$.subscribe(
+      (data: ConfirmationData) => {
+        this.responseSubject = data.response$;
 
-  onConfirm() {
-    this.isVisible = false;
-    this.responseSubject.next(true);
-    this.responseSubject.complete();
-    this.resetDialog();
-  }
+        this.confirmationServicePrimeng.confirm({
+          header: data.header,
+          message: data.message,
+          acceptLabel: data.actionLabel,
+          rejectLabel: 'Cancel',
+          icon: 'pi pi-exclamation-triangle',
+          acceptButtonStyleClass:
+            data.actionLabel === 'Approve'
+              ? 'p-button-success'
+              : 'p-button-danger',
+          rejectButtonStyleClass: 'p-button-secondary',
+          accept: () => {
+            this.responseSubject.next(true);
+            this.responseSubject.complete();
 
-  onCancel() {
-    this.isVisible = false;
-    this.responseSubject.next(false);
-    this.responseSubject.complete();
-    this.resetDialog();
-  }
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: `${data.actionLabel}d successfully`,
+            });
+          },
+          reject: () => {
+            this.responseSubject.next(false);
+            this.responseSubject.complete();
 
-  resetDialog(): void {
-    this.header = '';
-    this.message = '';
-    this.actionLabel = '';
-    this.isVisible = false;
-  }
-
-  onDialogHide() {
-    this.isVisible = false;
-    this.resetDialog();
+            this.messageService.add({
+              severity: 'info',
+              summary: 'Cancelled',
+              detail: `${data.actionLabel} was cancelled`,
+            });
+          },
+        });
+      }
+    );
   }
 }
