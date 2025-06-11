@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { PrimeIcons } from 'primeng/api';
 
 @Component({
-  selector: 'app-left-sidebar',
+  selector: 'director-left-sidebar',
   standalone: true,
   imports: [RouterModule, CommonModule],
   templateUrl: './director-sidebar.component.html',
@@ -17,7 +17,7 @@ export class DirectorSidebarComponent {
     {
       label: 'Request',
       routerLink: ['director-request'],
-      icon: PrimeIcons.DESKTOP,
+      icon: PrimeIcons.INBOX,
     },
     {
       label: 'Instructors and Courses',
@@ -27,20 +27,12 @@ export class DirectorSidebarComponent {
     {
       label: 'History',
       routerLink: ['history'],
-      icon: PrimeIcons.TIMES,
+      icon: PrimeIcons.HOURGLASS,
     },
     {
       label: 'Account Management',
       routerLink: ['account-management'],
-      icon: PrimeIcons.TRASH,
+      icon: PrimeIcons.USER_EDIT,
     },
   ];
-
-  toggleCollapse(): void {
-    this.changeIsLeftSidebarCollapsed.emit(!this.isLeftSidebarCollapsed());
-  }
-
-  closeSidenav(): void {
-    this.changeIsLeftSidebarCollapsed.emit(true);
-  }
 }

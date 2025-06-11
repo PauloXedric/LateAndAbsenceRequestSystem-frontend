@@ -1,0 +1,15 @@
+<nav class="navbar">
+  <div class="card flex justify-center"></div>
+  <p-button class="logo" (click)="toggleSidebar()" icon="pi pi-bars" />
+  <h1>DPC Academic Chairperson</h1>
+</nav>
+
+<chairperson-left-sidebar
+  [isLeftSidebarCollapsed]="isLeftSidebarCollapsed()"
+  (changeIsLeftSidebarCollapsed)="changeIsLeftSidebarCollapsed($event)"
+/>
+
+<app-main
+  [isLeftSidebarCollapsed]="isLeftSidebarCollapsed()"
+  [screenWidth]="screenWidth()"
+/>

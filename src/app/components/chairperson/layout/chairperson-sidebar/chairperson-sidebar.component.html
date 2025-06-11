@@ -2,17 +2,6 @@
   class="sidenav"
   [ngClass]="isLeftSidebarCollapsed() ? 'sidenav-collapsed' : ''"
 >
-  <div class="logo-container">
-    <button class="logo" (click)="toggleCollapse()">
-      <i class="pi-user"></i>
-    </button>
-    @if (!isLeftSidebarCollapsed()) {
-    <div class="logo-text">App</div>
-    <button class="btn-close" (click)="closeSidenav()">
-      <i class="pi-user"></i>
-    </button>
-    }
-  </div>
   <div class="sidenav-nav">
     @for (item of items; track $index) {
     <li class="sidenav-nav-item">

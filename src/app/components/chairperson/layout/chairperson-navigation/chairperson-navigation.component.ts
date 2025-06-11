@@ -1,25 +1,23 @@
 import { Component, HostListener, signal } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
-import { MenuItem } from 'primeng/api';
+import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
-import { DirectorSidebarComponent } from '../director-sidebar/director-sidebar.component';
-import { MainComponent } from '../../_layouts/main/main.component';
-import { CommonModule } from '@angular/common';
+import { ChairpersonSidebarComponent } from '../chairperson-sidebar/chairperson-sidebar.component';
+import { MainComponent } from '../../../_layouts/main/main.component';
 
 @Component({
-  selector: 'app-director-navigation',
+  selector: 'app-chairperson-navigation',
   imports: [
     ButtonModule,
-    RouterModule,
     MenuModule,
-    DirectorSidebarComponent,
+    RouterModule,
+    ChairpersonSidebarComponent,
     MainComponent,
   ],
-  templateUrl: './director-navigation.component.html',
-  styleUrl: './director-navigation.component.css',
+  templateUrl: './chairperson-navigation.component.html',
+  styleUrl: './chairperson-navigation.component.css',
 })
-export class DirectorNavigationComponent {
+export class ChairpersonNavigationComponent {
   isLeftSidebarCollapsed = signal<boolean>(false);
   screenWidth = signal<number>(window.innerWidth);
 
@@ -37,5 +35,9 @@ export class DirectorNavigationComponent {
 
   changeIsLeftSidebarCollapsed(isLeftSidebarCollapsed: boolean): void {
     this.isLeftSidebarCollapsed.set(isLeftSidebarCollapsed);
+  }
+
+  toggleSidebar(): void {
+    this.isLeftSidebarCollapsed.set(!this.isLeftSidebarCollapsed());
   }
 }

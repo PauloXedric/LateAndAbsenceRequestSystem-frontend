@@ -4,10 +4,8 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { roleGuard } from './_guards/role.guard';
 import { authGuard } from './_guards/auth.guard';
 import { SecretaryNavigationComponent } from './components/secretary/secretary-navigation/secretary-navigation.component';
-import { DirectorNavigationComponent } from './components/director/director-navigation/director-navigation.component';
 import { PublicLayoutComponent } from './components/_layouts/public-layout/public-layout.component';
 import { PrivateLayoutComponent } from './components/_layouts/private-layout/private-layout.component';
-import { ChairpersonNavigationComponent } from './components/chairperson/chairperson-navigation/chairperson-navigation.component';
 import { SecretaryInitialRequestComponent } from './components/secretary/request/secretary-initial-request/secretary-initial-request.component';
 import { SecretarySecondaryRequestComponent } from './components/secretary/request/secretary-secondary-request/secretary-secondary-request.component';
 import { ChairpersonRequestComponent } from './components/chairperson/chairperson-request/chairperson-request.component';
@@ -15,6 +13,8 @@ import { InstructorCoursesComponent } from './components/instructor-courses/inst
 import { ApprovalHistoryComponent } from './components/approval-history/approval-history.component';
 import { DirectorRequestComponent } from './components/director/director-request/director-request.component';
 import { AccountManagementComponent } from './components/account-management/account-management.component';
+import { DirectorNavigationComponent } from './components/director/layout/director-navigation/director-navigation.component';
+import { ChairpersonNavigationComponent } from './components/chairperson/layout/chairperson-navigation/chairperson-navigation.component';
 
 export const routes: Routes = [
   {
@@ -71,7 +71,7 @@ export const routes: Routes = [
           { path: 'instructors', component: InstructorCoursesComponent },
           { path: 'history', component: ApprovalHistoryComponent },
           { path: 'account-management', component: AccountManagementComponent },
-          { path: '', redirectTo: 'chairperson-request', pathMatch: 'full' },
+          { path: '', redirectTo: 'director-request', pathMatch: 'full' },
         ],
       },
     ],
