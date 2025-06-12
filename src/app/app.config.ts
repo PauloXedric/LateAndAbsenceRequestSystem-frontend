@@ -12,6 +12,8 @@ import { MyPreset } from '../assets/presets/aura-preset';
 import { authInterceptor } from './_interceptors/auth.interceptor';
 import { API_CONFIG } from './_config/api.config';
 import { environment } from '../enviroments/environment';
+import { tokenGetter } from './_config/auth.config';
+import { JwtModule } from '@auth0/angular-jwt';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,6 +29,16 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideHttpClient(withInterceptors([authInterceptor])),
+
+    importProvidersFrom(
+      JwtModule.forRoot({
+        config: {
+          tokenGetter: tokenGetter,
+          allowedDomains: [new URL(environment.baseUrl).host],
+          disallowedRoutes: [`${environment.baseUrl}/UserAccount/Login`],
+        },
+      })
+    ),
     {
       provide: API_CONFIG,
       useValue: {
