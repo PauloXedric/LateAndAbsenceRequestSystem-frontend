@@ -23,6 +23,7 @@ import { ViewRequestDialogComponent } from '../../../_dialogs/view-request-dialo
 import { RequestUpdateModel } from '../../../../_models/request-update-model';
 import { ConfirmationDialogComponent } from '../../../_dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ConfirmationDialogService } from '../../../../_services/confirmation-dialog-service';
+import { EmailService } from '../../../../_services/emailjs-service';
 
 @Component({
   selector: 'app-secretary-initial-request',
@@ -65,7 +66,8 @@ export class SecretaryInitialRequestComponent implements OnInit {
 
   constructor(
     private studentRequestService: StudentRequestService,
-    private confirmationDialogService: ConfirmationDialogService
+    private confirmationDialogService: ConfirmationDialogService,
+    private emailService: EmailService
   ) {}
 
   filteredRequests$ = combineLatest([
@@ -147,13 +149,24 @@ export class SecretaryInitialRequestComponent implements OnInit {
 
     this.isLoading = true;
 
-    const updateCalls = updates.map((update) =>
-      this.studentRequestService.updateRequestStatus(update).pipe(
-        catchError((error) => {
-          console.error(`Failed to update request ${update.requestId}`, error);
-          return of(null);
+    const updateCalls = this.selectedRequestReadData.map((request) =>
+      this.studentRequestService
+        .updateRequestStatus({
+          requestId: request.requestId,
+          statusId: newStatusId,
         })
-      )
+        .pipe(
+          tap(() => {
+            this.emailService.sendApprovalEmail(request);
+          }),
+          catchError((error) => {
+            console.error(
+              `Failed to update request ${request.requestId}`,
+              error
+            );
+            return of(null);
+          })
+        )
     );
 
     forkJoin(updateCalls).subscribe({
