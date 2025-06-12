@@ -157,7 +157,11 @@ export class SecretaryInitialRequestComponent implements OnInit {
         })
         .pipe(
           tap(() => {
-            this.emailService.sendApprovalEmail(request);
+            if (actionLabel === 'Approve') {
+              this.emailService.sendApprovalEmail(request);
+            } else {
+              this.emailService.sendDeclineEmail(request);
+            }
           }),
           catchError((error) => {
             console.error(
