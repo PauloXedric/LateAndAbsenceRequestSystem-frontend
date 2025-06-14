@@ -156,20 +156,19 @@ export class SecretaryInitialRequestComponent implements OnInit {
           statusId: newStatusId,
         })
         .pipe(
-          tap(() => {
-            if (actionLabel === 'Approve') {
-              this.emailService.sendApprovalEmail(request);
-            } else {
-              this.emailService.sendDeclineEmail(request);
-            }
-          }),
-          catchError((error) => {
-            console.error(
-              `Failed to update request ${request.requestId}`,
-              error
-            );
-            return of(null);
-          })
+          switchMap(() =>
+            this.emailService.generateUrlToken(request).pipe(
+              tap((response) => {
+                const token = response.token;
+
+                if (actionLabel === 'Approve') {
+                  this.emailService.sendApprovalEmail(request, token);
+                } else {
+                  this.emailService.sendDeclineEmail(request, token);
+                }
+              })
+            )
+          )
         )
     );
 

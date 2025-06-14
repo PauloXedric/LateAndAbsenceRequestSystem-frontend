@@ -13,9 +13,11 @@ export interface EmailjsParams {
   dlarsLink: string;
 }
 
-export function buildEmailparams(request: RequestReadModel): EmailjsParams {
+export function buildEmailparams(
+  request: RequestReadModel,
+  dlarsLink: string
+): EmailjsParams {
   const requesterEmail = `${request.studentNumber}@dhvsu.edu.ph`;
-  const dlarsLink = 'http://localhost:4200/request';
 
   return {
     studentName: request.studentName,

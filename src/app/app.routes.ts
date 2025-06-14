@@ -15,6 +15,7 @@ import { AccountManagementComponent } from './components/account-management/acco
 import { DirectorNavigationComponent } from './components/director/layout/director-navigation/director-navigation.component';
 import { ChairpersonNavigationComponent } from './components/chairperson/layout/chairperson-navigation/chairperson-navigation.component';
 import { SecretaryNavigationComponent } from './components/secretary/layout/secretary-navigation/secretary-navigation.component';
+import { SupportingDocumentsComponent } from './components/supporting-documents/supporting-documents.component';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,7 @@ export const routes: Routes = [
       { path: 'request', component: RequestComponent },
       { path: 'sign-in', component: SignInComponent },
       { path: 'unathorized', component: RequestComponent },
+      { path: 'supporting-documents', component: SupportingDocumentsComponent },
     ],
   },
   {

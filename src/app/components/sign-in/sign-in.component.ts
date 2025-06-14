@@ -2,7 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { UserLoginModel } from '../../_models/user-login.model';
 import { AuthService } from '../../_services/auth.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
@@ -10,37 +15,39 @@ import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-sign-in',
-  imports: [ InputTextModule, ReactiveFormsModule, FloatLabelModule, ButtonModule, NgIf],
+  imports: [
+    InputTextModule,
+    ReactiveFormsModule,
+    FloatLabelModule,
+    ButtonModule,
+    NgIf,
+  ],
   templateUrl: './sign-in.component.html',
-  styleUrl: './sign-in.component.css'
+  styleUrl: './sign-in.component.css',
 })
-
-
 export class SignInComponent implements OnInit {
- 
-  userLoginForm! : FormGroup;
+  userLoginForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
   ) {}
- 
-  ngOnInit(): void {
-     this.userLoginForm = this.fb.group({
-       username: ['', Validators.required],
-       password: ['', Validators.required]
-     });
-   }
 
-    submitUserLogin(): void {
+  ngOnInit(): void {
+    this.userLoginForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+    });
+  }
+
+  submitUserLogin(): void {
     if (this.userLoginForm.invalid) {
       this.userLoginForm.markAllAsTouched();
       return;
     }
 
     const credentials: UserLoginModel = this.userLoginForm.value;
-    console.log('Data being sent to backend:', credentials);
 
     this.authService.login(credentials).subscribe({
       next: () => {
@@ -57,7 +64,7 @@ export class SignInComponent implements OnInit {
       },
       error: () => {
         alert('Login failed. Check your credentials.');
-      }
+      },
     });
   }
 }

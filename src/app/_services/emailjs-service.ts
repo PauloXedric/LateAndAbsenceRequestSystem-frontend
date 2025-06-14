@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 import { RequestReadModel } from '../_models/request-read.model';
 import { EmailjsParams, buildEmailparams } from '../_params/emailjs-param';
+import { Observable } from 'rxjs';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +14,11 @@ export class EmailService {
   private readonly declinedTemplateId = 'template_xa68myd';
   private readonly publicKey = 'cFkp2u1DISUOMgVsm';
 
-  sendApprovalEmail(request: RequestReadModel): void {
-    const params: EmailjsParams = buildEmailparams(request);
+  constructor(private api: ApiService) {}
+
+  sendApprovalEmail(request: RequestReadModel, token: string): void {
+    const dlarsLink = `http://localhost:4200/supporting-documents?token=${token}`;
+    const params: EmailjsParams = buildEmailparams(request, dlarsLink);
 
     emailjs
       .send(this.serviceId, this.approvalTemplateId, params, this.publicKey)
@@ -33,8 +38,9 @@ export class EmailService {
       );
   }
 
-  sendDeclineEmail(request: RequestReadModel): void {
-    const params: EmailjsParams = buildEmailparams(request);
+  sendDeclineEmail(request: RequestReadModel, token: string): void {
+    const dlarsLink = `http://localhost:4200/supporting-documents?token=${token}`;
+    const params: EmailjsParams = buildEmailparams(request, dlarsLink);
 
     emailjs
       .send(this.serviceId, this.declinedTemplateId, params, this.publicKey)
@@ -52,5 +58,9 @@ export class EmailService {
           );
         }
       );
+  }
+
+  generateUrlToken(request: RequestReadModel): Observable<{ token: string }> {
+    return this.api.post<{ token: string }>(`Token/GenerateUrlToken`, request);
   }
 }

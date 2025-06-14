@@ -20,6 +20,7 @@
     "@auth0/angular-jwt": "^5.2.0",
     "@emailjs/browser": "^4.4.1",
     "@primeng/themes": "^19.1.2",
+    "jwt-decode": "^4.0.0",
     "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",
     "primeng": "^19.1.2",
