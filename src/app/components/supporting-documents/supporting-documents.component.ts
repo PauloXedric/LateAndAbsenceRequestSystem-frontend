@@ -1,12 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-supporting-documents',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    CardModule,
+    FormsModule,
+    ButtonModule,
+    ReactiveFormsModule,
+    FileUploadModule,
+  ],
   templateUrl: './supporting-documents.component.html',
   styleUrls: ['./supporting-documents.component.css'],
 })

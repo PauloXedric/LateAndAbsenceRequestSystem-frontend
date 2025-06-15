@@ -1,24 +1,32 @@
-<p>supporting-documents works!</p>
+<div class="card-wrapper">
+  <p-card [style]="{ width: '37rem' }">
+    <div *ngIf="isExpired" class="expired-message">
+      <h2>This link has expired.</h2>
+    </div>
+    <ng-template #header>
+      <div class="custom-card-header">
+        <img src="assets/images/dpcimage1.png" alt="Logo" class="header-logo" />
+        <span>DPC Late And Absence Request System</span>
+      </div>
+    </ng-template>
+    <div *ngIf="tokenData && !isExpired">
+      <h3>Request Detail:</h3>
+      <ul>
+        <li><strong>Student Number:</strong> {{ tokenData.studentNumber }}</li>
+        <li><strong>Student Name:</strong> {{ tokenData.studentName }}</li>
+        <li><strong>Teacher:</strong>{{ tokenData.teacher }}</li>
+        <li><strong>Subject:</strong> {{ tokenData.subject }}</li>
+        <li><strong>Date of Absence:</strong> {{ tokenData.dateOfAbsence }}</li>
+        <li>
+          <strong>Date of Attendance:</strong>
+          {{ tokenData.dateOfAttendance }}
+        </li>
+        <li><strong>Reason:</strong> {{ tokenData.reason }}</li>
+      </ul>
+    </div>
 
-<div *ngIf="isExpired" class="expired-message">
-  <h2>This link has expired.</h2>
-</div>
-
-<div *ngIf="tokenData && !isExpired">
-  <h2>Supporting Document Details</h2>
-  <ul>
-    <li><strong>Request ID:</strong> {{ tokenData.requestId }}</li>
-    <li><strong>Student Name:</strong> {{ tokenData.studentName }}</li>
-    <li><strong>Student Number:</strong> {{ tokenData.studentNumber }}</li>
-    <li><strong>Subject:</strong> {{ tokenData.subject }}</li>
-    <li><strong>Date of Absence:</strong> {{ tokenData.dateOfAbsence }}</li>
-    <li>
-      <strong>Date of Attendance:</strong> {{ tokenData.dateOfAttendance }}
-    </li>
-    <li><strong>Reason:</strong> {{ tokenData.reason }}</li>
-  </ul>
-</div>
-
-<div *ngIf="!tokenData && !isExpired">
-  <p>Waiting for token...</p>
+    <div *ngIf="!tokenData && !isExpired">
+      <p>Waiting for token...</p>
+    </div>
+  </p-card>
 </div>
