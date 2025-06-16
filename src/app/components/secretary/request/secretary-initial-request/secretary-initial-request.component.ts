@@ -53,7 +53,7 @@ export class SecretaryInitialRequestComponent implements OnInit {
 
   private filterSubject = new BehaviorSubject<string>('');
   private pageSubject = new BehaviorSubject<number>(0);
-  private pageSizeSubject = new BehaviorSubject<number>(8);
+  private pageSizeSubject = new BehaviorSubject<number>(7);
   private refreshSubject = new BehaviorSubject<void>(undefined);
 
   get pageSize(): number {

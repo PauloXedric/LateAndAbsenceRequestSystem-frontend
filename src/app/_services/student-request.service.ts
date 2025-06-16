@@ -26,4 +26,8 @@ export class StudentRequestService {
   updateRequestStatus(request: RequestUpdateModel) {
     return this.api.put(`Request/UpdateStatus`, request);
   }
+
+  addImageInRequest(formData: FormData) {
+    return this.api.put('Request/AddImageProof', formData);
+  }
 }
