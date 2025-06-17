@@ -46,6 +46,7 @@ src/environments/*
 !src/environments/.gitkeep
 
 src/assets/** 
-
 !src/assets/images/
 !src/assets/presets/
+!src/assets/images/.gitkeep
+!src/assets/presets/.gitkeep
