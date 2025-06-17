@@ -45,5 +45,7 @@ Thumbs.db
 src/environments/*
 !src/environments/.gitkeep
 
-src/assets/*
-!src/assets/.gitkeep
+src/assets/** 
+
+!src/assets/images/
+!src/assets/presets/
