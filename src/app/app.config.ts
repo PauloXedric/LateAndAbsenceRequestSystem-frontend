@@ -9,11 +9,10 @@ import { providePrimeNG } from 'primeng/config';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { MyPreset } from '../assets/presets/aura-preset';
-import { authInterceptor } from './_interceptors/auth.interceptor';
-import { API_CONFIG } from './_config/api.config';
+
 import { environment } from '../enviroments/environment';
-import { tokenGetter } from './_config/auth.config';
 import { JwtModule } from '@auth0/angular-jwt';
+import { API_CONFIG, authInterceptor, tokenGetter } from '@core';
 
 export const appConfig: ApplicationConfig = {
   providers: [

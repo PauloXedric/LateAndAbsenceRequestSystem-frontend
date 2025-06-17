@@ -1,21 +1,25 @@
 import { Routes } from '@angular/router';
-import { RequestComponent } from './components/request/request.component';
-import { SignInComponent } from './components/sign-in/sign-in.component';
-import { roleGuard } from './_guards/role.guard';
-import { authGuard } from './_guards/auth.guard';
-import { PublicLayoutComponent } from './components/_layouts/public-layout/public-layout.component';
-import { PrivateLayoutComponent } from './components/_layouts/private-layout/private-layout.component';
-import { SecretaryInitialRequestComponent } from './components/secretary/request/secretary-initial-request/secretary-initial-request.component';
-import { SecretarySecondaryRequestComponent } from './components/secretary/request/secretary-secondary-request/secretary-secondary-request.component';
-import { ChairpersonRequestComponent } from './components/chairperson/chairperson-request/chairperson-request.component';
-import { InstructorCoursesComponent } from './components/instructor-courses/instructor-courses.component';
-import { ApprovalHistoryComponent } from './components/approval-history/approval-history.component';
-import { DirectorRequestComponent } from './components/director/director-request/director-request.component';
-import { AccountManagementComponent } from './components/account-management/account-management.component';
-import { DirectorNavigationComponent } from './components/director/layout/director-navigation/director-navigation.component';
-import { ChairpersonNavigationComponent } from './components/chairperson/layout/chairperson-navigation/chairperson-navigation.component';
-import { SecretaryNavigationComponent } from './components/secretary/layout/secretary-navigation/secretary-navigation.component';
-import { SupportingDocumentsComponent } from './components/supporting-documents/supporting-documents.component';
+import {
+  ApprovalHistoryComponent,
+  InstructorCoursesComponent,
+  PrivateLayoutComponent,
+  PublicLayoutComponent,
+} from '@shared/components';
+
+import { authGuard, roleGuard } from '@core';
+import {
+  RequestComponent,
+  SupportingDocumentsComponent,
+  SecretaryNavigationComponent,
+  SecretaryInitialRequestComponent,
+  SecretarySecondaryRequestComponent,
+  ChairpersonNavigationComponent,
+  ChairpersonRequestComponent,
+  AccountManagementComponent,
+  SignInComponent,
+  DirectorNavigationComponent,
+  DirectorRequestComponent,
+} from '@features/components';
 
 export const routes: Routes = [
   {
