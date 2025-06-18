@@ -6,7 +6,7 @@ import {
   PublicLayoutComponent,
 } from '@shared/components';
 
-import { authGuard, roleGuard } from '@core';
+import { authGuard, roleGuard, tokenLinkGuard } from '@core';
 import {
   RequestComponent,
   SupportingDocumentsComponent,
@@ -32,6 +32,11 @@ export const routes: Routes = [
       { path: 'unathorized', component: RequestComponent },
       { path: 'supporting-documents', component: SupportingDocumentsComponent },
     ],
+  },
+  {
+    path: 'supporting-documents',
+    component: SupportingDocumentsComponent,
+    canActivate: [tokenLinkGuard],
   },
   {
     path: '',

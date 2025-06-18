@@ -10,3 +10,5 @@ export * from './_layouts/public-layout/public-layout.component';
 
 export * from './approval-history/approval-history.component';
 export * from './instructor-courses/instructor-courses.component';
+export * from './request-table/request-table.component';
+export * from './student-number-search-input/student-number-search-input.component';

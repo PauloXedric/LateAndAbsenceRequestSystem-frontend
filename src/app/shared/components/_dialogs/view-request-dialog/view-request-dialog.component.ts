@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
-import { RequestReadModel } from '../../../_models/request-read-model';
+import { RequestReadModel } from '../../../_models/request-read.model';
 
 @Component({
   selector: 'app-view-request-dialog',

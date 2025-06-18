@@ -1,2 +1,2 @@
-export * from './emailjs-param';
-export * from './read-request-params';
+export * from './emailjs.param';
+export * from './read-request.param';

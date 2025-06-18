@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
-import { RequestReadModel } from '../_models/request-read-model';
+import { RequestReadModel } from '../_models/request-read.model';
 import { Observable } from 'rxjs';
 import { ApiService } from '@core';
 import { buildEmailparams, EmailjsParams } from '@shared/_params';

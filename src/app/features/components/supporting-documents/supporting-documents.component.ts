@@ -5,16 +5,16 @@ import {
   ReactiveFormsModule,
   FormsModule,
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { jwtDecode } from 'jwt-decode';
 import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { FileUpload, FileUploadModule } from 'primeng/fileupload';
 import { CardModule } from 'primeng/card';
 import { Image } from 'primeng/image';
 import { ButtonModule } from 'primeng/button';
-import { StudentRequestService } from '@shared/_services';
-import { RequestService } from 'app/features/_services/request-service';
+import { RequestService } from '@features/_services/request.service';
+import { TokenLinkService } from '@core';
+import { DateFormatPipe } from '@shared/_pipes/date-format.pipe';
+import { ToastModule } from 'primeng/toast';
 
 type UploadField = 'imageProof' | 'parentsValidId' | 'medicalCertificate';
 
@@ -31,6 +31,8 @@ type UploadField = 'imageProof' | 'parentsValidId' | 'medicalCertificate';
     CardModule,
     Image,
     ButtonModule,
+    DateFormatPipe,
+    ToastModule,
   ],
   providers: [MessageService],
 })
@@ -53,48 +55,27 @@ export class SupportingDocumentsComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
     private messageService: MessageService,
-    private requestService: RequestService
+    private requestService: RequestService,
+    private tokenLinkService: TokenLinkService
   ) {}
 
   ngOnInit(): void {
-    const token =
-      this.route.snapshot.queryParamMap.get('token') ||
-      sessionStorage.getItem('dlarsToken');
-
-    if (!token) {
-      console.error('No token provided');
-      return;
-    }
-
-    try {
-      const decoded: any = jwtDecode(token);
-      const now = Date.now();
-      const expiration = decoded.exp * 1000;
-
-      if (expiration < now) {
-        this.isExpired = true;
-        console.warn('Token expired');
-      } else {
-        this.tokenData = decoded;
-        sessionStorage.setItem('dlarsToken', token);
-        this.router.navigate([], {
-          relativeTo: this.route,
-          queryParams: {},
-          replaceUrl: true,
-        });
-      }
-    } catch (error) {
-      console.error('Invalid token:', error);
-    }
+    this.tokenLinkService.initializeToken();
+    const decoded = this.tokenLinkService.decodeToken();
 
     this.formGroup = this.fb.group({
       imageProof: [''],
       parentsValidId: [''],
       medicalCertificate: [''],
     });
+
+    if (!decoded) {
+      console.error('No valid token found');
+      return;
+    }
+    this.tokenData = decoded;
+    this.isExpired = this.tokenLinkService.isTokenExpired();
   }
 
   selectedFiles: Record<UploadField, File | null> = {

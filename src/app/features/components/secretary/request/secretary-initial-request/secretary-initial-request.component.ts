@@ -4,11 +4,16 @@ import { CommonModule } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { ButtonModule } from 'primeng/button';
 import { Toolbar } from 'primeng/toolbar';
-import { InputIcon } from 'primeng/inputicon';
-import { IconField } from 'primeng/iconfield';
 import { InputTextModule } from 'primeng/inputtext';
 
-import { BehaviorSubject, combineLatest, forkJoin, of, Subject } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  forkJoin,
+  Observable,
+  of,
+  Subject,
+} from 'rxjs';
 import {
   catchError,
   debounceTime,
@@ -17,15 +22,22 @@ import {
   take,
   tap,
 } from 'rxjs/operators';
-import { RequestReadModel, RequestUpdateModel } from '@shared/_models';
+import {
+  PaginatedResult,
+  RequestReadModel,
+  RequestUpdateModel,
+} from '@shared/_models';
 import {
   ConfirmationDialogService,
   EmailService,
+  FilterService,
   StudentRequestService,
 } from '@shared/_services';
 import {
   ConfirmationDialogComponent,
+  StudentNumberSearchInputComponent,
   ViewRequestDialogComponent,
+  RequestTableComponent,
 } from '@shared/components';
 
 @Component({
@@ -37,11 +49,11 @@ import {
     PaginatorModule,
     ButtonModule,
     Toolbar,
-    InputIcon,
-    IconField,
     InputTextModule,
     ViewRequestDialogComponent,
     ConfirmationDialogComponent,
+    StudentNumberSearchInputComponent,
+    RequestTableComponent,
   ],
   templateUrl: './secretary-initial-request.component.html',
   styleUrl: './secretary-initial-request.component.css',
@@ -54,7 +66,6 @@ export class SecretaryInitialRequestComponent implements OnInit {
   selectedRequestReadData: RequestReadModel[] = [];
   selectedRequestToView: RequestReadModel | null = null;
 
-  private filterSubject = new BehaviorSubject<string>('');
   private pageSubject = new BehaviorSubject<number>(0);
   private pageSizeSubject = new BehaviorSubject<number>(7);
   private refreshSubject = new BehaviorSubject<void>(undefined);
@@ -66,50 +77,63 @@ export class SecretaryInitialRequestComponent implements OnInit {
   statusId = 1;
   totalRecords = 0;
   isLoading = false;
-
+  filteredRequests$!: Observable<PaginatedResult<RequestReadModel>>;
   constructor(
     private studentRequestService: StudentRequestService,
     private confirmationDialogService: ConfirmationDialogService,
-    private emailService: EmailService
+    private emailService: EmailService,
+    private filterService: FilterService
   ) {}
 
-  filteredRequests$ = combineLatest([
-    this.filterSubject.pipe(debounceTime(500), distinctUntilChanged()),
-    this.pageSubject,
-    this.pageSizeSubject,
-    this.refreshSubject,
-  ]).pipe(
-    tap(() => (this.isLoading = true)),
-    switchMap(([filter, page, pageSize]) =>
-      this.studentRequestService
-        .readRequest({
-          statusId: this.statusId,
-          pageNumber: page + 1,
-          pageSize: pageSize,
-          filter: filter.trim(),
-        })
-        .pipe(
-          catchError((err) => {
-            console.error('Failed to load requests', err);
-            return of({ items: [], totalCount: 0 });
-          })
-        )
-    ),
-    tap(() => (this.isLoading = false))
-  );
+  columns = [
+    { field: 'studentNumber', header: 'Student Number' },
+    { field: 'studentName', header: 'Student Name' },
+    { field: 'courseYearSection', header: 'Course/Year/Section' },
+    { field: 'dateOfAbsence', header: 'Date of Absence' },
+    { field: 'dateOfAttendance', header: 'Date of Attendance' },
+    { field: 'reason', header: 'Reason' },
+  ];
 
   ngOnInit(): void {
-    this.filterSubject.next('');
-
-    this.filteredRequests$.subscribe((response) => {
-      this.totalRecords = response.totalCount;
-    });
+    this.filteredRequests$ = combineLatest([
+      this.filterService.filter$.pipe(
+        debounceTime(500),
+        distinctUntilChanged()
+      ),
+      this.pageSubject,
+      this.pageSizeSubject,
+      this.refreshSubject,
+    ]).pipe(
+      tap(() => (this.isLoading = true)),
+      switchMap(([filter, page, pageSize]) =>
+        this.studentRequestService
+          .readRequest({
+            statusId: this.statusId,
+            pageNumber: page + 1,
+            pageSize: pageSize,
+            filter: filter,
+          })
+          .pipe(
+            catchError((err) => {
+              console.error('Failed to load requests', err);
+              return of({
+                items: [],
+                totalCount: 0,
+                pageNumber: page + 1,
+                pageSize: pageSize,
+              });
+            })
+          )
+      ),
+      tap((response) => {
+        this.totalRecords = response.totalCount;
+        this.isLoading = false;
+      })
+    );
   }
 
-  onFilterChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const value = input?.value ?? '';
-    this.filterSubject.next(value);
+  onFilterChange(value: string): void {
+    this.filterService.setFilter(value);
     this.pageSubject.next(0);
   }
 

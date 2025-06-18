@@ -11,7 +11,7 @@ import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { RequestCreateModel } from '../../_models/request-create.model';
 import { NgIf } from '@angular/common';
-import { RequestService } from 'app/features/_services/request-service';
+import { RequestService } from '@features/_services/request.service';
 
 @Component({
   selector: 'request-form',
