@@ -1,6 +1,5 @@
 import { Component, HostListener, OnInit, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { SecretarySidebarComponent } from '../secretary-sidebar/secretary-sidebar.component';
 import { MainComponent } from '@shared/components';

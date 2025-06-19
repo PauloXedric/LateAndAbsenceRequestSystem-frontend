@@ -1,0 +1,89 @@
+<div class="card">
+  <p-table
+    [value]="(value$ | async)?.items ?? []"
+    [selection]="selection"
+    (selectionChange)="onSelectionChange($event)"
+    dataKey="requestId"
+    [paginator]="true"
+    [rows]="pageSize"
+    [totalRecords]="totalRecords"
+    [lazy]="true"
+    (onPage)="pageChange.emit($event)"
+    [tableStyle]="{ 'min-width': '60rem' }"
+    stripedRows
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+        <th *ngFor="let col of columns">{{ col.header }}</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td><p-tableCheckbox [value]="item" /></td>
+        <td *ngFor="let col of columns">
+          <ng-container [ngSwitch]="col.field">
+            <ng-container *ngSwitchCase="'dateOfAbsence'">
+              {{ item[col.field] | dateFormat }}
+            </ng-container>
+            <ng-container *ngSwitchCase="'dateOfAttendance'">
+              {{ item[col.field] | dateFormat }}
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'proofImage'">
+              <p-image
+                [src]="'http://localhost:51564' + item.proofImage"
+                alt="Proof"
+                width="100"
+                [preview]="preview"
+                [style]="{ 'object-fit': 'cover' }"
+              />
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'parentValidImage'">
+              <p-image
+                [src]="'http://localhost:51564' + item.parentValidImage"
+                alt="Parent ID"
+                width="100"
+                [preview]="preview"
+                [style]="{ 'object-fit': 'cover' }"
+              />
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'medicalCertificate'">
+              <p-image
+                *ngIf="item.medicalCertificate"
+                [src]="'http://localhost:51564' + item.medicalCertificate"
+                alt="Medical Cert"
+                width="100"
+                [preview]="preview"
+                [style]="{ 'object-fit': 'cover' }"
+              />
+            </ng-container>
+
+            <ng-container *ngSwitchDefault>
+              {{ item[col.field] }}
+            </ng-container>
+          </ng-container>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+      <div class="text-sm text-gray-600 px-3 py-2">
+        There
+        {{ ((value$ | async)?.totalCount ?? 0) === 1 ? "is" : "are" }}
+        currently {{ (value$ | async)?.totalCount ?? 0 }} request{{
+          ((value$ | async)?.totalCount ?? 0) === 1 ? "" : "s"
+        }}.
+      </div>
+    </ng-template>
+
+    <ng-template #emptymessage>
+      <tr>
+        <td [attr.colspan]="columns.length + 1">No requests found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

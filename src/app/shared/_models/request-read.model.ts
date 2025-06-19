@@ -8,4 +8,7 @@ export interface RequestReadModel {
   dateOfAbsence: string;
   dateOfAttendance: string;
   reason: string;
+  proofImage: string;
+  parentValidImage: string;
+  medicalCertificate?: string;
 }

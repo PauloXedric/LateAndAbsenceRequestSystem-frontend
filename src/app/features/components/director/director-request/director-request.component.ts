@@ -1,9 +1,26 @@
 import { Component } from '@angular/core';
+import { RequestActionEnum } from '@shared/_enums/request-action.enum';
+import { RequestStatusEnum } from '@shared/_enums/request-status.enum';
+import { AdvancedRequestTableComponent } from '@shared/components';
 
 @Component({
   selector: 'app-director-request',
-  imports: [],
-  templateUrl: './director-request.component.html',
-  styleUrl: './director-request.component.css',
+  imports: [AdvancedRequestTableComponent],
+  template: ` <h1>Request:</h1>
+    <app-advanced-request-table
+      [statusId]="RequestStatusEnum.WaitingForDirectorApproval"
+      [nextApprovalStatus]="RequestStatusEnum.ApprovalComplete"
+      [rejectedStatus]="RequestStatusEnum.RejectedInDirectorApproval"
+    ></app-advanced-request-table>`,
+  styles: [
+    `
+      h1 {
+        padding-bottom: 1rem;
+      }
+    `,
+  ],
 })
-export class DirectorRequestComponent {}
+export class DirectorRequestComponent {
+  readonly RequestActionEnum = RequestActionEnum;
+  readonly RequestStatusEnum = RequestStatusEnum;
+}

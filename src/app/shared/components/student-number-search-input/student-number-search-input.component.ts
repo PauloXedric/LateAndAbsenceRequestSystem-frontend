@@ -15,7 +15,7 @@ import { InputTextModule } from 'primeng/inputtext';
         type="text"
         pInputText
         placeholder="Search student number"
-        (input)="onInputChange($event)"
+        (input)="onInput($event)"
       />
     </p-iconfield>
   `,

@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { RequestReadModel } from '../../../_models/request-read.model';
+import { DateFormatPipe } from '@shared/_pipes/date-format.pipe';
 
 @Component({
   selector: 'app-view-request-dialog',
   standalone: true,
-  imports: [CommonModule, DialogModule, ButtonModule],
+  imports: [CommonModule, DialogModule, ButtonModule, DateFormatPipe],
   templateUrl: './view-request-dialog.component.html',
   styleUrls: ['./view-request-dialog.component.css'],
 })

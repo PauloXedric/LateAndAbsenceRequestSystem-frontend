@@ -1,74 +1,65 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
-import { PaginatorModule } from 'primeng/paginator';
-import { ButtonModule } from 'primeng/button';
-import { ToolbarModule } from 'primeng/toolbar';
-import { InputTextModule } from 'primeng/inputtext';
-
+import { Component, Input } from '@angular/core';
+import { RequestActionEnum } from '@shared/_enums/request-action.enum';
+import { RequestStatusEnum } from '@shared/_enums/request-status.enum';
 import {
-  BehaviorSubject,
-  combineLatest,
-  forkJoin,
-  Observable,
-  of,
-  Subject,
-} from 'rxjs';
-import {
-  catchError,
-  debounceTime,
-  distinctUntilChanged,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs/operators';
-import {
-  PaginatedResult,
   RequestReadModel,
+  PaginatedResult,
   RequestUpdateModel,
 } from '@shared/_models';
 import {
+  StudentRequestService,
   ConfirmationDialogService,
   EmailService,
   FilterService,
-  StudentRequestService,
 } from '@shared/_services';
+import { ConfirmationDialogComponent } from '@shared/components/_dialogs/confirmation-dialog/confirmation-dialog.component';
+import { ViewRequestDialogComponent } from '@shared/components/_dialogs/view-request-dialog/view-request-dialog.component';
+import { RequestTableButtonsComponent } from '@shared/components/request-table-buttons/request-table-buttons.component';
+import { StudentNumberSearchInputComponent } from '@shared/components/student-number-search-input/student-number-search-input.component';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { PaginatorModule } from 'primeng/paginator';
+import { TableModule } from 'primeng/table';
+import { ToolbarModule } from 'primeng/toolbar';
 import {
-  ConfirmationDialogComponent,
-  StudentNumberSearchInputComponent,
-  ViewRequestDialogComponent,
-  RequestTableComponent,
-  RequestTableButtonsComponent,
-} from '@shared/components';
-import { RequestActionEnum } from '@shared/_enums/request-action.enum';
-import { RequestStatusEnum } from '@shared/_enums/request-status.enum';
+  BehaviorSubject,
+  Observable,
+  combineLatest,
+  debounceTime,
+  distinctUntilChanged,
+  tap,
+  switchMap,
+  catchError,
+  of,
+  Subject,
+  take,
+  forkJoin,
+} from 'rxjs';
+import { RequestTableComponent } from '../request-table/request-table.component';
 
 @Component({
-  selector: 'app-secretary-initial-request',
-  standalone: true,
+  selector: 'app-advanced-request-table',
   imports: [
-    TableModule,
     CommonModule,
-    PaginatorModule,
+    TableModule,
     ButtonModule,
     ToolbarModule,
+    PaginatorModule,
     InputTextModule,
+    RequestTableComponent,
+    RequestTableButtonsComponent,
     ViewRequestDialogComponent,
     ConfirmationDialogComponent,
     StudentNumberSearchInputComponent,
-    RequestTableComponent,
-    RequestTableButtonsComponent,
   ],
-  templateUrl: './secretary-initial-request.component.html',
-  styles: [
-    `
-      h1 {
-        padding-bottom: 1rem;
-      }
-    `,
-  ],
+  templateUrl: './advanced-request-table.component.html',
 })
-export class SecretaryInitialRequestComponent implements OnInit {
+export class AdvancedRequestTableComponent {
+  @Input() statusId!: RequestStatusEnum;
+  @Input() nextApprovalStatus!: RequestStatusEnum;
+  @Input() rejectedStatus!: RequestStatusEnum;
+
   readonly RequestActionEnum = RequestActionEnum;
   readonly RequestStatusEnum = RequestStatusEnum;
 
@@ -80,29 +71,30 @@ export class SecretaryInitialRequestComponent implements OnInit {
   private pageSizeSubject = new BehaviorSubject<number>(7);
   private refreshSubject = new BehaviorSubject<void>(undefined);
 
+  totalRecords = 0;
+  isLoading = false;
+
   get pageSize(): number {
     return this.pageSizeSubject.value;
   }
 
-  statusId = RequestStatusEnum.WaitingForFirstSecretaryApproval;
-  totalRecords = 0;
-  isLoading = false;
   filteredRequests$!: Observable<PaginatedResult<RequestReadModel>>;
+
+  columns = [
+    { field: 'studentNumber', header: 'Student Number' },
+    { field: 'studentName', header: 'Student Name' },
+    { field: 'courseYearSection', header: 'Course/Year/Section' },
+    { field: 'proofImage', header: 'Image Proof' },
+    { field: 'parentValidImage', header: "Parent's ID" },
+    { field: 'medicalCertificate', header: 'Med. Cert.' },
+  ];
+
   constructor(
     private studentRequestService: StudentRequestService,
     private confirmationDialogService: ConfirmationDialogService,
     private emailService: EmailService,
     private filterService: FilterService
   ) {}
-
-  columns = [
-    { field: 'studentNumber', header: 'Student Number' },
-    { field: 'studentName', header: 'Student Name' },
-    { field: 'courseYearSection', header: 'Course/Year/Section' },
-    { field: 'dateOfAbsence', header: 'Date of Absence' },
-    { field: 'dateOfAttendance', header: 'Date of Attendance' },
-    { field: 'reason', header: 'Reason' },
-  ];
 
   ngOnInit(): void {
     this.filteredRequests$ = combineLatest([
@@ -120,8 +112,8 @@ export class SecretaryInitialRequestComponent implements OnInit {
           .readRequest({
             statusId: this.statusId,
             pageNumber: page + 1,
-            pageSize: pageSize,
-            filter: filter,
+            pageSize,
+            filter,
           })
           .pipe(
             catchError((err) => {
@@ -130,7 +122,7 @@ export class SecretaryInitialRequestComponent implements OnInit {
                 items: [],
                 totalCount: 0,
                 pageNumber: page + 1,
-                pageSize: pageSize,
+                pageSize,
               });
             })
           )
@@ -142,41 +134,40 @@ export class SecretaryInitialRequestComponent implements OnInit {
     );
   }
 
+  onPageChange(event: { first: number; rows: number }) {
+    this.pageSubject.next(event.first / event.rows);
+    this.pageSizeSubject.next(event.rows);
+  }
+
   onFilterChange(value: string): void {
     this.filterService.setFilter(value);
     this.pageSubject.next(0);
   }
 
-  onPageChange(event: { first: number; rows: number }): void {
-    this.pageSubject.next(event.first / event.rows);
-    this.pageSizeSubject.next(event.rows);
-  }
-
-  //Button Enabling
-  get selectionCount(): number {
-    return this.selectedRequestReadData?.length || 0;
-  }
-
-  get isViewDisabled(): boolean {
-    return this.selectionCount !== 1;
-  }
-
-  get isActionDisabled(): boolean {
-    return this.selectionCount < 1;
-  }
-
-  //View Request Data
   onViewRequest(): void {
-    if (this.selectionCount === 1) {
+    if (this.selectedRequestReadData.length === 1) {
       this.selectedRequestToView = this.selectedRequestReadData[0];
       this.isViewDialogVisible = true;
     }
   }
 
-  // Request Status Updation
-  executeStatusChange(newStatusId: number, actionLabel: string): void {
-    if (this.selectedRequestReadData.length === 0) return;
+  confirmStatusChange(status: RequestStatusEnum, label: RequestActionEnum) {
+    const response$ = new Subject<boolean>();
 
+    this.confirmationDialogService.requestConfirmation({
+      header: `Confirm ${label}`,
+      message: `Are you sure you want to ${label.toLowerCase()} the selected request(s)?`,
+      actionLabel: label,
+      response$: response$,
+    });
+
+    response$.pipe(take(1)).subscribe((confirmed) => {
+      if (confirmed) this.executeStatusChange(status, label);
+    });
+  }
+
+  executeStatusChange(newStatusId: number, actionLabel: string) {
+    if (this.selectedRequestReadData.length === 0) return;
     this.isLoading = true;
 
     const updateCalls = this.selectedRequestReadData.map((request) => {
@@ -190,7 +181,6 @@ export class SecretaryInitialRequestComponent implements OnInit {
           this.emailService.generateUrlToken(request).pipe(
             tap((response) => {
               const token = response.token;
-
               if (actionLabel === RequestActionEnum.Approve) {
                 this.emailService.sendApprovalEmail(request, token);
               } else {
@@ -215,26 +205,11 @@ export class SecretaryInitialRequestComponent implements OnInit {
     });
   }
 
-  // Confirmation Dialog Logic
-  confirmStatusChange(
-    statusId: RequestStatusEnum,
-    label: RequestActionEnum
-  ): void {
-    if (this.selectedRequestReadData.length === 0) return;
+  get isViewDisabled(): boolean {
+    return this.selectedRequestReadData.length !== 1;
+  }
 
-    const response$ = new Subject<boolean>();
-
-    this.confirmationDialogService.requestConfirmation({
-      header: `Confirm ${label}`,
-      message: `Are you sure you want to ${label.toLowerCase()} the selected request(s)?`,
-      actionLabel: label,
-      response$: response$,
-    });
-
-    response$.pipe(take(1)).subscribe((confirmed) => {
-      if (confirmed) {
-        this.executeStatusChange(statusId, label);
-      }
-    });
+  get isActionDisabled(): boolean {
+    return this.selectedRequestReadData.length === 0;
   }
 }

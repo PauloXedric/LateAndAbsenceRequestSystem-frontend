@@ -1,16 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { PrimeIcons } from 'primeng/api';
+import { AuthService } from '@core';
+import { ConfirmationService, PrimeIcons } from 'primeng/api';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 @Component({
   selector: 'director-left-sidebar',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, ConfirmPopupModule],
+  providers: [AuthService, ConfirmationService],
   templateUrl: './director-sidebar.component.html',
   styleUrl: './director-sidebar.component.css',
 })
 export class DirectorSidebarComponent {
+  constructor(
+    private authService: AuthService,
+    private confirmationService: ConfirmationService
+  ) {}
+
   isLeftSidebarCollapsed = input.required<boolean>();
   changeIsLeftSidebarCollapsed = output<boolean>();
   items = [
@@ -34,5 +42,32 @@ export class DirectorSidebarComponent {
       routerLink: ['account-management'],
       icon: PrimeIcons.USER_EDIT,
     },
+    {
+      label: 'Log out',
+      icon: PrimeIcons.SIGN_OUT,
+      command: (event: Event) => this.confirmLogout(event),
+    },
   ];
+
+  confirmLogout(event: Event) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Are you sure you want to logout?',
+      icon: 'pi pi-sign-out',
+      acceptLabel: 'Logout',
+      rejectLabel: 'Cancel',
+      acceptButtonProps: {
+        severity: 'danger',
+        outlined: true,
+      },
+      rejectButtonProps: {
+        severity: 'secondary',
+        outlined: true,
+      },
+      accept: () => {
+        this.authService.logout();
+      },
+      reject: () => {},
+    });
+  }
 }

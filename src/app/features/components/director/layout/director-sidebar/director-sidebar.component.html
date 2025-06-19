@@ -8,6 +8,7 @@
       <a
         class="sidenav-nav-link"
         [routerLink]="item.routerLink"
+        (click)="item.command?.($event)"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: true }"
       >
@@ -20,3 +21,4 @@
     }
   </div>
 </div>
+<p-confirmpopup></p-confirmpopup>

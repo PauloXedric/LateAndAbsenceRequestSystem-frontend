@@ -31,11 +31,11 @@ export class AuthService {
     );
   }
 
-  // logout() {
-  //   localStorage.removeItem(this.tokenKey);
-  //   this.isLoggedIn$.next(false);
-  //   this.router.navigate(['/login']);
-  // }
+  logout() {
+    localStorage.removeItem(this.tokenKey);
+    this.isLoggedIn$.next(false);
+    this.router.navigate(['/sign-in']);
+  }
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);

@@ -11,11 +11,11 @@
     <p><strong>Course/Year/Section:</strong> {{ request.courseYearSection }}</p>
     <p>
       <strong>Date of Absence:</strong>
-      {{ request.dateOfAbsence | date : "MM/dd/yyyy" }}
+      {{ request.dateOfAbsence | dateFormat }}
     </p>
     <p>
       <strong>Date of Attendance:</strong>
-      {{ request.dateOfAttendance | date : "MM/dd/yyyy" }}
+      {{ request.dateOfAttendance | dateFormat }}
     </p>
     <p><strong>Reason:</strong> {{ request.reason }}</p>
   </div>
