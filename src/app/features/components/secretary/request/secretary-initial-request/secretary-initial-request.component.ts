@@ -42,6 +42,7 @@ import {
 } from '@shared/components';
 import { RequestActionEnum } from '@shared/_enums/request-action.enum';
 import { RequestStatusEnum } from '@shared/_enums/request-status.enum';
+import { RolesEnum } from '@shared/_enums/roles.enums';
 
 @Component({
   selector: 'app-secretary-initial-request',
@@ -192,9 +193,16 @@ export class SecretaryInitialRequestComponent implements OnInit {
               const token = response.token;
 
               if (actionLabel === RequestActionEnum.Approve) {
-                this.emailService.sendApprovalEmail(request, token);
+                this.emailService.sendApprovalEmail(
+                  request,
+                  token,
+                  RolesEnum.Secretary
+                );
               } else {
-                this.emailService.sendDeclineEmail(request, token);
+                this.emailService.sendDeclineEmail(
+                  request,
+                  RolesEnum.Secretary
+                );
               }
             })
           )

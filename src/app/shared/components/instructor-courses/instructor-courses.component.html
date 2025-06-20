@@ -1,1 +1,113 @@
-<p>instuctor-courses works!</p>
+<div class="card flex justify-center">
+  <p-accordion value="0">
+    <p-accordion-panel value="0">
+      <p-accordion-header>Table</p-accordion-header>
+      <p-accordion-content>
+        <p class="m-0">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </p-accordion-content>
+    </p-accordion-panel>
+
+    <p-accordion-panel value="1">
+      <p-accordion-header>Assign Subjects:</p-accordion-header>
+      <p-accordion-content>
+        <p class="m-0">
+          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+          accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae
+          ab illo inventore veritatis et quasi architecto beatae vitae dicta
+          sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
+          aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos
+          qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit,
+          sed quia non numquam eius modi.
+        </p>
+      </p-accordion-content>
+    </p-accordion-panel>
+
+    <p-accordion-panel value="2">
+      <p-accordion-header>Add Instructors:</p-accordion-header>
+      <p-accordion-content>
+        <form
+          [formGroup]="addTeacherForm"
+          (ngSubmit)="addTeacher()"
+          class="form-container"
+        >
+          <p class="m-0">
+            <p-inputgroup>
+              <p-inputgroup-addon>
+                <i class="pi pi-user"></i>
+              </p-inputgroup-addon>
+              <input
+                pInputText
+                formControlName="teacherName"
+                placeholder="Teacher Name"
+              />
+            </p-inputgroup>
+            <p-inputgroup>
+              <p-inputgroup-addon>
+                <i class="pi pi-id-card"></i>
+              </p-inputgroup-addon>
+              <input
+                pInputText
+                formControlName="teacherCode"
+                placeholder="Teacher Code"
+              />
+            </p-inputgroup>
+            <p-button
+              label="Add Teacher"
+              type="submit"
+              [disabled]="addTeacherForm.invalid"
+            />
+          </p>
+        </form>
+      </p-accordion-content>
+    </p-accordion-panel>
+
+    <p-accordion-panel value="3">
+      <p-accordion-header>Add Subjects:</p-accordion-header>
+      <p-accordion-content>
+        <p class="m-0"></p>
+        <form
+          [formGroup]="addSubjectForm"
+          (ngSubmit)="addSubject()"
+          class="form-container"
+        >
+          <p class="m-0">
+            <p-inputgroup>
+              <p-inputgroup-addon>
+                <i class="pi pi-user"></i>
+              </p-inputgroup-addon>
+              <input
+                pInputText
+                formControlName="subjectName"
+                placeholder="Subject Name"
+              />
+            </p-inputgroup>
+            <p-inputgroup>
+              <p-inputgroup-addon>
+                <i class="pi pi-hashtag"></i>
+              </p-inputgroup-addon>
+              <input
+                pInputText
+                formControlName="subjectCode"
+                placeholder="Subject Code"
+              />
+            </p-inputgroup>
+            <p-button
+              label="Add Subject"
+              type="submit"
+              [disabled]="addSubjectForm.invalid"
+            />
+          </p>
+        </form>
+      </p-accordion-content>
+    </p-accordion-panel>
+  </p-accordion>
+</div>
+<p-toast></p-toast>

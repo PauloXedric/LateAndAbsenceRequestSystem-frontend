@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RequestActionEnum } from '@shared/_enums/request-action.enum';
 import { RequestStatusEnum } from '@shared/_enums/request-status.enum';
+import { RolesEnum } from '@shared/_enums/roles.enums';
 import { AdvancedRequestTableComponent } from '@shared/components';
 
 @Component({
@@ -12,6 +13,7 @@ import { AdvancedRequestTableComponent } from '@shared/components';
       [statusId]="RequestStatusEnum.WaitingForSecondSecretaryApproval"
       [nextApprovalStatus]="RequestStatusEnum.WaitingForChairpersonApproval"
       [rejectedStatus]="RequestStatusEnum.RejectedInSecondSecretaryApproval"
+      [roles]="RolesEnum.SecondSecretary"
     ></app-advanced-request-table>`,
   styles: [
     `
@@ -24,4 +26,5 @@ import { AdvancedRequestTableComponent } from '@shared/components';
 export class SecretarySecondaryRequestComponent {
   readonly RequestActionEnum = RequestActionEnum;
   readonly RequestStatusEnum = RequestStatusEnum;
+  readonly RolesEnum = RolesEnum;
 }

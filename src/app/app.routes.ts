@@ -30,13 +30,14 @@ export const routes: Routes = [
       { path: 'request', component: RequestComponent },
       { path: 'sign-in', component: SignInComponent },
       { path: 'unathorized', component: RequestComponent },
+      { path: 'supporting-documents', component: SupportingDocumentsComponent },
     ],
   },
-  {
-    path: 'supporting-documents',
-    component: SupportingDocumentsComponent,
-    canActivate: [tokenLinkGuard],
-  },
+  // {
+  //   path: 'supporting-documents',
+  //   component: SupportingDocumentsComponent,
+  //   canActivate: [tokenLinkGuard],
+  // },
   {
     path: '',
     component: PrivateLayoutComponent,

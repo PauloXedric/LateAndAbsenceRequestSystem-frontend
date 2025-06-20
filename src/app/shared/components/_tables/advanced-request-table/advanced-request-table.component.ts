@@ -37,6 +37,8 @@ import {
   forkJoin,
 } from 'rxjs';
 import { RequestTableComponent } from '../request-table/request-table.component';
+import { RolesEnum } from '@shared/_enums/roles.enums';
+import { toRequestGenTokenModel } from '@shared/_utilities/request-mapper';
 
 @Component({
   selector: 'app-advanced-request-table',
@@ -59,6 +61,7 @@ export class AdvancedRequestTableComponent {
   @Input() statusId!: RequestStatusEnum;
   @Input() nextApprovalStatus!: RequestStatusEnum;
   @Input() rejectedStatus!: RequestStatusEnum;
+  @Input() roles!: RolesEnum;
 
   readonly RequestActionEnum = RequestActionEnum;
   readonly RequestStatusEnum = RequestStatusEnum;
@@ -177,18 +180,24 @@ export class AdvancedRequestTableComponent {
       };
 
       return this.studentRequestService.updateRequestStatus(updateModel).pipe(
-        switchMap(() =>
-          this.emailService.generateUrlToken(request).pipe(
+        switchMap(() => {
+          const tokenModel = toRequestGenTokenModel(request);
+          return this.emailService.generateUrlToken(tokenModel).pipe(
             tap((response) => {
               const token = response.token;
+
               if (actionLabel === RequestActionEnum.Approve) {
-                this.emailService.sendApprovalEmail(request, token);
+                this.emailService.sendApprovalEmail(
+                  tokenModel,
+                  token,
+                  this.roles
+                );
               } else {
-                this.emailService.sendDeclineEmail(request, token);
+                this.emailService.sendDeclineEmail(tokenModel, this.roles);
               }
             })
-          )
-        )
+          );
+        })
       );
     });
 
