@@ -68,7 +68,7 @@ export class EmailService {
       );
   }
 
-  generateUrlToken(
+  generateNewToken(
     request: RequestGenTokenModel
   ): Observable<{ token: string }> {
     return this.api.post<{ token: string }>(`Token/GenerateUrlToken`, request);

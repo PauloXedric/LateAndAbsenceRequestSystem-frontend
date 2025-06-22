@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RequestActionEnum } from '@shared/_enums/request-action.enum';
 import { RequestStatusEnum } from '@shared/_enums/request-status.enum';
@@ -17,11 +16,9 @@ import { ConfirmationDialogComponent } from '@shared/components/_dialogs/confirm
 import { ViewRequestDialogComponent } from '@shared/components/_dialogs/view-request-dialog/view-request-dialog.component';
 import { RequestTableButtonsComponent } from '@shared/components/request-table-buttons/request-table-buttons.component';
 import { StudentNumberSearchInputComponent } from '@shared/components/student-number-search-input/student-number-search-input.component';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { PaginatorModule } from 'primeng/paginator';
-import { TableModule } from 'primeng/table';
-import { ToolbarModule } from 'primeng/toolbar';
+import { DateFormatPipe } from '@shared/_pipes/date-format.pipe';
+
+import { CommonModule } from '@angular/common';
 import {
   BehaviorSubject,
   Observable,
@@ -36,12 +33,18 @@ import {
   take,
   forkJoin,
 } from 'rxjs';
-import { RequestTableComponent } from '../request-table/request-table.component';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { PaginatorModule } from 'primeng/paginator';
+import { ToolbarModule } from 'primeng/toolbar';
+import { Image } from 'primeng/image';
 import { RolesEnum } from '@shared/_enums/roles.enums';
 import { toRequestGenTokenModel } from '@shared/_utilities/request-mapper';
 
 @Component({
-  selector: 'app-advanced-request-table',
+  selector: 'app-requests-table',
+  standalone: true,
   imports: [
     CommonModule,
     TableModule,
@@ -49,19 +52,31 @@ import { toRequestGenTokenModel } from '@shared/_utilities/request-mapper';
     ToolbarModule,
     PaginatorModule,
     InputTextModule,
-    RequestTableComponent,
+    DateFormatPipe,
+    Image,
     RequestTableButtonsComponent,
     ViewRequestDialogComponent,
     ConfirmationDialogComponent,
     StudentNumberSearchInputComponent,
   ],
-  templateUrl: './advanced-request-table.component.html',
+  templateUrl: './requests-table.component.html',
+  styles: [
+    `
+      ::ng-deep .p-image-original {
+        margin-left: 15rem !important;
+        transition: transform 0.15s;
+        max-width: 90vh !important;
+        max-height: 90vh !important;
+      }
+    `,
+  ],
 })
-export class AdvancedRequestTableComponent {
+export class RequestsTableComponent {
   @Input() statusId!: RequestStatusEnum;
   @Input() nextApprovalStatus!: RequestStatusEnum;
   @Input() rejectedStatus!: RequestStatusEnum;
   @Input() roles!: RolesEnum;
+  @Input() columns: { field: string; header: string }[] = [];
 
   readonly RequestActionEnum = RequestActionEnum;
   readonly RequestStatusEnum = RequestStatusEnum;
@@ -76,21 +91,13 @@ export class AdvancedRequestTableComponent {
 
   totalRecords = 0;
   isLoading = false;
+  preview = true;
 
   get pageSize(): number {
     return this.pageSizeSubject.value;
   }
 
   filteredRequests$!: Observable<PaginatedResult<RequestReadModel>>;
-
-  columns = [
-    { field: 'studentNumber', header: 'Student Number' },
-    { field: 'studentName', header: 'Student Name' },
-    { field: 'courseYearSection', header: 'Course/Year/Section' },
-    { field: 'proofImage', header: 'Image Proof' },
-    { field: 'parentValidImage', header: "Parent's ID" },
-    { field: 'medicalCertificate', header: 'Med. Cert.' },
-  ];
 
   constructor(
     private studentRequestService: StudentRequestService,
@@ -119,15 +126,14 @@ export class AdvancedRequestTableComponent {
             filter,
           })
           .pipe(
-            catchError((err) => {
-              console.error('Failed to load requests', err);
-              return of({
+            catchError(() =>
+              of({
                 items: [],
                 totalCount: 0,
                 pageNumber: page + 1,
                 pageSize,
-              });
-            })
+              })
+            )
           )
       ),
       tap((response) => {
@@ -147,6 +153,10 @@ export class AdvancedRequestTableComponent {
     this.pageSubject.next(0);
   }
 
+  onSelectionChange(selected: RequestReadModel[]): void {
+    this.selectedRequestReadData = selected;
+  }
+
   onViewRequest(): void {
     if (this.selectedRequestReadData.length === 1) {
       this.selectedRequestToView = this.selectedRequestReadData[0];
@@ -156,7 +166,6 @@ export class AdvancedRequestTableComponent {
 
   confirmStatusChange(status: RequestStatusEnum, label: RequestActionEnum) {
     const response$ = new Subject<boolean>();
-
     this.confirmationDialogService.requestConfirmation({
       header: `Confirm ${label}`,
       message: `Are you sure you want to ${label.toLowerCase()} the selected request(s)?`,
@@ -182,10 +191,9 @@ export class AdvancedRequestTableComponent {
       return this.studentRequestService.updateRequestStatus(updateModel).pipe(
         switchMap(() => {
           const tokenModel = toRequestGenTokenModel(request);
-          return this.emailService.generateUrlToken(tokenModel).pipe(
+          return this.emailService.generateNewToken(tokenModel).pipe(
             tap((response) => {
               const token = response.token;
-
               if (actionLabel === RequestActionEnum.Approve) {
                 this.emailService.sendApprovalEmail(
                   tokenModel,

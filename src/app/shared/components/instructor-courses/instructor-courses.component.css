@@ -1,0 +1,15 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-container-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.form-container-row p-inputgroup {
+  flex: 1;
+}

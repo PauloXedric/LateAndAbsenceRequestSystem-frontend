@@ -1,0 +1,21 @@
+<div class="card">
+  <p-table
+    [value]="teachersTable"
+    [scrollable]="true"
+    scrollHeight="275px"
+    [tableStyle]="{ 'min-width': '50rem' }"
+  >
+    <ng-template #header>
+      <tr>
+        <th>Teacher Code</th>
+        <th>Teacher Name</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-teacher>
+      <tr>
+        <td>{{ teacher.teacherCode }}</td>
+        <td>{{ teacher.teacherName }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@core';
-import { TeacherModel } from '@shared/_models';
+import { TeacherCreateModel, TeacherReadModel } from '@shared/_models';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,7 +9,11 @@ import { Observable } from 'rxjs';
 export class TeacherService {
   constructor(private api: ApiService) {}
 
-  addNewTeacher(data: TeacherModel): Observable<{ message: string }> {
+  addNewTeacher(data: TeacherCreateModel): Observable<{ message: string }> {
     return this.api.post('Teacher/AddTeacher', data);
+  }
+
+  teacherList(): Observable<TeacherReadModel[]> {
+    return this.api.get('Teacher/TeacherList');
   }
 }

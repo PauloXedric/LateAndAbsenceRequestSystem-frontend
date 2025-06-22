@@ -1,14 +1,36 @@
 <div class="card">
+  <p-toolbar>
+    <ng-template pTemplate="start">
+      <app-request-table-buttons
+        [isViewDisabled]="isViewDisabled"
+        [isActionDisabled]="isActionDisabled"
+        (view)="onViewRequest()"
+        (approve)="
+          confirmStatusChange(nextApprovalStatus, RequestActionEnum.Approve)
+        "
+        (decline)="
+          confirmStatusChange(rejectedStatus, RequestActionEnum.Decline)
+        "
+      />
+    </ng-template>
+
+    <ng-template pTemplate="center">
+      <app-student-number-search-input
+        (filterChanged)="onFilterChange($event)"
+      />
+    </ng-template>
+  </p-toolbar>
+
   <p-table
-    [value]="(value$ | async)?.items ?? []"
-    [selection]="selection"
+    [value]="(filteredRequests$ | async)?.items ?? []"
+    [selection]="selectedRequestReadData"
     (selectionChange)="onSelectionChange($event)"
     dataKey="requestId"
     [paginator]="true"
     [rows]="pageSize"
     [totalRecords]="totalRecords"
     [lazy]="true"
-    (onPage)="pageChange.emit($event)"
+    (onPage)="onPageChange($event)"
     [tableStyle]="{ 'min-width': '60rem' }"
     stripedRows
   >
@@ -73,9 +95,11 @@
     <ng-template pTemplate="summary">
       <div class="text-sm text-gray-600 px-3 py-2">
         There
-        {{ ((value$ | async)?.totalCount ?? 0) === 1 ? "is" : "are" }}
-        currently {{ (value$ | async)?.totalCount ?? 0 }} request{{
-          ((value$ | async)?.totalCount ?? 0) === 1 ? "" : "s"
+        {{
+          ((filteredRequests$ | async)?.totalCount ?? 0) === 1 ? "is" : "are"
+        }}
+        currently {{ (filteredRequests$ | async)?.totalCount ?? 0 }} request{{
+          ((filteredRequests$ | async)?.totalCount ?? 0) === 1 ? "" : "s"
         }}.
       </div>
     </ng-template>
@@ -86,4 +110,10 @@
       </tr>
     </ng-template>
   </p-table>
+
+  <app-view-request-dialog
+    [(visible)]="isViewDialogVisible"
+    [request]="selectedRequestToView"
+  />
+  <app-confirmation-dialog />
 </div>

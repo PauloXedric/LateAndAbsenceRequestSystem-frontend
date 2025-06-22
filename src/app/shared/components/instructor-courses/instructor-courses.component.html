@@ -1,21 +1,6 @@
 <div class="card flex justify-center">
   <p-accordion value="0">
     <p-accordion-panel value="0">
-      <p-accordion-header>Table</p-accordion-header>
-      <p-accordion-content>
-        <p class="m-0">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-      </p-accordion-content>
-    </p-accordion-panel>
-
-    <p-accordion-panel value="1">
       <p-accordion-header>Assign Subjects:</p-accordion-header>
       <p-accordion-content>
         <p class="m-0">
@@ -30,47 +15,52 @@
       </p-accordion-content>
     </p-accordion-panel>
 
-    <p-accordion-panel value="2">
-      <p-accordion-header>Add Instructors:</p-accordion-header>
+    <p-accordion-panel value="1">
+      <p-accordion-header>Instructors:</p-accordion-header>
       <p-accordion-content>
-        <form
-          [formGroup]="addTeacherForm"
-          (ngSubmit)="addTeacher()"
-          class="form-container"
-        >
-          <p class="m-0">
-            <p-inputgroup>
-              <p-inputgroup-addon>
-                <i class="pi pi-user"></i>
-              </p-inputgroup-addon>
-              <input
-                pInputText
-                formControlName="teacherName"
-                placeholder="Teacher Name"
+        <p-toolbar styleClass="mb-6">
+          <form
+            [formGroup]="addTeacherForm"
+            (ngSubmit)="addTeacher()"
+            class="form-container"
+          >
+            <h4>Manage:</h4>
+            <div class="form-container-row">
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-id-card"></i>
+                </p-inputgroup-addon>
+                <input
+                  pInputText
+                  formControlName="teacherCode"
+                  placeholder="Teacher Code"
+                />
+              </p-inputgroup>
+              <p-inputgroup>
+                <p-inputgroup-addon>
+                  <i class="pi pi-user"></i>
+                </p-inputgroup-addon>
+                <input
+                  pInputText
+                  formControlName="teacherName"
+                  placeholder="Teacher Name"
+                />
+              </p-inputgroup>
+
+              <p-button
+                label="Add New"
+                type="submit"
+                [disabled]="addTeacherForm.invalid"
               />
-            </p-inputgroup>
-            <p-inputgroup>
-              <p-inputgroup-addon>
-                <i class="pi pi-id-card"></i>
-              </p-inputgroup-addon>
-              <input
-                pInputText
-                formControlName="teacherCode"
-                placeholder="Teacher Code"
-              />
-            </p-inputgroup>
-            <p-button
-              label="Add Teacher"
-              type="submit"
-              [disabled]="addTeacherForm.invalid"
-            />
-          </p>
-        </form>
+            </div>
+          </form>
+        </p-toolbar>
+        <app-instructors-table></app-instructors-table>
       </p-accordion-content>
     </p-accordion-panel>
 
-    <p-accordion-panel value="3">
-      <p-accordion-header>Add Subjects:</p-accordion-header>
+    <p-accordion-panel value="2">
+      <p-accordion-header>Subjects:</p-accordion-header>
       <p-accordion-content>
         <p class="m-0"></p>
         <form
@@ -81,22 +71,22 @@
           <p class="m-0">
             <p-inputgroup>
               <p-inputgroup-addon>
-                <i class="pi pi-user"></i>
-              </p-inputgroup-addon>
-              <input
-                pInputText
-                formControlName="subjectName"
-                placeholder="Subject Name"
-              />
-            </p-inputgroup>
-            <p-inputgroup>
-              <p-inputgroup-addon>
                 <i class="pi pi-hashtag"></i>
               </p-inputgroup-addon>
               <input
                 pInputText
                 formControlName="subjectCode"
                 placeholder="Subject Code"
+              />
+            </p-inputgroup>
+            <p-inputgroup>
+              <p-inputgroup-addon>
+                <i class="pi pi-user"></i>
+              </p-inputgroup-addon>
+              <input
+                pInputText
+                formControlName="subjectName"
+                placeholder="Subject Name"
               />
             </p-inputgroup>
             <p-button

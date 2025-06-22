@@ -8,8 +8,8 @@ export * from './_layouts/main/main.component';
 export * from './_layouts/private-layout/private-layout.component';
 export * from './_layouts/public-layout/public-layout.component';
 
-export * from './_tables/advanced-request-table/advanced-request-table.component';
-export * from './_tables/request-table/request-table.component';
+export * from './_tables/instructors-table/instructors-table.component';
+export * from './_tables/requests-table/requests-table.component';
 
 export * from './approval-history/approval-history.component';
 export * from './instructor-courses/instructor-courses.component';

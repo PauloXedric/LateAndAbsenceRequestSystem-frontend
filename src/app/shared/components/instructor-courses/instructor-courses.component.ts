@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { SubjectModel, TeacherModel } from '@shared/_models';
+import { SubjectModel, TeacherCreateModel } from '@shared/_models';
 import { SubjectService, TeacherService } from '@shared/_services';
 import { AccordionModule } from 'primeng/accordion';
 import { MessageService } from 'primeng/api';
@@ -14,6 +14,8 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
+import { ToolbarModule } from 'primeng/toolbar';
+import { InstructorsTableComponent } from '../_tables/instructors-table/instructors-table.component';
 @Component({
   selector: 'app-instructor-courses',
   imports: [
@@ -24,6 +26,8 @@ import { ToastModule } from 'primeng/toast';
     ToastModule,
     InputTextModule,
     ButtonModule,
+    ToolbarModule,
+    InstructorsTableComponent,
   ],
   standalone: true,
   providers: [TeacherService, SubjectService, MessageService],
@@ -31,6 +35,9 @@ import { ToastModule } from 'primeng/toast';
   styleUrl: './instructor-courses.component.css',
 })
 export class InstructorCoursesComponent implements OnInit {
+  @ViewChild(InstructorsTableComponent)
+  instructorsTableComponent!: InstructorsTableComponent;
+
   addTeacherForm!: FormGroup;
   addSubjectForm!: FormGroup;
 
@@ -59,7 +66,7 @@ export class InstructorCoursesComponent implements OnInit {
       return;
     }
 
-    const formTeacherValue: TeacherModel = this.addTeacherForm.value;
+    const formTeacherValue: TeacherCreateModel = this.addTeacherForm.value;
 
     this.teacherService.addNewTeacher(formTeacherValue).subscribe({
       next: (res) => {
@@ -68,6 +75,9 @@ export class InstructorCoursesComponent implements OnInit {
           summary: 'Success',
           detail: res.message,
         });
+
+        this.instructorsTableComponent.refresh();
+        this.addTeacherForm.reset();
       },
       error: (err) => {
         this.messageService.add({
