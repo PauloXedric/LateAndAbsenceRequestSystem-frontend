@@ -9,7 +9,6 @@ import { TableModule } from 'primeng/table';
   imports: [TableModule, CommonModule],
   standalone: true,
   templateUrl: './instructors-table.component.html',
-  styleUrl: './instructors-table.component.css',
 })
 export class InstructorsTableComponent implements OnInit {
   constructor(private teacherService: TeacherService) {}

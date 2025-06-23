@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@core';
-import { ApiResponse, SubjectModel } from '@shared/_models';
+import {
+  ApiResponse,
+  SubjectCreateModel,
+  SubjectReadModel,
+  SubjectUpdateModel,
+} from '@shared/_models';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,7 +14,15 @@ import { Observable } from 'rxjs';
 export class SubjectService {
   constructor(private api: ApiService) {}
 
-  addNewSubject(data: SubjectModel): Observable<ApiResponse> {
+  addNewSubject(data: SubjectCreateModel): Observable<ApiResponse> {
     return this.api.post<ApiResponse>('Subject/AddSubject', data);
+  }
+
+  subjectList(): Observable<SubjectReadModel[]> {
+    return this.api.get('Subject/SubjectList');
+  }
+
+  updateSubject(data: SubjectUpdateModel): Observable<ApiResponse> {
+    return this.api.put<ApiResponse>('Subject/UpdateSubject', data);
   }
 }

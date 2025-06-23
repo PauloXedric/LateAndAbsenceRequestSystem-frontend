@@ -18,84 +18,104 @@
     <p-accordion-panel value="1">
       <p-accordion-header>Instructors:</p-accordion-header>
       <p-accordion-content>
-        <p-toolbar styleClass="mb-6">
-          <form
-            [formGroup]="addTeacherForm"
-            (ngSubmit)="addTeacher()"
-            class="form-container"
-          >
-            <h4>Manage:</h4>
-            <div class="form-container-row">
-              <p-inputgroup>
-                <p-inputgroup-addon>
-                  <i class="pi pi-id-card"></i>
-                </p-inputgroup-addon>
-                <input
-                  pInputText
-                  formControlName="teacherCode"
-                  placeholder="Teacher Code"
-                />
-              </p-inputgroup>
-              <p-inputgroup>
-                <p-inputgroup-addon>
-                  <i class="pi pi-user"></i>
-                </p-inputgroup-addon>
-                <input
-                  pInputText
-                  formControlName="teacherName"
-                  placeholder="Teacher Name"
-                />
-              </p-inputgroup>
+        <div class="form-and-table">
+          <div class="form-section">
+            <p-toolbar>
+              <form
+                [formGroup]="addTeacherForm"
+                (ngSubmit)="addTeacher()"
+                class="form-container"
+              >
+                <h4>Manage:</h4>
+                <p-fluid>
+                  <p-inputgroup>
+                    <p-inputgroup-addon>
+                      <i class="pi pi-id-card"></i>
+                    </p-inputgroup-addon>
+                    <input
+                      pInputText
+                      formControlName="teacherCode"
+                      placeholder="Teacher Code"
+                    />
+                  </p-inputgroup>
 
-              <p-button
-                label="Add New"
-                type="submit"
-                [disabled]="addTeacherForm.invalid"
-              />
-            </div>
-          </form>
-        </p-toolbar>
-        <app-instructors-table></app-instructors-table>
+                  <p-inputgroup>
+                    <p-inputgroup-addon>
+                      <i class="pi pi-user"></i>
+                    </p-inputgroup-addon>
+                    <input
+                      pInputText
+                      formControlName="teacherName"
+                      placeholder="Teacher Name"
+                    />
+                  </p-inputgroup>
+                </p-fluid>
+
+                <p-button
+                  label="Add New"
+                  type="submit"
+                  [disabled]="addTeacherForm.invalid"
+                ></p-button>
+              </form>
+            </p-toolbar>
+          </div>
+
+          <div class="table-section">
+            <app-instructors-table></app-instructors-table>
+          </div>
+        </div>
       </p-accordion-content>
     </p-accordion-panel>
 
     <p-accordion-panel value="2">
       <p-accordion-header>Subjects:</p-accordion-header>
       <p-accordion-content>
-        <p class="m-0"></p>
-        <form
-          [formGroup]="addSubjectForm"
-          (ngSubmit)="addSubject()"
-          class="form-container"
-        >
-          <p class="m-0">
-            <p-inputgroup>
-              <p-inputgroup-addon>
-                <i class="pi pi-hashtag"></i>
-              </p-inputgroup-addon>
-              <input
-                pInputText
-                formControlName="subjectCode"
-                placeholder="Subject Code"
-              />
-            </p-inputgroup>
-            <p-inputgroup>
-              <p-inputgroup-addon>
-                <i class="pi pi-user"></i>
-              </p-inputgroup-addon>
-              <input
-                pInputText
-                formControlName="subjectName"
-                placeholder="Subject Name"
-              />
-            </p-inputgroup>
-            <p-button
-              label="Add Subject"
-              type="submit"
-              [disabled]="addSubjectForm.invalid"
-            />
-          </p>
-        </form>
+        <div class="form-and-table">
+          <div class="form-section">
+            <p-toolbar>
+              <form
+                [formGroup]="addSubjectForm"
+                (ngSubmit)="addSubject()"
+                class="form-container"
+              >
+                <h4>Manage:</h4>
+                <p-fluid>
+                  <p-inputgroup>
+                    <p-inputgroup-addon>
+                      <i class="pi pi-hashtag"></i>
+                    </p-inputgroup-addon>
+                    <input
+                      pInputText
+                      formControlName="subjectCode"
+                      placeholder="Subject Code"
+                    />
+                  </p-inputgroup>
+
+                  <p-inputgroup>
+                    <p-inputgroup-addon>
+                      <i class="pi pi-book"></i>
+                    </p-inputgroup-addon>
+                    <input
+                      pInputText
+                      formControlName="subjectName"
+                      placeholder="Subject Name"
+                    />
+                  </p-inputgroup>
+                </p-fluid>
+
+                <p-button
+                  label="Add Subject"
+                  type="submit"
+                  [disabled]="addSubjectForm.invalid"
+                ></p-button>
+              </form>
+            </p-toolbar>
+          </div>
+
+          <div class="table-section">
+            <app-subjects-table></app-subjects-table>
+          </div>
+        </div>
       </p-accordion-content>
     </p-accordion-panel>
   </p-accordion>

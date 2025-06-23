@@ -1,4 +1,4 @@
-export interface TeacherReadModel {
+export interface TeacherUpdateModel {
   teacherId: number;
   teacherCode: string;
   teacherName: string;

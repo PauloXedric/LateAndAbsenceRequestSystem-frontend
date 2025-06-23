@@ -5,7 +5,7 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { SubjectModel, TeacherCreateModel } from '@shared/_models';
+import { SubjectCreateModel, TeacherCreateModel } from '@shared/_models';
 import { SubjectService, TeacherService } from '@shared/_services';
 import { AccordionModule } from 'primeng/accordion';
 import { MessageService } from 'primeng/api';
@@ -15,7 +15,11 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
+
+import { FluidModule } from 'primeng/fluid';
 import { InstructorsTableComponent } from '../_tables/instructors-table/instructors-table.component';
+import { SubjectsTableComponent } from '../_tables/subjects-table/subjects-table.component';
+
 @Component({
   selector: 'app-instructor-courses',
   imports: [
@@ -28,6 +32,8 @@ import { InstructorsTableComponent } from '../_tables/instructors-table/instruct
     ButtonModule,
     ToolbarModule,
     InstructorsTableComponent,
+    SubjectsTableComponent,
+    FluidModule,
   ],
   standalone: true,
   providers: [TeacherService, SubjectService, MessageService],
@@ -37,6 +43,8 @@ import { InstructorsTableComponent } from '../_tables/instructors-table/instruct
 export class InstructorCoursesComponent implements OnInit {
   @ViewChild(InstructorsTableComponent)
   instructorsTableComponent!: InstructorsTableComponent;
+  @ViewChild(SubjectsTableComponent)
+  subjectsTableComponent!: SubjectsTableComponent;
 
   addTeacherForm!: FormGroup;
   addSubjectForm!: FormGroup;
@@ -95,7 +103,8 @@ export class InstructorCoursesComponent implements OnInit {
       return;
     }
 
-    const formSubjectValue: SubjectModel = this.addSubjectForm.value;
+    const formSubjectValue: SubjectCreateModel = this.addSubjectForm.value;
+
     this.subjectService.addNewSubject(formSubjectValue).subscribe({
       next: (res) => {
         this.messageService.add({
@@ -103,6 +112,9 @@ export class InstructorCoursesComponent implements OnInit {
           summary: 'Success',
           detail: res.message,
         });
+
+        this.subjectsTableComponent.refresh();
+        this.addSubjectForm.reset();
       },
       error: (err) => {
         this.messageService.add({

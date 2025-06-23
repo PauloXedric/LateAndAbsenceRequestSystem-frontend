@@ -10,6 +10,7 @@ export * from './_layouts/public-layout/public-layout.component';
 
 export * from './_tables/instructors-table/instructors-table.component';
 export * from './_tables/requests-table/requests-table.component';
+export * from './_tables/subjects-table/subjects-table.component';
 
 export * from './approval-history/approval-history.component';
 export * from './instructor-courses/instructor-courses.component';

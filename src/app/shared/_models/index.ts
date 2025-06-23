@@ -4,5 +4,8 @@ export * from './request-gen-token.model';
 export * from './request-read.model';
 export * from './request-update.model';
 export * from './subject-create.model';
+export * from './subject-read.model';
+export * from './subject-update.model';
 export * from './teacher-create.model';
 export * from './teacher-read.model';
+export * from './teacher-update.model';
