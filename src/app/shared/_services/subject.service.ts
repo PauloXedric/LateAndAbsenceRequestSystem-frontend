@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ApiService } from '@core';
 import {
@@ -24,5 +25,12 @@ export class SubjectService {
 
   updateSubject(data: SubjectUpdateModel): Observable<ApiResponse> {
     return this.api.put<ApiResponse>('Subject/UpdateSubject', data);
+  }
+
+  deleteSubject(id: number): Observable<ApiResponse> {
+    const params = new HttpParams().set('subjectId', id.toString());
+    return this.api.delete<ApiResponse>(
+      'Subject/DeleteSubject?subjectId=' + id
+    );
   }
 }

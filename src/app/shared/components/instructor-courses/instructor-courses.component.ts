@@ -6,7 +6,11 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { SubjectCreateModel, TeacherCreateModel } from '@shared/_models';
-import { SubjectService, TeacherService } from '@shared/_services';
+import {
+  SubjectService,
+  TeacherService,
+  ToastService,
+} from '@shared/_services';
 import { AccordionModule } from 'primeng/accordion';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -53,7 +57,7 @@ export class InstructorCoursesComponent implements OnInit {
     private fb: FormBuilder,
     private teacherService: TeacherService,
     private subjectService: SubjectService,
-    private messageService: MessageService
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -78,21 +82,18 @@ export class InstructorCoursesComponent implements OnInit {
 
     this.teacherService.addNewTeacher(formTeacherValue).subscribe({
       next: (res) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: res.message,
-        });
-
+        this.toastService.showSuccess(res.message);
         this.instructorsTableComponent.refresh();
         this.addTeacherForm.reset();
       },
       error: (err) => {
-        this.messageService.add({
-          severity: err.status === 409 ? 'warn' : 'error',
-          summary: err.status === 409 ? 'Warning' : 'Error',
-          detail: err.error?.message || 'Something went wrong.',
-        });
+        if (err.status === 409) {
+          this.toastService.showWarn(err.error.message);
+        } else {
+          this.toastService.showError(
+            err.error?.message || 'Error occureed while adding teacher'
+          );
+        }
       },
     });
   }
@@ -107,21 +108,18 @@ export class InstructorCoursesComponent implements OnInit {
 
     this.subjectService.addNewSubject(formSubjectValue).subscribe({
       next: (res) => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: res.message,
-        });
-
+        this.toastService.showSuccess(res.message);
         this.subjectsTableComponent.refresh();
         this.addSubjectForm.reset();
       },
       error: (err) => {
-        this.messageService.add({
-          severity: err.status === 409 ? 'warn' : 'error',
-          summary: err.status === 409 ? 'Warning' : 'Error',
-          detail: err.error?.message || 'Something went wrong.',
-        });
+        if (err.status === 409) {
+          this.toastService.showWarn(err.error.message);
+        } else {
+          this.toastService.showError(
+            err.error?.message || 'Error occureed while adding subject'
+          );
+        }
       },
     });
   }

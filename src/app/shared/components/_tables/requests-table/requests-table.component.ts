@@ -166,7 +166,7 @@ export class RequestsTableComponent {
 
   confirmStatusChange(status: RequestStatusEnum, label: RequestActionEnum) {
     const response$ = new Subject<boolean>();
-    this.confirmationDialogService.requestConfirmation({
+    this.confirmationDialogService.confirmation({
       header: `Confirm ${label}`,
       message: `Are you sure you want to ${label.toLowerCase()} the selected request(s)?`,
       actionLabel: label,

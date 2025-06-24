@@ -34,7 +34,23 @@ export class ApiService {
     return this.http.put<T>(`${this.config.baseUrl}/${url}`, body);
   }
 
-  delete<T>(url: string) {
-    return this.http.delete<T>(`${this.config.baseUrl}/${url}`);
+  delete<T>(url: string, params?: any) {
+    let httpParams = new HttpParams();
+
+    if (params) {
+      for (const key in params) {
+        if (
+          params.hasOwnProperty(key) &&
+          params[key] !== undefined &&
+          params[key] !== null
+        ) {
+          httpParams = httpParams.set(key, params[key]);
+        }
+      }
+    }
+
+    return this.http.delete<T>(`${this.config.baseUrl}/${url}`, {
+      params: httpParams,
+    });
   }
 }

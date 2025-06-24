@@ -1,11 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SubjectReadModel } from '@shared/_models';
-import { SubjectService } from '@shared/_services';
+import {
+  ConfirmationDialogService,
+  SubjectService,
+  ToastService,
+} from '@shared/_services';
+import { ConfirmationDialogComponent } from '@shared/components/_dialogs/confirmation-dialog/confirmation-dialog.component';
+import {
+  FormFieldConfig,
+  UpdateTeacherSubjectDialogComponent,
+} from '@shared/components/_dialogs/update-teacher-subject-dialog/update-teacher-subject-dialog.component';
 import { ButtonModule } from 'primeng/button';
-import { Dialog } from 'primeng/dialog';
-import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 
 @Component({
@@ -14,30 +21,37 @@ import { TableModule } from 'primeng/table';
     CommonModule,
     TableModule,
     ButtonModule,
-    Dialog,
-    InputTextModule,
-    ReactiveFormsModule,
+    UpdateTeacherSubjectDialogComponent,
+    ConfirmationDialogComponent,
   ],
   standalone: true,
   templateUrl: './subjects-table.component.html',
 })
 export class SubjectsTableComponent implements OnInit {
-  visible: boolean = false;
+  visible = false;
   editSubjectForm!: FormGroup;
 
   subjectsTable: SubjectReadModel[] = [];
 
+  fields: FormFieldConfig[] = [
+    { label: 'Name', controlName: 'subjectName' },
+    { label: 'Code', controlName: 'subjectCode' },
+  ];
+
   constructor(
     private subjectService: SubjectService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private toastService: ToastService,
+    private confirmationDialogService: ConfirmationDialogService
   ) {}
+
   ngOnInit(): void {
     this.loadData();
 
     this.editSubjectForm = this.fb.group({
       subjectId: [0],
-      subjectName: [''],
-      subjectCode: [''],
+      subjectName: ['', Validators.required],
+      subjectCode: ['', Validators.required],
     });
   }
 
@@ -47,7 +61,7 @@ export class SubjectsTableComponent implements OnInit {
         this.subjectsTable = data;
       },
       error: () => {
-        console.error("Failed to load teacher's data");
+        console.error("Failed to load subject's data");
       },
     });
   }
@@ -57,11 +71,53 @@ export class SubjectsTableComponent implements OnInit {
   }
 
   showDialog(subject: SubjectReadModel) {
-    this.editSubjectForm.setValue({
-      subjectId: subject.subjectId,
-      subjectCode: subject.subjectCode,
-      subjectName: subject.subjectName,
-    });
+    this.editSubjectForm.patchValue(subject);
     this.visible = true;
+  }
+
+  updateSubject() {
+    const updatedData = this.editSubjectForm.value;
+
+    this.subjectService.updateSubject(updatedData).subscribe({
+      next: (res) => {
+        this.toastService.showSuccess(res.message);
+        this.visible = false;
+        this.loadData();
+      },
+      error: (err) => {
+        if (err.status === 404) {
+          this.toastService.showWarn(err.error.message);
+        } else {
+          this.toastService.showError(
+            err.error?.message || 'Error occureed while updating subject'
+          );
+        }
+      },
+    });
+  }
+
+  deleteSubject(subjectId: number): void {
+    this.confirmationDialogService
+      .confirm$({
+        header: 'Confirm Deletion',
+        message: 'Are you sure you want to delete this subject?',
+        actionLabel: 'Delete',
+      })
+      .subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.subjectService.deleteSubject(subjectId).subscribe({
+            next: (res) => {
+              this.toastService.showSuccess(res.message);
+              this.visible = false;
+              this.loadData();
+            },
+            error: (err) => {
+              this.toastService.showError(
+                err.error?.message || 'Error occured while deleting subject'
+              );
+            },
+          });
+        }
+      });
   }
 }

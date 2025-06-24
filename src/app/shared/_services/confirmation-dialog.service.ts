@@ -8,8 +8,14 @@ export class ConfirmationDialogService {
   confirmationRequests$: Observable<ConfirmationData> =
     this.confirmationSubject.asObservable();
 
-  requestConfirmation(data: ConfirmationData): void {
+  confirmation(data: ConfirmationData): void {
     this.confirmationSubject.next(data);
+  }
+
+  confirm$(data: Omit<ConfirmationData, 'response$'>): Observable<boolean> {
+    const response$ = new Subject<boolean>();
+    this.confirmation({ ...data, response$ });
+    return response$.asObservable();
   }
 }
 

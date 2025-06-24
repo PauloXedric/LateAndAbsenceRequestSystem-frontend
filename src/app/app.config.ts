@@ -13,6 +13,7 @@ import { MyPreset } from '../assets/presets/aura-preset';
 import { environment } from '../environments/environment';
 import { JwtModule } from '@auth0/angular-jwt';
 import { API_CONFIG, authInterceptor, tokenGetter } from '@core';
+import { MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -44,5 +45,6 @@ export const appConfig: ApplicationConfig = {
         baseUrl: environment.baseUrl,
       },
     },
+    MessageService,
   ],
 };

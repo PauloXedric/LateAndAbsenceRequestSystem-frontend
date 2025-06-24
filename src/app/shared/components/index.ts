@@ -2,6 +2,7 @@ export * from './_dialogs/confirmation-dialog/confirmation-dialog.component';
 export * from './_dialogs/view-request-dialog/view-request-dialog.component';
 
 export * from './_dialogs/confirmation-dialog/confirmation-dialog.component';
+export * from './_dialogs/update-teacher-subject-dialog/update-teacher-subject-dialog.component';
 export * from './_dialogs/view-request-dialog/view-request-dialog.component';
 
 export * from './_layouts/main/main.component';

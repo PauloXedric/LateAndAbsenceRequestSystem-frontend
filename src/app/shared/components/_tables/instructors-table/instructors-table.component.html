@@ -10,13 +10,31 @@
       <tr>
         <th>Teacher Code</th>
         <th>Teacher Name</th>
+        <th></th>
       </tr>
     </ng-template>
     <ng-template #body let-teacher>
       <tr>
         <td>{{ teacher.teacherCode }}</td>
         <td>{{ teacher.teacherName }}</td>
+        <td>
+          <p-button
+            icon="pi pi-pencil"
+            class="mr-2"
+            [rounded]="true"
+            [outlined]="true"
+            (click)="showDialog(teacher)"
+          />
+        </td>
       </tr>
     </ng-template>
   </p-table>
 </div>
+
+<app-update-teacher-subject-dialog
+  [(visible)]="visible"
+  [form]="editTeacherForm"
+  [fields]="fields"
+  (submit)="updateTeacher()"
+  (delete)="deleteTeacher(editTeacherForm.value.teacherId)"
+/>
