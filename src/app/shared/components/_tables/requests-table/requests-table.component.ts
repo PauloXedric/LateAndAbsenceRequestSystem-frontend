@@ -7,10 +7,10 @@ import {
   RequestUpdateModel,
 } from '@shared/_models';
 import {
-  StudentRequestService,
   ConfirmationDialogService,
   EmailService,
   FilterService,
+  RequestService,
 } from '@shared/_services';
 import { ConfirmationDialogComponent } from '@shared/components/_dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ViewRequestDialogComponent } from '@shared/components/_dialogs/view-request-dialog/view-request-dialog.component';
@@ -100,7 +100,7 @@ export class RequestsTableComponent {
   filteredRequests$!: Observable<PaginatedResult<RequestReadModel>>;
 
   constructor(
-    private studentRequestService: StudentRequestService,
+    private requestService: RequestService,
     private confirmationDialogService: ConfirmationDialogService,
     private emailService: EmailService,
     private filterService: FilterService
@@ -118,7 +118,7 @@ export class RequestsTableComponent {
     ]).pipe(
       tap(() => (this.isLoading = true)),
       switchMap(([filter, page, pageSize]) =>
-        this.studentRequestService
+        this.requestService
           .readRequest({
             statusId: this.statusId,
             pageNumber: page + 1,
@@ -188,7 +188,7 @@ export class RequestsTableComponent {
         statusId: newStatusId,
       };
 
-      return this.studentRequestService.updateRequestStatus(updateModel).pipe(
+      return this.requestService.updateRequestStatus(updateModel).pipe(
         switchMap(() => {
           const tokenModel = toRequestGenTokenModel(request);
           return this.emailService.generateNewToken(tokenModel).pipe(

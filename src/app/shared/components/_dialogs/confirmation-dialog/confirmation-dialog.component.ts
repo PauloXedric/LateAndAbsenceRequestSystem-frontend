@@ -58,7 +58,7 @@ export class ConfirmationDialogComponent implements OnInit {
             this.messageService.add({
               severity: 'info',
               summary: 'Cancelled',
-              detail: `${data.actionLabel} was cancelled`,
+              detail: `${data.actionLabel} was cancelled.`,
             });
           },
         });

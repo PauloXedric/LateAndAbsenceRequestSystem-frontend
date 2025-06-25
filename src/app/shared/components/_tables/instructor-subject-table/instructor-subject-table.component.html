@@ -1,0 +1,41 @@
+<div class="card">
+  <p-table
+    [value]="assignedSubjectsTable"
+    [scrollable]="true"
+    scrollHeight="375px"
+    [tableStyle]="{ 'min-width': '40rem' }"
+    [rowHover]="true"
+  >
+    <ng-template #header>
+      <tr>
+        <th>Teacher Name</th>
+        <th>Assigned Subjects</th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-subjectsAssigned>
+      <tr>
+        <td>{{ subjectsAssigned.teacherName }}</td>
+        <td>
+          <div class="subject-lines">
+            <div
+              *ngFor="
+                let subject of subjectsAssigned.assignedSubjects | splitAndTrim
+              "
+            >
+              {{ subject }}
+            </div>
+          </div>
+        </td>
+        <td>
+          <p-button
+            icon="pi pi-plus"
+            class="mr-2"
+            [rounded]="true"
+            [outlined]="true"
+          />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

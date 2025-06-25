@@ -8,7 +8,7 @@ import { ApiService } from '@core';
 @Injectable({
   providedIn: 'root',
 })
-export class StudentRequestService {
+export class RequestService {
   constructor(private api: ApiService) {}
 
   readRequest(params: ReadRequestParams) {

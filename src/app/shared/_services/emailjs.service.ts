@@ -55,13 +55,13 @@ export class EmailService {
       .then(
         (result: EmailJSResponseStatus) => {
           console.log(
-            `✅ Decline email sent to ${params.requesterEmail}:`,
+            `Decline email sent to ${params.requesterEmail}:`,
             result.status
           );
         },
         (error) => {
           console.error(
-            `❌ Failed to send rejection email to ${params.requesterEmail}:`,
+            `Failed to send rejection email to ${params.requesterEmail}:`,
             error
           );
         }

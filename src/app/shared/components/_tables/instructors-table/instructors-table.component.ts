@@ -7,13 +7,11 @@ import {
   TeacherService,
   ToastService,
 } from '@shared/_services';
-import { ConfirmationDialogComponent } from '@shared/components/_dialogs/confirmation-dialog/confirmation-dialog.component';
 import {
   FormFieldConfig,
   UpdateTeacherSubjectDialogComponent,
 } from '@shared/components/_dialogs/update-teacher-subject-dialog/update-teacher-subject-dialog.component';
 import { ButtonModule } from 'primeng/button';
-
 import { TableModule } from 'primeng/table';
 
 @Component({
@@ -23,7 +21,6 @@ import { TableModule } from 'primeng/table';
     CommonModule,
     ButtonModule,
     UpdateTeacherSubjectDialogComponent,
-    ConfirmationDialogComponent,
   ],
   standalone: true,
   templateUrl: './instructors-table.component.html',

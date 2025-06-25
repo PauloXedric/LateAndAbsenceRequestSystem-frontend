@@ -1,22 +1,58 @@
 <div class="card flex justify-center">
-  <p-accordion value="0">
+  <p-accordion value="0" [style.width]="'100%'">
     <p-accordion-panel value="0">
-      <p-accordion-header>Assign Subjects:</p-accordion-header>
+      <p-accordion-header>ASSIGN SUBJECTS:</p-accordion-header>
       <p-accordion-content>
-        <p class="m-0">
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae
-          ab illo inventore veritatis et quasi architecto beatae vitae dicta
-          sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
-          aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos
-          qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit,
-          sed quia non numquam eius modi.
-        </p>
+        <div class="form-and-table">
+          <div class="form-section">
+            <p-toolbar>
+              <form
+                [formGroup]="addTeacherForm"
+                (ngSubmit)="addTeacher()"
+                class="form-container"
+              >
+                <h4>Assign:</h4>
+                <p-fluid>
+                  <p-inputgroup>
+                    <p-inputgroup-addon>
+                      <i class="pi pi-id-card"></i>
+                    </p-inputgroup-addon>
+                    <input
+                      pInputText
+                      formControlName="teacherCode"
+                      placeholder="Teacher Code"
+                    />
+                  </p-inputgroup>
+                </p-fluid>
+                <div class="card sm:flex sm:justify-center">
+                  <p-orderlist
+                    [value]="subjectList"
+                    dataKey="subjectId"
+                    breakpoint="575px"
+                  >
+                    <ng-template let-option pTemplate="item">
+                      {{ option.subjectName }} ({{ option.subjectCode }})
+                    </ng-template>
+                  </p-orderlist>
+                </div>
+                <p-button
+                  label="Add New"
+                  type="submit"
+                  [disabled]="addTeacherForm.invalid"
+                ></p-button>
+              </form>
+            </p-toolbar>
+          </div>
+
+          <div class="table-section">
+            <app-instructor-subject-table></app-instructor-subject-table>
+          </div>
+        </div>
       </p-accordion-content>
     </p-accordion-panel>
 
     <p-accordion-panel value="1">
-      <p-accordion-header>Instructors:</p-accordion-header>
+      <p-accordion-header>INSTRUCTORS:</p-accordion-header>
       <p-accordion-content>
         <div class="form-and-table">
           <div class="form-section">
@@ -68,7 +104,7 @@
     </p-accordion-panel>
 
     <p-accordion-panel value="2">
-      <p-accordion-header>Subjects:</p-accordion-header>
+      <p-accordion-header>SUBJECTS:</p-accordion-header>
       <p-accordion-content>
         <div class="form-and-table">
           <div class="form-section">
@@ -113,7 +149,9 @@
           </div>
 
           <div class="table-section">
-            <app-subjects-table></app-subjects-table>
+            <app-subjects-table
+              (subjectUpdated)="loadSubjects()"
+            ></app-subjects-table>
           </div>
         </div>
       </p-accordion-content>

@@ -5,7 +5,11 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { SubjectCreateModel, TeacherCreateModel } from '@shared/_models';
+import {
+  SubjectCreateModel,
+  SubjectReadModel,
+  TeacherCreateModel,
+} from '@shared/_models';
 import {
   SubjectService,
   TeacherService,
@@ -19,10 +23,11 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-
+import { OrderListModule } from 'primeng/orderlist';
 import { FluidModule } from 'primeng/fluid';
 import { InstructorsTableComponent } from '../_tables/instructors-table/instructors-table.component';
 import { SubjectsTableComponent } from '../_tables/subjects-table/subjects-table.component';
+import { InstructorSubjectTableComponent } from '../_tables/instructor-subject-table/instructor-subject-table.component';
 
 @Component({
   selector: 'app-instructor-courses',
@@ -37,7 +42,9 @@ import { SubjectsTableComponent } from '../_tables/subjects-table/subjects-table
     ToolbarModule,
     InstructorsTableComponent,
     SubjectsTableComponent,
+    InstructorSubjectTableComponent,
     FluidModule,
+    OrderListModule,
   ],
   standalone: true,
   providers: [TeacherService, SubjectService, MessageService],
@@ -49,6 +56,8 @@ export class InstructorCoursesComponent implements OnInit {
   instructorsTableComponent!: InstructorsTableComponent;
   @ViewChild(SubjectsTableComponent)
   subjectsTableComponent!: SubjectsTableComponent;
+
+  subjectList!: SubjectReadModel[];
 
   addTeacherForm!: FormGroup;
   addSubjectForm!: FormGroup;
@@ -69,6 +78,19 @@ export class InstructorCoursesComponent implements OnInit {
     this.addSubjectForm = this.fb.group({
       subjectName: ['', Validators.required],
       subjectCode: ['', Validators.required],
+    });
+
+    this.loadSubjects();
+  }
+
+  public loadSubjects(): void {
+    this.subjectService.subjectList().subscribe({
+      next: (data) => {
+        this.subjectList = data;
+      },
+      error: () => {
+        console.error('Failed to load subject list');
+      },
     });
   }
 
@@ -111,6 +133,7 @@ export class InstructorCoursesComponent implements OnInit {
         this.toastService.showSuccess(res.message);
         this.subjectsTableComponent.refresh();
         this.addSubjectForm.reset();
+        this.loadSubjects();
       },
       error: (err) => {
         if (err.status === 409) {

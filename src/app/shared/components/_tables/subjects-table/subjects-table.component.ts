@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SubjectReadModel } from '@shared/_models';
 import {
@@ -7,7 +13,6 @@ import {
   SubjectService,
   ToastService,
 } from '@shared/_services';
-import { ConfirmationDialogComponent } from '@shared/components/_dialogs/confirmation-dialog/confirmation-dialog.component';
 import {
   FormFieldConfig,
   UpdateTeacherSubjectDialogComponent,
@@ -22,12 +27,13 @@ import { TableModule } from 'primeng/table';
     TableModule,
     ButtonModule,
     UpdateTeacherSubjectDialogComponent,
-    ConfirmationDialogComponent,
   ],
   standalone: true,
   templateUrl: './subjects-table.component.html',
 })
 export class SubjectsTableComponent implements OnInit {
+  @Output() subjectUpdated = new EventEmitter<void>();
+
   visible = false;
   editSubjectForm!: FormGroup;
 
@@ -83,6 +89,7 @@ export class SubjectsTableComponent implements OnInit {
         this.toastService.showSuccess(res.message);
         this.visible = false;
         this.loadData();
+        this.subjectUpdated.emit();
       },
       error: (err) => {
         if (err.status === 404) {
@@ -110,6 +117,7 @@ export class SubjectsTableComponent implements OnInit {
               this.toastService.showSuccess(res.message);
               this.visible = false;
               this.loadData();
+              this.subjectUpdated.emit();
             },
             error: (err) => {
               this.toastService.showError(
