@@ -19,6 +19,7 @@ import {
 } from '@shared/components/_dialogs/update-teacher-subject-dialog/update-teacher-subject-dialog.component';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
+import { InstructorSubjectTableComponent } from '../instructor-subject-table/instructor-subject-table.component';
 
 @Component({
   selector: 'app-subjects-table',
@@ -33,7 +34,7 @@ import { TableModule } from 'primeng/table';
 })
 export class SubjectsTableComponent implements OnInit {
   @Output() subjectUpdated = new EventEmitter<void>();
-
+  @Output() refreshInstructorSubject = new EventEmitter<void>();
   visible = false;
   editSubjectForm!: FormGroup;
 
@@ -90,6 +91,7 @@ export class SubjectsTableComponent implements OnInit {
         this.visible = false;
         this.loadData();
         this.subjectUpdated.emit();
+        this.refreshInstructorSubject.emit();
       },
       error: (err) => {
         if (err.status === 404) {
@@ -118,6 +120,7 @@ export class SubjectsTableComponent implements OnInit {
               this.visible = false;
               this.loadData();
               this.subjectUpdated.emit();
+              this.refreshInstructorSubject.emit();
             },
             error: (err) => {
               this.toastService.showError(

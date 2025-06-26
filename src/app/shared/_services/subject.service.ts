@@ -29,8 +29,6 @@ export class SubjectService {
 
   deleteSubject(id: number): Observable<ApiResponse> {
     const params = new HttpParams().set('subjectId', id.toString());
-    return this.api.delete<ApiResponse>(
-      'Subject/DeleteSubject?subjectId=' + id
-    );
+    return this.api.delete<ApiResponse>('Subject/DeleteSubject', { params });
   }
 }

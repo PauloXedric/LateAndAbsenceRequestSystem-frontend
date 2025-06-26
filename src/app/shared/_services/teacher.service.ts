@@ -29,8 +29,6 @@ export class TeacherService {
 
   deleteTeacher(id: number): Observable<ApiResponse> {
     const params = new HttpParams().set('teacherId', id.toString());
-    return this.api.delete<ApiResponse>(
-      'Teacher/DeleteTeacher?teacherId=' + id
-    );
+    return this.api.delete<ApiResponse>('Teacher/DeleteTeacher', { params });
   }
 }

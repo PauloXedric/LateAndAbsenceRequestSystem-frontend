@@ -7,38 +7,44 @@
           <div class="form-section">
             <p-toolbar>
               <form
-                [formGroup]="addTeacherForm"
-                (ngSubmit)="addTeacher()"
+                [formGroup]="assignForm"
+                (ngSubmit)="onAssignSubjects()"
                 class="form-container"
               >
                 <h4>Assign:</h4>
                 <p-fluid>
                   <p-inputgroup>
                     <p-inputgroup-addon>
-                      <i class="pi pi-id-card"></i>
+                      <i class="pi pi-user"></i>
                     </p-inputgroup-addon>
-                    <input
-                      pInputText
-                      formControlName="teacherCode"
-                      placeholder="Teacher Code"
+
+                    <p-dropdown
+                      formControlName="teacher"
+                      [options]="teacherList"
+                      optionLabel="teacherName"
+                      placeholder="Instructor"
                     />
                   </p-inputgroup>
                 </p-fluid>
                 <div class="card sm:flex sm:justify-center">
-                  <p-orderlist
-                    [value]="subjectList"
-                    dataKey="subjectId"
-                    breakpoint="575px"
+                  <p-multiSelect
+                    formControlName="subjects"
+                    [options]="subjectList"
+                    optionLabel="subjectName"
+                    display="chip"
+                    placeholder="Select Subjects"
+                    styleClass="w-full md:w-80"
+                    [filter]="true"
                   >
-                    <ng-template let-option pTemplate="item">
-                      {{ option.subjectName }} ({{ option.subjectCode }})
+                    <ng-template let-subject pTemplate="item">
+                      {{ subject.subjectName }} ({{ subject.subjectCode }})
                     </ng-template>
-                  </p-orderlist>
+                  </p-multiSelect>
                 </div>
                 <p-button
-                  label="Add New"
+                  label="Assign+"
                   type="submit"
-                  [disabled]="addTeacherForm.invalid"
+                  [disabled]="assignForm.invalid"
                 ></p-button>
               </form>
             </p-toolbar>
@@ -97,7 +103,12 @@
           </div>
 
           <div class="table-section">
-            <app-instructors-table></app-instructors-table>
+            <app-instructors-table
+              (teacherUpdated)="loadTeachers()"
+              (refreshInstructorSubject)="
+                instructorSubjectTableComponent.refresh()
+              "
+            ></app-instructors-table>
           </div>
         </div>
       </p-accordion-content>
@@ -151,6 +162,9 @@
           <div class="table-section">
             <app-subjects-table
               (subjectUpdated)="loadSubjects()"
+              (refreshInstructorSubject)="
+                instructorSubjectTableComponent.refresh()
+              "
             ></app-subjects-table>
           </div>
         </div>

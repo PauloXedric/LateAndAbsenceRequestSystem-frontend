@@ -9,4 +9,5 @@ export * from './subject-update.model';
 export * from './teacher-assigned-subjects.model';
 export * from './teacher-create.model';
 export * from './teacher-read.model';
+export * from './teacher-subjects-code.model';
 export * from './teacher-update.model';

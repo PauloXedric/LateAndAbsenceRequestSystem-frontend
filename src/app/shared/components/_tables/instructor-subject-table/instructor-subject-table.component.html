@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" style="min-height: 390px">
   <p-table
     [value]="assignedSubjectsTable"
     [scrollable]="true"
@@ -33,6 +33,15 @@
             class="mr-2"
             [rounded]="true"
             [outlined]="true"
+          />
+        </td>
+        <td>
+          <p-button
+            icon="pi pi-trash"
+            class="mr-2"
+            [rounded]="true"
+            [outlined]="true"
+            (click)="onDeleteTeacherWithSubjects(subjectsAssigned.teacherId)"
           />
         </td>
       </tr>

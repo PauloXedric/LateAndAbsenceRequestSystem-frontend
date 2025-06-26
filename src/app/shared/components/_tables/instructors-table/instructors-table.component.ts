@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TeacherReadModel } from '@shared/_models';
 import {
@@ -26,6 +26,9 @@ import { TableModule } from 'primeng/table';
   templateUrl: './instructors-table.component.html',
 })
 export class InstructorsTableComponent implements OnInit {
+  @Output() teacherUpdated = new EventEmitter<void>();
+  @Output() refreshInstructorSubject = new EventEmitter<void>();
+
   visible = false;
   editTeacherForm!: FormGroup;
 
@@ -81,6 +84,8 @@ export class InstructorsTableComponent implements OnInit {
         this.toastService.showSuccess(res.message);
         this.visible = false;
         this.loadData();
+        this.teacherUpdated.emit();
+        this.refreshInstructorSubject.emit();
       },
       error: (err) => {
         if (err.status === 404) {
@@ -108,6 +113,8 @@ export class InstructorsTableComponent implements OnInit {
               this.toastService.showSuccess(res.message);
               this.visible = false;
               this.loadData();
+              this.teacherUpdated.emit();
+              this.refreshInstructorSubject.emit();
             },
             error: (err) => {
               this.toastService.showError(

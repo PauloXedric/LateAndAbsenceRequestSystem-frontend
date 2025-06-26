@@ -2,7 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { TeacherAssignedSubjectsModel } from '@shared/_models';
 import { SplitAndTrimPipe } from '@shared/_pipes/split-and-trim.pipe';
-import { TeacherSubjectService } from '@shared/_services';
+import {
+  ConfirmationDialogService,
+  TeacherSubjectService,
+  ToastService,
+} from '@shared/_services';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 
@@ -15,7 +19,11 @@ import { TableModule } from 'primeng/table';
 export class InstructorSubjectTableComponent implements OnInit {
   assignedSubjectsTable: TeacherAssignedSubjectsModel[] = [];
 
-  constructor(private teacherSubjectService: TeacherSubjectService) {}
+  constructor(
+    private teacherSubjectService: TeacherSubjectService,
+    private toastService: ToastService,
+    private confirmationDialogService: ConfirmationDialogService
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -34,5 +42,31 @@ export class InstructorSubjectTableComponent implements OnInit {
 
   refresh(): void {
     this.loadData();
+  }
+
+  onDeleteTeacherWithSubjects(id: number): void {
+    this.confirmationDialogService
+      .confirm$({
+        header: 'Confirm Deletion',
+        message: 'Are you sure you want to delete this data?',
+        actionLabel: 'Delete',
+      })
+      .subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.teacherSubjectService.deleteTeacherWithSubjects(id).subscribe({
+            next: (res) => {
+              this.toastService.showSuccess(
+                res.message || 'Deleted successfully.'
+              );
+              this.loadData();
+            },
+            error: (err) => {
+              this.toastService.showError(
+                err.error?.message || 'Failed to delete teacher with subjects.'
+              );
+            },
+          });
+        }
+      });
   }
 }

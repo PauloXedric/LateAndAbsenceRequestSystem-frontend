@@ -4,15 +4,19 @@ import {
   FormGroup,
   Validators,
   ReactiveFormsModule,
+  FormControl,
 } from '@angular/forms';
 import {
   SubjectCreateModel,
   SubjectReadModel,
   TeacherCreateModel,
+  TeacherReadModel,
+  TeacherSubjectsCodeModel,
 } from '@shared/_models';
 import {
   SubjectService,
   TeacherService,
+  TeacherSubjectService,
   ToastService,
 } from '@shared/_services';
 import { AccordionModule } from 'primeng/accordion';
@@ -23,11 +27,12 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
-import { OrderListModule } from 'primeng/orderlist';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { FluidModule } from 'primeng/fluid';
 import { InstructorsTableComponent } from '../_tables/instructors-table/instructors-table.component';
 import { SubjectsTableComponent } from '../_tables/subjects-table/subjects-table.component';
 import { InstructorSubjectTableComponent } from '../_tables/instructor-subject-table/instructor-subject-table.component';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-instructor-courses',
@@ -44,7 +49,8 @@ import { InstructorSubjectTableComponent } from '../_tables/instructor-subject-t
     SubjectsTableComponent,
     InstructorSubjectTableComponent,
     FluidModule,
-    OrderListModule,
+    MultiSelectModule,
+    DropdownModule,
   ],
   standalone: true,
   providers: [TeacherService, SubjectService, MessageService],
@@ -56,9 +62,14 @@ export class InstructorCoursesComponent implements OnInit {
   instructorsTableComponent!: InstructorsTableComponent;
   @ViewChild(SubjectsTableComponent)
   subjectsTableComponent!: SubjectsTableComponent;
+  @ViewChild(InstructorSubjectTableComponent)
+  instructorSubjectTableComponent!: InstructorSubjectTableComponent;
 
-  subjectList!: SubjectReadModel[];
+  teacherList: TeacherReadModel[] = [];
+  subjectList: SubjectReadModel[] = [];
+  selectedSubjects: SubjectReadModel[] = [];
 
+  assignForm!: FormGroup;
   addTeacherForm!: FormGroup;
   addSubjectForm!: FormGroup;
 
@@ -66,7 +77,8 @@ export class InstructorCoursesComponent implements OnInit {
     private fb: FormBuilder,
     private teacherService: TeacherService,
     private subjectService: SubjectService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private teacherSubjectService: TeacherSubjectService
   ) {}
 
   ngOnInit(): void {
@@ -80,7 +92,20 @@ export class InstructorCoursesComponent implements OnInit {
       subjectCode: ['', Validators.required],
     });
 
+    this.assignForm = this.fb.group({
+      teacher: ['', Validators.required],
+      subjects: [[], Validators.required],
+    });
+
+    this.loadTeachers();
     this.loadSubjects();
+  }
+
+  public loadTeachers(): void {
+    this.teacherService.teacherList().subscribe({
+      next: (data) => (this.teacherList = data),
+      error: () => console.error('Failed to load teacher list'),
+    });
   }
 
   public loadSubjects(): void {
@@ -92,6 +117,43 @@ export class InstructorCoursesComponent implements OnInit {
         console.error('Failed to load subject list');
       },
     });
+  }
+
+  onAssignSubjects(): void {
+    if (this.assignForm.invalid) {
+      this.assignForm.markAllAsTouched();
+      return;
+    }
+
+    const selectedTeacher = this.assignForm.value.teacher;
+    const selectedSubjects = this.assignForm.value.subjects;
+
+    const assignFormValue: TeacherSubjectsCodeModel = {
+      teacherCode: selectedTeacher.teacherCode,
+      subjectCode: selectedSubjects.map((s: any) => s.subjectCode),
+    };
+    console.log(assignFormValue);
+    this.teacherSubjectService
+      .assignedSubjectToTeacher(assignFormValue)
+      .subscribe({
+        next: (res) => {
+          this.toastService.showSuccess(res.message);
+          this.instructorSubjectTableComponent.refresh();
+          this.assignForm.reset();
+        },
+        error: (err) => {
+          if (err.status === 404) {
+            this.toastService.showWarn(err.error.message);
+          } else if (err.status === 409) {
+            this.toastService.showWarn(err.error.message);
+          } else {
+            this.toastService.showError(
+              err.error?.message ||
+                'An unknown error occurred during assigning of subjects.'
+            );
+          }
+        },
+      });
   }
 
   addTeacher(): void {
@@ -107,13 +169,14 @@ export class InstructorCoursesComponent implements OnInit {
         this.toastService.showSuccess(res.message);
         this.instructorsTableComponent.refresh();
         this.addTeacherForm.reset();
+        this.loadTeachers();
       },
       error: (err) => {
         if (err.status === 409) {
           this.toastService.showWarn(err.error.message);
         } else {
           this.toastService.showError(
-            err.error?.message || 'Error occureed while adding teacher'
+            err.error?.message || 'Error occured while adding teacher.'
           );
         }
       },
@@ -140,7 +203,7 @@ export class InstructorCoursesComponent implements OnInit {
           this.toastService.showWarn(err.error.message);
         } else {
           this.toastService.showError(
-            err.error?.message || 'Error occureed while adding subject'
+            err.error?.message || 'Error occureed while adding subject.'
           );
         }
       },
