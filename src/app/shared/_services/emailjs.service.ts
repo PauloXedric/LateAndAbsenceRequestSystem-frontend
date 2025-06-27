@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { ApiService } from '@core';
 import { buildEmailparams, EmailjsParams } from '@shared/_params';
 import { RolesEnum } from '@shared/_enums/roles.enums';
-import { RequestGenTokenModel } from '@shared/_models';
+import { InvitationGenTokenModel, RequestGenTokenModel } from '@shared/_models';
 
 @Injectable({
   providedIn: 'root',
@@ -68,9 +68,56 @@ export class EmailService {
       );
   }
 
+  sendInvitationEmail(
+    newUserEmail: string,
+    userRole: string,
+    inviteLink: string
+  ): void {
+    const params = {
+      isInvite: 'true',
+      date: new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }),
+      userRole: String(userRole),
+      requesterEmail: String(newUserEmail),
+      inviteLink: String(inviteLink),
+    };
+
+    emailjs
+      .send(this.serviceId, this.declinedTemplateId, params, this.publicKey)
+      .then(
+        (result: EmailJSResponseStatus) => {
+          console.log(
+            `Invitation email sent to ${newUserEmail}:`,
+            result.status
+          );
+        },
+        (error) => {
+          console.error(
+            `Failed to send invitation email to ${newUserEmail}:`,
+            error
+          );
+        }
+      );
+  }
+
   generateNewToken(
     request: RequestGenTokenModel
+  ): Observable<{ urlToken: string }> {
+    return this.api.post<{ urlToken: string }>(
+      `Token/GenerateUrlToken`,
+      request
+    );
+  }
+
+  generateInvitationLink(
+    user: InvitationGenTokenModel
   ): Observable<{ token: string }> {
-    return this.api.post<{ token: string }>(`Token/GenerateUrlToken`, request);
+    return this.api.post<{ token: string }>(
+      'Token/GenerateInvitationLink',
+      user
+    );
   }
 }

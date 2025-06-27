@@ -13,9 +13,11 @@ import { RequestsTableComponent } from '@shared/components';
   template: ` <h1>Secondary Request:</h1>
     <app-requests-table
       [statusId]="RequestStatusEnum.WaitingForFirstSecretaryApproval"
-      [nextApprovalStatus]="RequestStatusEnum.WaitingForSecondSecretaryApproval"
+      [nextApprovalStatus]="
+        RequestStatusEnum.WaitingForStudentSupportingDocuments
+      "
       [rejectedStatus]="RequestStatusEnum.RejectedInFirstSecretaryApproval"
-      [roles]="RolesEnum.SecondSecretary"
+      [roles]="RolesEnum.Secretary"
       [columns]="columns"
     ></app-requests-table>`,
   styles: [

@@ -25,7 +25,6 @@ import { ButtonModule } from 'primeng/button';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
-import { ToastModule } from 'primeng/toast';
 import { ToolbarModule } from 'primeng/toolbar';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FluidModule } from 'primeng/fluid';
@@ -41,7 +40,6 @@ import { DropdownModule } from 'primeng/dropdown';
     InputGroupModule,
     InputGroupAddonModule,
     ReactiveFormsModule,
-    ToastModule,
     InputTextModule,
     ButtonModule,
     ToolbarModule,
@@ -207,6 +205,26 @@ export class InstructorCoursesComponent implements OnInit {
           );
         }
       },
+    });
+  }
+
+  patchExistingValue(data: { teacher: any; subjects: string[] }): void {
+    const selectedTeacher = this.teacherList.find(
+      (t) => t.teacherCode === data.teacher.teacherCode
+    );
+
+    const selectedSubjects = this.subjectList.filter((subject) => {
+      return data.subjects.some((s) => {
+        const [name, code] = s
+          .split('(')
+          .map((part) => part.replace(')', '').trim());
+        return subject.subjectName === name && subject.subjectCode === code;
+      });
+    });
+
+    this.assignForm.patchValue({
+      teacher: selectedTeacher,
+      subjects: selectedSubjects,
     });
   }
 }

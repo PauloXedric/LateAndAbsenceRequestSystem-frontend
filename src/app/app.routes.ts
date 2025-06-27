@@ -19,6 +19,7 @@ import {
   SignInComponent,
   DirectorNavigationComponent,
   DirectorRequestComponent,
+  InvitedRegisterComponent,
 } from '@features/components';
 
 export const routes: Routes = [
@@ -31,6 +32,7 @@ export const routes: Routes = [
       { path: 'sign-in', component: SignInComponent },
       { path: 'unathorized', component: RequestComponent },
       { path: 'supporting-documents', component: SupportingDocumentsComponent },
+      { path: 'register', component: InvitedRegisterComponent },
     ],
   },
   // {

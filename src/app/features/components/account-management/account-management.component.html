@@ -1,1 +1,32 @@
-<p>account-management works!</p>
+<p-card>
+  <p-toolbar>
+    <form
+      [formGroup]="newUserForm"
+      (ngSubmit)="addNewUser()"
+      class="form-container"
+    >
+      <h4>Manage:</h4>
+      <p-fluid>
+        <p-inputgroup>
+          <p-inputgroup-addon>
+            <i class="pi pi-id-card"></i>
+          </p-inputgroup-addon>
+          <input pInputText formControlName="email" placeholder="Email" />
+        </p-inputgroup>
+
+        <p-inputgroup>
+          <p-inputgroup-addon>
+            <i class="pi pi-user"></i>
+          </p-inputgroup-addon>
+          <input pInputText formControlName="role" placeholder="Role" />
+        </p-inputgroup>
+      </p-fluid>
+
+      <p-button
+        label="Add New"
+        type="submit"
+        [disabled]="newUserForm.invalid"
+      ></p-button>
+    </form>
+  </p-toolbar>
+</p-card>

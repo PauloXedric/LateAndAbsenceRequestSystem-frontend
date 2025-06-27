@@ -8,6 +8,8 @@ export * from './director/director-request/director-request.component';
 export * from './director/layout/director-navigation/director-navigation.component';
 export * from './director/layout/director-sidebar/director-sidebar.component';
 
+export * from './invited-register/invited-register.component';
+
 export * from './request/request.component';
 
 export * from './secretary/layout/secretary-navigation/secretary-navigation.component';

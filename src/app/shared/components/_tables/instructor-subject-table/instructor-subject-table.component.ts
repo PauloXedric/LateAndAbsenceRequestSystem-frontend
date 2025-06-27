@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TeacherAssignedSubjectsModel } from '@shared/_models';
 import { SplitAndTrimPipe } from '@shared/_pipes/split-and-trim.pipe';
 import {
@@ -17,6 +17,12 @@ import { TableModule } from 'primeng/table';
   templateUrl: './instructor-subject-table.component.html',
 })
 export class InstructorSubjectTableComponent implements OnInit {
+  @Output()
+  teacherSubjectSelected = new EventEmitter<{
+    teacher: any;
+    subjects: any[];
+  }>();
+
   assignedSubjectsTable: TeacherAssignedSubjectsModel[] = [];
 
   constructor(
@@ -68,5 +74,21 @@ export class InstructorSubjectTableComponent implements OnInit {
           });
         }
       });
+  }
+
+  selectTeacherWithSubjects(
+    subjectsAssigned: TeacherAssignedSubjectsModel
+  ): void {
+    const subjects = (subjectsAssigned.assignedSubjects || '')
+      .split(',')
+      .map((s) => s.trim());
+
+    this.teacherSubjectSelected.emit({
+      teacher: {
+        teacherName: subjectsAssigned.teacherName,
+        teacherCode: subjectsAssigned.teacherCode,
+      },
+      subjects: subjects,
+    });
   }
 }

@@ -51,7 +51,9 @@
           </div>
 
           <div class="table-section">
-            <app-instructor-subject-table></app-instructor-subject-table>
+            <app-instructor-subject-table
+              (teacherSubjectSelected)="patchExistingValue($event)"
+            ></app-instructor-subject-table>
           </div>
         </div>
       </p-accordion-content>
@@ -172,4 +174,3 @@
     </p-accordion-panel>
   </p-accordion>
 </div>
-<p-toast></p-toast>

@@ -193,7 +193,8 @@ export class RequestsTableComponent {
           const tokenModel = toRequestGenTokenModel(request);
           return this.emailService.generateNewToken(tokenModel).pipe(
             tap((response) => {
-              const token = response.token;
+              const token = response.urlToken;
+
               if (actionLabel === RequestActionEnum.Approve) {
                 this.emailService.sendApprovalEmail(
                   tokenModel,

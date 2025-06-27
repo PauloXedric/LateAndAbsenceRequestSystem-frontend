@@ -14,7 +14,6 @@ export interface EmailjsParams {
   approvedBy?: string;
   declinedBy?: string;
   date: string;
-  // ❌ no `dlarsLink?: string` in interface — keep dynamic
 }
 
 export function buildEmailparams(
@@ -39,7 +38,6 @@ export function buildEmailparams(
     approvedBy: options?.approvedBy,
   };
 
-  // ✅ Only add dlarsLink if it's not null
   if (dlarsLink) {
     params['dlarsLink'] = dlarsLink;
   }
