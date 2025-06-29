@@ -9,7 +9,7 @@ export class RequestService {
   constructor(private api: ApiService) {}
 
   addNewRequest(data: RequestCreateModel) {
-    return this.api.post('Request/AddRequest', data);
+    return this.api.post('Request', data);
   }
 
   addImageProofInRequest(formData: FormData) {

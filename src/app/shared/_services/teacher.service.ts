@@ -16,19 +16,18 @@ export class TeacherService {
   constructor(private api: ApiService) {}
 
   addNewTeacher(data: TeacherCreateModel): Observable<ApiResponse> {
-    return this.api.post<ApiResponse>('Teacher/AddTeacher', data);
+    return this.api.post<ApiResponse>('Teacher', data);
   }
 
-  teacherList(): Observable<TeacherReadModel[]> {
-    return this.api.get('Teacher/TeacherList');
+  getAllTeachers(): Observable<TeacherReadModel[]> {
+    return this.api.get<TeacherReadModel[]>('Teacher');
   }
 
   updateTeacher(data: TeacherUpdateModel): Observable<ApiResponse> {
-    return this.api.put<ApiResponse>('Teacher/UpdateTeacher', data);
+    return this.api.put<ApiResponse>('Teacher', data);
   }
 
   deleteTeacher(id: number): Observable<ApiResponse> {
-    const params = new HttpParams().set('teacherId', id.toString());
-    return this.api.delete<ApiResponse>('Teacher/DeleteTeacher', { params });
+    return this.api.delete<ApiResponse>(`Teacher/${id}`);
   }
 }

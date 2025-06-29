@@ -63,7 +63,7 @@ export class SubjectsTableComponent implements OnInit {
   }
 
   loadData(): void {
-    this.subjectService.subjectList().subscribe({
+    this.subjectService.getAllSubject().subscribe({
       next: (data) => {
         this.subjectsTable = data;
       },

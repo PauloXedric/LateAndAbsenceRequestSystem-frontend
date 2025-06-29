@@ -100,14 +100,14 @@ export class InstructorCoursesComponent implements OnInit {
   }
 
   public loadTeachers(): void {
-    this.teacherService.teacherList().subscribe({
+    this.teacherService.getAllTeachers().subscribe({
       next: (data) => (this.teacherList = data),
       error: () => console.error('Failed to load teacher list'),
     });
   }
 
   public loadSubjects(): void {
-    this.subjectService.subjectList().subscribe({
+    this.subjectService.getAllSubject().subscribe({
       next: (data) => {
         this.subjectList = data;
       },
@@ -132,7 +132,7 @@ export class InstructorCoursesComponent implements OnInit {
     };
     console.log(assignFormValue);
     this.teacherSubjectService
-      .assignedSubjectToTeacher(assignFormValue)
+      .assignedSubjectsToTeacher(assignFormValue)
       .subscribe({
         next: (res) => {
           this.toastService.showSuccess(res.message);
@@ -224,6 +224,35 @@ export class InstructorCoursesComponent implements OnInit {
 
     this.assignForm.patchValue({
       teacher: selectedTeacher,
+      subjects: selectedSubjects,
+    });
+  }
+
+  onTeacherSelected(selectedTeacher: TeacherReadModel): void {
+    const instructorData =
+      this.instructorSubjectTableComponent.assignedSubjectsTable.find(
+        (i) => i.teacherCode === selectedTeacher.teacherCode
+      );
+
+    if (!instructorData || !instructorData.assignedSubjects) {
+      this.assignForm.patchValue({ subjects: [] });
+      return;
+    }
+
+    const assignedArray = instructorData.assignedSubjects
+      .split(',')
+      .map((s) => s.trim());
+
+    const selectedSubjects = this.subjectList.filter((subject) =>
+      assignedArray.some((s: string) => {
+        const [name, code] = s
+          .split('(')
+          .map((part) => part.replace(')', '').trim());
+        return subject.subjectName === name && subject.subjectCode === code;
+      })
+    );
+
+    this.assignForm.patchValue({
       subjects: selectedSubjects,
     });
   }

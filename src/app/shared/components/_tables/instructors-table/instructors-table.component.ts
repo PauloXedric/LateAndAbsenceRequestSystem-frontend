@@ -57,7 +57,7 @@ export class InstructorsTableComponent implements OnInit {
   }
 
   loadData(): void {
-    this.teacherService.teacherList().subscribe({
+    this.teacherService.getAllTeachers().subscribe({
       next: (data) => {
         this.teachersTable = data;
       },

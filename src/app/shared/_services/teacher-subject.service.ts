@@ -14,21 +14,17 @@ import { Observable } from 'rxjs';
 export class TeacherSubjectService {
   constructor(private api: ApiService) {}
 
-  assignedSubjectToTeacher(
+  assignedSubjectsToTeacher(
     data: TeacherSubjectsCodeModel
   ): Observable<ApiResponse> {
-    return this.api.post<ApiResponse>('TeacherSubject/AssignSubject', data);
+    return this.api.post<ApiResponse>('TeacherSubject', data);
   }
 
-  teacherAssignedSubjectsList(): Observable<TeacherAssignedSubjectsModel[]> {
-    return this.api.get('TeacherSubject/TeacherAssignedSubjects');
+  getAllTeacherAssignedSubjects(): Observable<TeacherAssignedSubjectsModel[]> {
+    return this.api.get('TeacherSubject');
   }
 
   deleteTeacherWithSubjects(id: number): Observable<ApiResponse> {
-    const params = new HttpParams().set('teacherId', id.toString());
-    return this.api.delete<ApiResponse>(
-      'TeacherSubject/DeleteTeacherWithSubjects',
-      { params }
-    );
+    return this.api.delete<ApiResponse>(`TeacherSubject/${id}`);
   }
 }

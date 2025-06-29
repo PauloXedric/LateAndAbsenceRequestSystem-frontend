@@ -1,5 +1,7 @@
+import { RequestStatusEnum } from '@shared/_enums';
+
 export interface ReadRequestParams {
-  statusId: number;
+  statusId: RequestStatusEnum;
   pageNumber: number;
   pageSize: number;
   filter?: string;

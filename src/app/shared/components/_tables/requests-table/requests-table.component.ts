@@ -119,7 +119,7 @@ export class RequestsTableComponent {
       tap(() => (this.isLoading = true)),
       switchMap(([filter, page, pageSize]) =>
         this.requestService
-          .readRequest({
+          .getAllRequests({
             statusId: this.statusId,
             pageNumber: page + 1,
             pageSize,

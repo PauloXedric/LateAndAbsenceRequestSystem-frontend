@@ -11,11 +11,8 @@ import { ApiService } from '@core';
 export class RequestService {
   constructor(private api: ApiService) {}
 
-  readRequest(params: ReadRequestParams) {
-    return this.api.get<PaginatedResult<RequestReadModel>>(
-      'Request/DisplayRequest',
-      params
-    );
+  getAllRequests(params: ReadRequestParams) {
+    return this.api.get<PaginatedResult<RequestReadModel>>('Request', params);
   }
 
   updateRequestStatus(request: RequestUpdateModel) {

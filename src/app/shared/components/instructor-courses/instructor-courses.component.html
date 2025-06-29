@@ -23,6 +23,7 @@
                       [options]="teacherList"
                       optionLabel="teacherName"
                       placeholder="Instructor"
+                      (onChange)="onTeacherSelected($event.value)"
                     />
                   </p-inputgroup>
                 </p-fluid>

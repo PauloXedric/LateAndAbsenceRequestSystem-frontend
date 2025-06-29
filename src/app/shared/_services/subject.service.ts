@@ -16,19 +16,18 @@ export class SubjectService {
   constructor(private api: ApiService) {}
 
   addNewSubject(data: SubjectCreateModel): Observable<ApiResponse> {
-    return this.api.post<ApiResponse>('Subject/AddSubject', data);
+    return this.api.post<ApiResponse>('Subject', data);
   }
 
-  subjectList(): Observable<SubjectReadModel[]> {
-    return this.api.get('Subject/SubjectList');
+  getAllSubject(): Observable<SubjectReadModel[]> {
+    return this.api.get('Subject');
   }
 
   updateSubject(data: SubjectUpdateModel): Observable<ApiResponse> {
-    return this.api.put<ApiResponse>('Subject/UpdateSubject', data);
+    return this.api.put<ApiResponse>('Subject', data);
   }
 
   deleteSubject(id: number): Observable<ApiResponse> {
-    const params = new HttpParams().set('subjectId', id.toString());
-    return this.api.delete<ApiResponse>('Subject/DeleteSubject', { params });
+    return this.api.delete<ApiResponse>(`Subject/${id}`);
   }
 }
