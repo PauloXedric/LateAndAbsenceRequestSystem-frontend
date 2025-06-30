@@ -40,7 +40,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { ToolbarModule } from 'primeng/toolbar';
 import { Image } from 'primeng/image';
 import { RolesEnum } from '@shared/_enums/roles.enums';
-import { toRequestGenTokenModel } from '@shared/_utilities/request-mapper';
+import { toRequestGenTokenModel } from '@shared/_mappers/request.mapper';
 
 @Component({
   selector: 'app-requests-table',
@@ -187,10 +187,11 @@ export class RequestsTableComponent {
         requestId: request.requestId,
         statusId: newStatusId,
       };
-
+      console.log('Updating request with model:', updateModel);
       return this.requestService.updateRequestStatus(updateModel).pipe(
         switchMap(() => {
           const tokenModel = toRequestGenTokenModel(request);
+
           return this.emailService.generateNewToken(tokenModel).pipe(
             tap((response) => {
               const token = response.urlToken;

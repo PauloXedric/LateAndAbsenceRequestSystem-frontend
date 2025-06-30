@@ -6,6 +6,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ApiService } from '@core';
+import { ApiResponse, UserRegisterModel } from '@shared/_models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -66,5 +67,9 @@ export class AuthService {
   hasRole(expectedRoles: string[]): boolean {
     const roles = this.getUserRoles();
     return expectedRoles.some((r) => roles.includes(r));
+  }
+
+  registerUSer(user: UserRegisterModel): Observable<ApiResponse> {
+    return this.api.post<ApiResponse>('UserAccount/RegisterUser', user);
   }
 }

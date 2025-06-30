@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { ApiService } from '@core';
 import { buildEmailparams, EmailjsParams } from '@shared/_params';
 import { RolesEnum } from '@shared/_enums/roles.enums';
 import { InvitationGenTokenModel, RequestGenTokenModel } from '@shared/_models';
+import { environment } from 'environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,7 @@ export class EmailService {
   ): void {
     const dlarsLink =
       approvedBy === RolesEnum.Secretary
-        ? `http://localhost:4200/supporting-documents?token=${token}`
+        ? `${environment.appBaseUrl}/supporting-documents?token=${token}`
         : null;
 
     const params = buildEmailparams(request, dlarsLink, { approvedBy });
@@ -114,10 +115,13 @@ export class EmailService {
 
   generateInvitationLink(
     user: InvitationGenTokenModel
-  ): Observable<{ token: string }> {
-    return this.api.post<{ token: string }>(
-      'Token/GenerateInvitationLink',
-      user
-    );
+  ): Observable<{ inviteLink: string }> {
+    return this.api
+      .post<{ invitationToken: string }>('Token/GenerateInvitationLink', user)
+      .pipe(
+        map((res) => ({
+          inviteLink: `${environment.appBaseUrl}/register?token=${res.invitationToken}`,
+        }))
+      );
   }
 }

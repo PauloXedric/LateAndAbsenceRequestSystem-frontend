@@ -23,7 +23,7 @@ export function toRequestGenTokenModel(
     teacher,
     subjectCode,
     dateOfAbsence: new Date(dateOfAbsence).toISOString().slice(0, 10),
-    dateOfAttendance: new Date(dateOfAttendance).toISOString().slice(0, 10), //
+    dateOfAttendance: new Date(dateOfAttendance).toISOString().slice(0, 10),
     reason,
   };
 }

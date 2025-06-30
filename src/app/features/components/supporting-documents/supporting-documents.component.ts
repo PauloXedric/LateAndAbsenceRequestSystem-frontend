@@ -15,6 +15,7 @@ import { RequestService } from '@features/_services/request.service';
 import { TokenLinkService } from '@core';
 import { DateFormatPipe } from '@shared/_pipes/date-format.pipe';
 import { ToastModule } from 'primeng/toast';
+import { RequestStatusEnum } from '@shared/_enums';
 
 type UploadField = 'imageProof' | 'parentsValidId' | 'medicalCertificate';
 
@@ -43,6 +44,7 @@ export class SupportingDocumentsComponent implements OnInit {
   medicalCertificateUploader!: FileUpload;
 
   formGroup!: FormGroup;
+  readonly RequestStatusEnum = RequestStatusEnum;
 
   imagePreviews: Record<UploadField, string> = {
     imageProof: '',
@@ -61,15 +63,14 @@ export class SupportingDocumentsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.tokenLinkService.initializeToken();
-    const decoded = this.tokenLinkService.decodeToken();
-
     this.formGroup = this.fb.group({
       imageProof: [''],
       parentsValidId: [''],
       medicalCertificate: [''],
     });
 
+    this.tokenLinkService.initializeToken();
+    const decoded = this.tokenLinkService.decodeToken();
     if (!decoded) {
       console.error('No valid token found');
       return;
@@ -132,7 +133,10 @@ export class SupportingDocumentsComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('RequestId', this.tokenData.requestId);
-    formData.append('StatusId', '3');
+    formData.append(
+      'StatusId',
+      RequestStatusEnum.WaitingForSecondSecretaryApproval.toString()
+    );
 
     formData.append('ProofImage', this.selectedFiles.imageProof);
     formData.append('ParentValidImage', this.selectedFiles.parentsValidId);

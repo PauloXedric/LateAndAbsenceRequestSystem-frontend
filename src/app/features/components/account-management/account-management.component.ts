@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { InvitationGenTokenModel } from '@shared/_models';
-import { EmailService } from '@shared/_services';
+import { EmailService, ToastService } from '@shared/_services';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { FluidModule } from 'primeng/fluid';
@@ -34,7 +34,11 @@ import { ToolbarModule } from 'primeng/toolbar';
 export class AccountManagementComponent implements OnInit {
   newUserForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private emailService: EmailService) {}
+  constructor(
+    private fb: FormBuilder,
+    private emailService: EmailService,
+    private toastService: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.newUserForm = this.fb.group({
@@ -55,17 +59,17 @@ export class AccountManagementComponent implements OnInit {
 
     this.emailService.generateInvitationLink(tokenModel).subscribe({
       next: (response) => {
-        const token = response.token;
-        const inviteLink = `http://localhost:4200/register?token=${token}`;
-
-        this.emailService.sendInvitationEmail(
-          tokenModel.userEmail,
-          tokenModel.userRole,
-          inviteLink
-        );
+        const inviteLink = response.inviteLink;
+        // this.emailService.sendInvitationEmail(
+        //   tokenModel.userEmail,
+        //   tokenModel.userRole,
+        //   inviteLink
+        // );
+        this.toastService.showSuccess('Invitation send successfully');
+        this.newUserForm.reset();
       },
       error: (err) => {
-        console.error('Failed to generate invitation token', err);
+        this.toastService.showError('Failed to send invitation');
       },
     });
   }

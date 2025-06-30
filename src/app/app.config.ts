@@ -34,15 +34,15 @@ export const appConfig: ApplicationConfig = {
       JwtModule.forRoot({
         config: {
           tokenGetter: tokenGetter,
-          allowedDomains: [new URL(environment.baseUrl).host],
-          disallowedRoutes: [`${environment.baseUrl}/UserAccount/Login`],
+          allowedDomains: [new URL(environment.apiBaseUrl).host],
+          disallowedRoutes: [`${environment.apiBaseUrl}/UserAccount/Login`],
         },
       })
     ),
     {
       provide: API_CONFIG,
       useValue: {
-        baseUrl: environment.baseUrl,
+        baseUrl: environment.apiBaseUrl,
       },
     },
     MessageService,

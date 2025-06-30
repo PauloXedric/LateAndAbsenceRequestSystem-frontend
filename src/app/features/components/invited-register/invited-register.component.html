@@ -1,1 +1,137 @@
-<p>invited-register works!</p>
+<p-toast></p-toast>
+<div class="card-wrapper">
+  <p-card [style]="{ width: '37rem' }">
+    <div *ngIf="isExpired" class="expired-message">
+      <h2>This link has expired.</h2>
+    </div>
+
+    <ng-template #header>
+      <div class="custom-card-header">
+        <img src="assets/images/dpcimage1.png" alt="Logo" class="header-logo" />
+        <span>DPC Late And Absence Request System</span>
+      </div>
+    </ng-template>
+
+    <div *ngIf="tokenData && !isExpired">
+      <h3>Instructor Registration</h3>
+      <div class="form-field">
+        <form [formGroup]="registerForm" (ngSubmit)="submitForm()">
+          <p-fluid class="mt-4">
+            <p-inputgroup>
+              <p-inputgroup-addon>
+                <i class="pi pi-id-card"></i>
+              </p-inputgroup-addon>
+              <input
+                pInputText
+                formControlName="userCode"
+                placeholder="Teacher Code"
+              />
+            </p-inputgroup>
+
+            <p-inputgroup>
+              <p-inputgroup-addon>
+                <i class="pi pi-user"></i>
+              </p-inputgroup-addon>
+              <input
+                pInputText
+                formControlName="lastName"
+                placeholder="Last Name"
+              />
+            </p-inputgroup>
+
+            <p-inputgroup>
+              <p-inputgroup-addon>
+                <i class="pi pi-user-plus"></i>
+              </p-inputgroup-addon>
+              <input
+                pInputText
+                formControlName="firstName"
+                placeholder="First Name"
+              />
+            </p-inputgroup>
+
+            <p-inputgroup>
+              <p-inputgroup-addon>
+                <i class="pi pi-briefcase"></i>
+              </p-inputgroup-addon>
+              <input pInputText formControlName="role" placeholder="Role" />
+            </p-inputgroup>
+
+            <p-inputgroup>
+              <p-inputgroup-addon>
+                <i class="pi pi-envelope"></i>
+              </p-inputgroup-addon>
+              <input
+                pInputText
+                formControlName="username"
+                placeholder="Email"
+              />
+            </p-inputgroup>
+            <div
+              class="password-policy"
+              *ngIf="
+    registerForm.get('password')?.errors?.['passwordPolicy'] &&
+    registerForm.get('password')?.touched
+  "
+            >
+              <p>
+                Password must:
+                <span
+                  *ngIf="!registerForm.get('password')?.errors?.['passwordPolicy'].hasUpperCase"
+                >
+                  include an uppercase letter,
+                </span>
+                <span
+                  *ngIf="!registerForm.get('password')?.errors?.['passwordPolicy'].hasLowerCase"
+                >
+                  include a lowercase letter,
+                </span>
+                <span
+                  *ngIf="!registerForm.get('password')?.errors?.['passwordPolicy'].hasNumber"
+                >
+                  include a digit,
+                </span>
+                <span
+                  *ngIf="!registerForm.get('password')?.errors?.['passwordPolicy'].hasSpecialChar"
+                >
+                  include a special character,
+                </span>
+                <span
+                  *ngIf="!registerForm.get('password')?.errors?.['passwordPolicy'].hasMinLength"
+                >
+                  be at least 8 characters.
+                </span>
+              </p>
+            </div>
+            <div class="password">
+              <p-password
+                type="password"
+                [toggleMask]="true"
+                formControlName="password"
+                placeholder="Password"
+              />
+            </div>
+
+            <div class="password">
+              <p-password
+                type="password"
+                [toggleMask]="true"
+                formControlName="confirmPassword"
+                placeholder="Confirm Password"
+              />
+            </div>
+          </p-fluid>
+          <p-button
+            label="Register"
+            type="submit"
+            [disabled]="registerForm.invalid"
+          ></p-button>
+        </form>
+      </div>
+    </div>
+
+    <div *ngIf="!tokenData && !isExpired">
+      <p>Waiting for token...</p>
+    </div>
+  </p-card>
+</div>

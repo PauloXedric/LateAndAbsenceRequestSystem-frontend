@@ -12,3 +12,4 @@ export * from './teacher-read.model';
 export * from './teacher-subjects-code.model';
 export * from './teacher-update.model';
 export * from './invitation-gen-token.model';
+export * from './user-register.model';

@@ -32,10 +32,12 @@ import { InstructorsTableComponent } from '../_tables/instructors-table/instruct
 import { SubjectsTableComponent } from '../_tables/subjects-table/subjects-table.component';
 import { InstructorSubjectTableComponent } from '../_tables/instructor-subject-table/instructor-subject-table.component';
 import { DropdownModule } from 'primeng/dropdown';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-instructor-courses',
   imports: [
+    CommonModule,
     AccordionModule,
     InputGroupModule,
     InputGroupAddonModule,
@@ -118,11 +120,6 @@ export class InstructorCoursesComponent implements OnInit {
   }
 
   onAssignSubjects(): void {
-    if (this.assignForm.invalid) {
-      this.assignForm.markAllAsTouched();
-      return;
-    }
-
     const selectedTeacher = this.assignForm.value.teacher;
     const selectedSubjects = this.assignForm.value.subjects;
 
@@ -155,11 +152,6 @@ export class InstructorCoursesComponent implements OnInit {
   }
 
   addTeacher(): void {
-    if (this.addTeacherForm.invalid) {
-      this.addTeacherForm.markAllAsTouched();
-      return;
-    }
-
     const formTeacherValue: TeacherCreateModel = this.addTeacherForm.value;
 
     this.teacherService.addNewTeacher(formTeacherValue).subscribe({
@@ -182,11 +174,6 @@ export class InstructorCoursesComponent implements OnInit {
   }
 
   addSubject(): void {
-    if (this.addSubjectForm.invalid) {
-      this.addSubjectForm.markAllAsTouched();
-      return;
-    }
-
     const formSubjectValue: SubjectCreateModel = this.addSubjectForm.value;
 
     this.subjectService.addNewSubject(formSubjectValue).subscribe({
