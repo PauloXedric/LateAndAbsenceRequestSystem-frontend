@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import {
+  ApproverRolesEnum,
   RequestActionEnum,
+  RequestResultEnum,
   RequestStatusEnum,
-  RolesEnum,
 } from '@shared/_enums';
 
 import { RequestsTableComponent } from '@shared/components';
@@ -16,8 +17,10 @@ import { RequestsTableComponent } from '@shared/components';
       [statusId]="RequestStatusEnum.WaitingForSecondSecretaryApproval"
       [nextApprovalStatus]="RequestStatusEnum.WaitingForChairpersonApproval"
       [rejectedStatus]="RequestStatusEnum.RejectedInSecondSecretaryApproval"
-      [roles]="RolesEnum.SecondSecretary"
+      [roles]="ApproverRolesEnum.SecondSecretary"
       [columns]="columns"
+      [addApproveHistory]="RequestResultEnum.ApprovedBySecretarySecondReview"
+      [addRejectHistory]="RequestResultEnum.RejectedBySecretarySecondReview"
     ></app-requests-table>`,
   styles: [
     `
@@ -30,7 +33,8 @@ import { RequestsTableComponent } from '@shared/components';
 export class SecretarySecondaryRequestComponent {
   readonly RequestActionEnum = RequestActionEnum;
   readonly RequestStatusEnum = RequestStatusEnum;
-  readonly RolesEnum = RolesEnum;
+  readonly ApproverRolesEnum = ApproverRolesEnum;
+  readonly RequestResultEnum = RequestResultEnum;
 
   columns = [
     { field: 'studentNumber', header: 'Student Number' },

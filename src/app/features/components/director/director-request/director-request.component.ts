@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import {
+  ApproverRolesEnum,
   RequestActionEnum,
+  RequestResultEnum,
   RequestStatusEnum,
-  RolesEnum,
 } from '@shared/_enums';
 import { RequestsTableComponent } from '@shared/components';
 
@@ -14,8 +15,10 @@ import { RequestsTableComponent } from '@shared/components';
       [statusId]="RequestStatusEnum.WaitingForDirectorApproval"
       [nextApprovalStatus]="RequestStatusEnum.ApprovalComplete"
       [rejectedStatus]="RequestStatusEnum.RejectedInDirectorApproval"
-      [roles]="RolesEnum.Director"
+      [roles]="ApproverRolesEnum.Director"
       [columns]="columns"
+      [addApproveHistory]="RequestResultEnum.ApprovedByDirector"
+      [addRejectHistory]="RequestResultEnum.RejectedByDirector"
     ></app-requests-table>`,
   styles: [
     `
@@ -28,7 +31,9 @@ import { RequestsTableComponent } from '@shared/components';
 export class DirectorRequestComponent {
   readonly RequestActionEnum = RequestActionEnum;
   readonly RequestStatusEnum = RequestStatusEnum;
-  readonly RolesEnum = RolesEnum;
+  readonly ApproverRolesEnum = ApproverRolesEnum;
+  readonly RequestResultEnum = RequestResultEnum;
+
   columns = [
     { field: 'studentNumber', header: 'Student Number' },
     { field: 'studentName', header: 'Student Name' },

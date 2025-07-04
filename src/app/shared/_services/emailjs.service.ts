@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 import { map, Observable } from 'rxjs';
 import { ApiService } from '@core';
-import { buildEmailparams, EmailjsParams } from '@shared/_params';
-import { RolesEnum } from '@shared/_enums/roles.enums';
+import { buildEmailparams } from '@shared/_params';
 import { InvitationGenTokenModel, RequestGenTokenModel } from '@shared/_models';
 import { environment } from 'environments/environment';
+import { ApproverRolesEnum } from '@shared/_enums';
 
 @Injectable({
   providedIn: 'root',
@@ -21,10 +21,10 @@ export class EmailService {
   sendApprovalEmail(
     request: RequestGenTokenModel,
     token: string,
-    approvedBy: RolesEnum
+    approvedBy: ApproverRolesEnum
   ): void {
     const dlarsLink =
-      approvedBy === RolesEnum.Secretary
+      approvedBy === ApproverRolesEnum.Secretary
         ? `${environment.appBaseUrl}/supporting-documents?token=${token}`
         : null;
 
@@ -48,7 +48,10 @@ export class EmailService {
       );
   }
 
-  sendDeclineEmail(request: RequestGenTokenModel, declinedBy: RolesEnum): void {
+  sendDeclineEmail(
+    request: RequestGenTokenModel,
+    declinedBy: ApproverRolesEnum
+  ): void {
     const params = buildEmailparams(request, null, { declinedBy });
 
     emailjs

@@ -64,7 +64,7 @@ export const routes: Routes = [
       {
         path: 'chairperson',
         component: ChairpersonNavigationComponent,
-        data: { roles: ['chairperson'] },
+        data: { roles: ['Chairperson'] },
         children: [
           {
             path: 'chairperson-request',

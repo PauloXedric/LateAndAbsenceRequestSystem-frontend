@@ -12,6 +12,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { NgIf } from '@angular/common';
 import { AuthService } from '@core';
+import { ToastService } from '@shared/_services';
 
 @Component({
   selector: 'app-sign-in',
@@ -31,7 +32,8 @@ export class SignInComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -54,7 +56,7 @@ export class SignInComponent implements OnInit {
         const roles = this.authService.getUserRoles();
         if (roles.includes('Secretary')) {
           this.router.navigate(['/secretary']);
-        } else if (roles.includes('chairperson')) {
+        } else if (roles.includes('Chairperson')) {
           this.router.navigate(['/chairperson']);
         } else if (roles.includes('Director')) {
           this.router.navigate(['/director']);
@@ -62,8 +64,16 @@ export class SignInComponent implements OnInit {
           this.router.navigate(['/unauthorized']);
         }
       },
-      error: () => {
-        alert('Login failed. Check your credentials.');
+      error: (err) => {
+        if (err.status === 403) {
+          this.toastService.showInfo(err.error?.message);
+        } else if (err.status === 404) {
+          this.toastService.showError(err.error?.message);
+        } else {
+          this.toastService.showError(
+            'Something went wrong. Please try again.'
+          );
+        }
       },
     });
   }

@@ -30,3 +30,112 @@
     </form>
   </p-toolbar>
 </p-card>
+
+<p-card *ngIf="users.controls.length">
+  <form [formGroup]="userListForm">
+    <div formArrayName="users">
+      <p-table
+        #userTable
+        [value]="userData"
+        dataKey="userCode"
+        editMode="row"
+        [tableStyle]="{ 'min-width': '70rem' }"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>User Code</th>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+
+        <ng-template
+          pTemplate="body"
+          let-rowData
+          let-editing="editing"
+          let-ri="rowIndex"
+        >
+          <tr [formGroup]="getUserFormGroup(ri)" [pEditableRow]="rowData">
+            <td>{{ rowData.userCode }}</td>
+            <td>{{ rowData.lastName }}</td>
+            <td>{{ rowData.firstName }}</td>
+            <td>{{ rowData.email }}</td>
+
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-select
+                    formControlName="role"
+                    [options]="roles"
+                    [style]="{ width: '100%' }"
+                    appendTo="body"
+                  ></p-select>
+                </ng-template>
+                <ng-template pTemplate="output">
+                  {{ rowData.role }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+
+            <td>
+              <p-cellEditor>
+                <ng-template pTemplate="input">
+                  <p-select
+                    formControlName="status"
+                    [options]="statuses"
+                    [style]="{ width: '100%' }"
+                    appendTo="body"
+                  ></p-select>
+                </ng-template>
+                <ng-template pTemplate="output">
+                  <p-tag
+                    [value]="rowData.status"
+                    [severity]="getSeverity(rowData.status)"
+                  />
+                </ng-template>
+              </p-cellEditor>
+            </td>
+
+            <td>
+              <div class="flex gap-2 justify-center">
+                <button
+                  *ngIf="editingRowIndex !== ri"
+                  pButton
+                  pInitEditableRow
+                  icon="pi pi-pencil"
+                  (click)="onRowEditInit(ri)"
+                  text
+                  rounded
+                ></button>
+
+                <button
+                  *ngIf="editingRowIndex === ri"
+                  pButton
+                  pSaveEditableRow
+                  icon="pi pi-check"
+                  (click)="onRowEditSave(ri)"
+                  text
+                  rounded
+                ></button>
+
+                <button
+                  *ngIf="editingRowIndex === ri"
+                  pButton
+                  pCancelEditableRow
+                  icon="pi pi-times"
+                  (click)="onRowEditCancel(ri)"
+                  text
+                  rounded
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </form>
+</p-card>

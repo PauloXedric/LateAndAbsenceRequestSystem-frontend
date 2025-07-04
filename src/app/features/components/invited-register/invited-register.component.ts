@@ -9,8 +9,7 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { AuthService, TokenLinkService } from '@core';
-import { UserRegisterModel } from '@shared/_models';
+import { TokenLinkService } from '@core';
 import { ToastService } from '@shared/_services';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -21,6 +20,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { PasswordModule } from 'primeng/password';
 import { toUserRegisterModel } from '@shared/_mappers/user-register.mapper';
+import { UserService } from '@features/_services/user.service';
 
 @Component({
   selector: 'app-invited-register',
@@ -52,7 +52,7 @@ export class InvitedRegisterComponent implements OnInit {
     private fb: FormBuilder,
     private tokenLinkService: TokenLinkService,
     private toastService: ToastService,
-    private authService: AuthService
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -92,7 +92,7 @@ export class InvitedRegisterComponent implements OnInit {
     const rawValue = this.registerForm.getRawValue();
     const newUser = toUserRegisterModel(rawValue);
 
-    this.authService.registerUSer(newUser).subscribe({
+    this.userService.registerUSer(newUser).subscribe({
       next: (res) => {
         this.toastService.showSuccess(res.message);
         this.registerForm.reset();

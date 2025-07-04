@@ -5,11 +5,13 @@ import {
   RequestReadModel,
   PaginatedResult,
   RequestUpdateModel,
+  RequestHistoryCreateModel,
 } from '@shared/_models';
 import {
   ConfirmationDialogService,
   EmailService,
   FilterService,
+  RequestHistoryService,
   RequestService,
 } from '@shared/_services';
 import { ConfirmationDialogComponent } from '@shared/components/_dialogs/confirmation-dialog/confirmation-dialog.component';
@@ -39,8 +41,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
 import { ToolbarModule } from 'primeng/toolbar';
 import { Image } from 'primeng/image';
-import { RolesEnum } from '@shared/_enums/roles.enums';
+import { ApproverRolesEnum } from '@shared/_enums/approver-roles.enum';
 import { toRequestGenTokenModel } from '@shared/_mappers/request.mapper';
+import { RequestResultEnum } from '@shared/_enums';
 
 @Component({
   selector: 'app-requests-table',
@@ -75,8 +78,10 @@ export class RequestsTableComponent {
   @Input() statusId!: RequestStatusEnum;
   @Input() nextApprovalStatus!: RequestStatusEnum;
   @Input() rejectedStatus!: RequestStatusEnum;
-  @Input() roles!: RolesEnum;
+  @Input() roles!: ApproverRolesEnum;
   @Input() columns: { field: string; header: string }[] = [];
+  @Input() addApproveHistory!: RequestResultEnum;
+  @Input() addRejectHistory!: RequestResultEnum;
 
   readonly RequestActionEnum = RequestActionEnum;
   readonly RequestStatusEnum = RequestStatusEnum;
@@ -103,10 +108,12 @@ export class RequestsTableComponent {
     private requestService: RequestService,
     private confirmationDialogService: ConfirmationDialogService,
     private emailService: EmailService,
-    private filterService: FilterService
+    private filterService: FilterService,
+    private requestHistoryService: RequestHistoryService
   ) {}
 
   ngOnInit(): void {
+    console.log(this.statusId);
     this.filteredRequests$ = combineLatest([
       this.filterService.filter$.pipe(
         debounceTime(500),
@@ -178,7 +185,7 @@ export class RequestsTableComponent {
     });
   }
 
-  executeStatusChange(newStatusId: number, actionLabel: string) {
+  executeStatusChange(newStatusId: RequestStatusEnum, actionLabel: string) {
     if (this.selectedRequestReadData.length === 0) return;
     this.isLoading = true;
 
@@ -187,24 +194,37 @@ export class RequestsTableComponent {
         requestId: request.requestId,
         statusId: newStatusId,
       };
-      console.log('Updating request with model:', updateModel);
+
       return this.requestService.updateRequestStatus(updateModel).pipe(
         switchMap(() => {
           const tokenModel = toRequestGenTokenModel(request);
 
           return this.emailService.generateNewToken(tokenModel).pipe(
-            tap((response) => {
+            switchMap((response) => {
               const token = response.urlToken;
 
-              if (actionLabel === RequestActionEnum.Approve) {
-                this.emailService.sendApprovalEmail(
-                  tokenModel,
-                  token,
-                  this.roles
+              const historyModel: RequestHistoryCreateModel = {
+                requestId: request.requestId,
+                resultId:
+                  actionLabel === RequestActionEnum.Approve
+                    ? this.addApproveHistory
+                    : this.addRejectHistory,
+              };
+
+              console.log(historyModel);
+              return this.requestHistoryService
+                .addRequestHistory(historyModel)
+                .pipe(
+                  tap(() => {
+                    if (actionLabel === RequestActionEnum.Approve) {
+                      console.log('History recorded');
+                      // this.emailService.sendApprovalEmail(tokenModel, token, this.roles);
+                    } else {
+                      console.log('Rejection history recorded');
+                      // this.emailService.sendDeclineEmail(tokenModel, this.roles);
+                    }
+                  })
                 );
-              } else {
-                this.emailService.sendDeclineEmail(tokenModel, this.roles);
-              }
             })
           );
         })
