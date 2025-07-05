@@ -3,165 +3,169 @@
     <img src="assets/images/dpcimage1.png" alt="Background Image" />
   </section>
 
-  <h1>Request Form</h1>
+  <div #formSection>
+    <div class="form-wrapper">
+      <p-card>
+        <ng-template #header>
+          <div class="custom-card-header">
+            <img
+              src="assets/images/dpcimage1.png"
+              alt="Logo"
+              class="header-logo"
+            />
+            <span>Request Form</span>
+          </div>
+        </ng-template>
+        <form
+          [formGroup]="requestForm"
+          (ngSubmit)="submitRequestForm()"
+          class="form-container"
+        >
+          <p>
+            Please complete the form below to submit your official request.
+            Ensure all required fields are filled out accurately. This
+            information will be reviewed and processed by the DPC administrative
+            staff.
+          </p>
+          <p-fluid>
+            <div class="form-columns">
+              <div class="form-column" style="margin-top: 2.3rem">
+                <p-inputGroup>
+                  <p-inputGroupAddon
+                    ><i class="pi pi-id-card"></i
+                  ></p-inputGroupAddon>
+                  <p-floatLabel variant="on">
+                    <input
+                      pInputText
+                      id="studentNumber"
+                      formControlName="studentNumber"
+                      autocomplete="off"
+                    />
+                    <label for="studentNumber">Student Number</label>
+                  </p-floatLabel>
+                </p-inputGroup>
 
-  <form
-    [formGroup]="requestForm"
-    (ngSubmit)="submitRequestForm()"
-    class="form-container"
-  >
-    <div class="form-columns">
-      <div class="form-column">
-        <div class="field">
-          <label for="studentNumber" class="block">Student Number:</label>
-          <input type="text" pInputText formControlName="studentNumber" />
-          <small
-            class="p-error block"
-            *ngIf="
-              requestForm.get('studentNumber')?.invalid &&
-              requestForm.get('studentNumber')?.touched
-            "
-          >
-            Student Number is required.
-          </small>
-        </div>
+                <p-inputGroup>
+                  <p-inputGroupAddon
+                    ><i class="pi pi-user"></i
+                  ></p-inputGroupAddon>
+                  <p-floatLabel variant="on">
+                    <input
+                      pInputText
+                      id="studentName"
+                      formControlName="studentName"
+                      autocomplete="off"
+                    />
+                    <label for="studentName">Student Name</label>
+                  </p-floatLabel>
+                </p-inputGroup>
 
-        <div class="field">
-          <label for="studentName" class="block">Student Name:</label>
-          <input type="text" pInputText formControlName="studentName" />
-          <small
-            class="p-error block"
-            *ngIf="
-              requestForm.get('studentName')?.invalid &&
-              requestForm.get('studentName')?.touched
-            "
-          >
-            Student Name is required.
-          </small>
-        </div>
+                <p-inputGroup>
+                  <p-inputGroupAddon
+                    ><i class="pi pi-users"></i
+                  ></p-inputGroupAddon>
+                  <p-floatLabel variant="on">
+                    <input
+                      pInputText
+                      id="courseYearSection"
+                      formControlName="courseYearSection"
+                      autocomplete="off"
+                    />
+                    <label for="courseYearSection"
+                      >Course / Year / Section</label
+                    >
+                  </p-floatLabel>
+                </p-inputGroup>
 
-        <div class="field">
-          <label for="courseYearSection" class="block"
-            >Course Yr. & Sec.:</label
-          >
-          <input type="text" pInputText formControlName="courseYearSection" />
-          <small
-            class="p-error block"
-            *ngIf="
-              requestForm.get('courseYearSection')?.invalid &&
-              requestForm.get('courseYearSection')?.touched
-            "
-          >
-            Course, Year, and Section is required.
-          </small>
-        </div>
+                <p-floatLabel variant="on">
+                  <p-autocomplete
+                    id="teacher"
+                    formControlName="teacher"
+                    [dropdown]="true"
+                    [suggestions]="filteredTeachers"
+                    (completeMethod)="searchTeachers($event)"
+                  />
+                  <label for="teacher">Teacher</label>
+                </p-floatLabel>
 
-        <div class="field">
-          <label for="teacher" class="block">Teacher:</label>
-          <input type="text" pInputText formControlName="teacher" />
-          <small
-            class="p-error block"
-            *ngIf="
-              requestForm.get('teacher')?.invalid &&
-              requestForm.get('teacher')?.touched
-            "
-          >
-            Teacher is required.
-          </small>
-        </div>
+                <p-floatLabel variant="on">
+                  <p-autocomplete
+                    id="subjectCode"
+                    formControlName="subjectCode"
+                    [dropdown]="true"
+                    [suggestions]="filteredSubjects"
+                    (completeMethod)="searchSubjects($event)"
+                  />
+                  <label for="subjectCode">Subject Code</label>
+                </p-floatLabel>
+              </div>
 
-        <div class="field">
-          <label for="subjectCode" class="block">Subject Code:</label>
-          <input type="text" pInputText formControlName="subjectCode" />
-          <small
-            class="p-error block"
-            *ngIf="
-              requestForm.get('subjectCode')?.invalid &&
-              requestForm.get('subjectCode')?.touched
-            "
-          >
-            Subject Code is required.
-          </small>
-        </div>
-      </div>
+              <div class="form-column">
+                <div style="margin-top: 0.5rem">
+                  <p-floatLabel>
+                    <p-datepicker
+                      formControlName="dateOfAbsence"
+                      [showIcon]="true"
+                      inputId="dateOfAbsence"
+                      [iconDisplay]="'input'"
+                    />
 
-      <div class="form-column">
-        <div class="field">
-          <label for="dateOfAbsence" class="block">Date of Absence:</label>
-          <p-datepicker
-            [showIcon]="true"
-            inputId="buttondisplay"
-            [showOnFocus]="false"
-            formControlName="dateOfAbsence"
-          />
-          <small
-            class="p-error block"
-            *ngIf="
-              requestForm.get('dateOfAbsence')?.invalid &&
-              requestForm.get('dateOfAbsence')?.touched
-            "
-          >
-            Date of Absence is required.
-          </small>
-        </div>
+                    <label for="dateOfAbsence">Date Of Absence</label>
+                  </p-floatLabel>
+                </div>
 
-        <div class="field">
-          <label for="dateOfAttendance" class="block"
-            >Date of Attendance:</label
-          >
-          <p-datepicker
-            [showIcon]="true"
-            inputId="buttondisplay"
-            [showOnFocus]="false"
-            formControlName="dateOfAttendance"
-          />
-          <small
-            class="p-error block"
-            *ngIf="
-              requestForm.get('dateOfAttendance')?.invalid &&
-              requestForm.get('dateOfAttendance')?.touched
-            "
-          >
-            Date of Attendance is required.
-          </small>
-        </div>
+                <p-floatLabel>
+                  <p-datepicker
+                    formControlName="dateOfAttendance"
+                    [showIcon]="true"
+                    inputId="dateOfAttendance"
+                    [iconDisplay]="'input'"
+                  />
+                  <label for="dateOfAttendance">Date Of Attendance</label>
+                </p-floatLabel>
 
-        <div class="field">
-          <label for="parentsCpNumber" class="block"
-            >Parent's Mobile No.:</label
-          >
-          <input type="text" pInputText formControlName="parentsCpNumber" />
-          <small
-            class="p-error block"
-            *ngIf="
-              requestForm.get('parentsCpNumber')?.invalid &&
-              requestForm.get('parentsCpNumber')?.touched
-            "
-          >
-            Parent's Mobile Number is required.
-          </small>
-        </div>
+                <p-inputGroup>
+                  <p-inputGroupAddon
+                    ><i class="pi pi-mobile"></i
+                  ></p-inputGroupAddon>
+                  <p-floatLabel variant="on">
+                    <input
+                      pInputText
+                      id="parentsCpNumber"
+                      pKeyFilter="num"
+                      formControlName="parentsCpNumber"
+                      autocomplete="off"
+                    />
+                    <label for="parentsCpNumber">Parent's Mobile No.</label>
+                  </p-floatLabel>
+                </p-inputGroup>
 
-        <div class="field">
-          <label for="reason" class="block">Reason:</label>
-          <input type="text" pInputText formControlName="reason" />
-          <small
-            class="p-error block"
-            *ngIf="
-              requestForm.get('reason')?.invalid &&
-              requestForm.get('reason')?.touched
-            "
-          >
-            Reason is required.
-          </small>
-        </div>
-
-        <p-button
-          label="Request"
-          type="submit"
-          [disabled]="requestForm.invalid"
-        />
-      </div>
+                <p-inputGroup>
+                  <p-inputGroupAddon
+                    ><i class="pi pi-comment"></i
+                  ></p-inputGroupAddon>
+                  <p-floatLabel variant="on">
+                    <textarea
+                      pTextarea
+                      id="reason"
+                      formControlName="reason"
+                      style="height: 100px"
+                      autocomplete="off"
+                    ></textarea>
+                    <label for="reason">Reason</label>
+                  </p-floatLabel>
+                </p-inputGroup>
+                <p-button
+                  label="Submit Request"
+                  type="submit"
+                  [disabled]="requestForm.invalid"
+                  class="mt-3"
+                />
+              </div>
+            </div>
+          </p-fluid>
+        </form>
+      </p-card>
     </div>
-  </form>
+  </div>
 </div>

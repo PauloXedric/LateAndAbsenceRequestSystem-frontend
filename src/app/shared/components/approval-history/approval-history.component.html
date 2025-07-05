@@ -2,12 +2,16 @@
   <p-toolbar>
     <ng-template pTemplate="center">
       <app-student-number-search-input
-        (filterChanged)="onFilterChange($event)"
+        (filterChanged)="onStudentNumberFilterChange($event)"
       />
       <p-datepicker
-        (onSelect)="onDateFilterChange($event)"
+        [(ngModel)]="selectedDate"
+        (ngModelChange)="onDateFilterChange($event)"
         [showIcon]="true"
+        [showButtonBar]="true"
         dateFormat="yy-mm-dd"
+        [placeholder]="'Filter by date'"
+        [showClear]="true"
       />
     </ng-template>
   </p-toolbar>

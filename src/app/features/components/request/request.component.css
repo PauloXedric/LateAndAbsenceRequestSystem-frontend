@@ -1,12 +1,12 @@
 .content {
   height: 191vh;
-  background-color: white;
+  background-color: #eeeeee;
   display: flex;
   flex-direction: column;
 }
 
 .spacer {
-  height: 92vh;
+  height: 91vh;
   overflow: hidden;
 }
 
@@ -15,19 +15,31 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 0 0 8px 8px;
 }
+
+h1 {
+  text-align: center;
+  font-size: 3rem;
+  font-weight: bolder;
+  color: black;
+}
+
 .form-container {
-  height: 96vh;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  width: 100%;
+  flex: 1;
+  max-width: 1200px;
+  padding: 1rem 4rem 1rem 4rem;
+  margin: 1.5rem;
+  background-color: #fdfdfd;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  height: 70vh;
 }
 
 .form-columns {
   display: flex;
   justify-content: space-between;
-  gap: 3rem;
+  gap: 2rem;
   flex-wrap: wrap;
 }
 
@@ -35,28 +47,44 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  min-width: 300px;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-}
-
-label {
-  font-size: 1rem;
-  color: black;
+  gap: 1.5rem;
+  width: 25rem;
+  margin-top: 2rem;
 }
 
 input {
-  background-color: white;
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  height: 40px;
 }
 
-.p-error {
-  color: red;
+.form-wrapper {
+  margin-top: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.custom-card-header {
+  display: flex;
+  align-items: center;
+  height: 4rem;
+  background-color: #770202;
+  font-weight: 600;
+  padding: 0 1rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  color: #ebebeb;
+  font-size: 2.5rem;
+}
+
+.header-logo {
+  height: 2.5rem;
+  margin-right: 1rem;
+}
+
+:host ::ng-deep .p-button {
+  width: 70%;
+  height: 40px;
+  margin-left: 15%;
 }

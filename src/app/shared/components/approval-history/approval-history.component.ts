@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -16,15 +16,20 @@ import {
   tap,
   of,
   Observable,
+  Subject,
+  takeUntil,
 } from 'rxjs';
 import { PaginatorModule } from 'primeng/paginator';
 import { StudentNumberSearchInputComponent } from '../student-number-search-input/student-number-search-input.component';
 import { DatePickerModule } from 'primeng/datepicker';
+import { FormsModule } from '@angular/forms';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-approval-history',
   standalone: true,
   imports: [
+    FormsModule,
     CommonModule,
     TableModule,
     ToolbarModule,
@@ -32,22 +37,23 @@ import { DatePickerModule } from 'primeng/datepicker';
     DateFormatPipe,
     PaginatorModule,
     DatePickerModule,
+    ProgressSpinnerModule,
     StudentNumberSearchInputComponent,
   ],
   templateUrl: './approval-history.component.html',
   styleUrl: './approval-history.component.css',
 })
-export class ApprovalHistoryComponent implements OnInit {
+export class ApprovalHistoryComponent implements OnInit, OnDestroy {
   readonly columns = [
-    { field: 'historyId', header: 'History ID' },
-    { field: 'actionDate', header: 'Action Date' },
+    { field: 'actionDate', header: 'Date' },
     { field: 'studentNumber', header: 'Student Number' },
     { field: 'studentName', header: 'Student Name' },
-    { field: 'courseYearSection', header: 'Course/Year/Section' },
+    { field: 'courseYearSection', header: 'Course/ Year/ Section' },
     { field: 'description', header: 'Description' },
     { field: 'performedByUser', header: 'Performed By' },
   ];
 
+  private destroy$ = new Subject<void>();
   private pageSubject = new BehaviorSubject<number>(0);
   private pageSizeSubject = new BehaviorSubject<number>(5);
   private refreshSubject = new BehaviorSubject<void>(undefined);
@@ -56,7 +62,7 @@ export class ApprovalHistoryComponent implements OnInit {
   );
 
   history$!: Observable<PaginatedResult<RequestHistoryReadModel>>;
-
+  selectedDate: Date | null = null;
   first = 0;
   totalRecords = 0;
   isLoading = false;
@@ -73,6 +79,7 @@ export class ApprovalHistoryComponent implements OnInit {
   ngOnInit(): void {
     this.history$ = combineLatest([
       this.filterService.filter$.pipe(
+        tap(() => (this.isLoading = true)),
         debounceTime(500),
         distinctUntilChanged()
       ),
@@ -81,7 +88,6 @@ export class ApprovalHistoryComponent implements OnInit {
       this.pageSizeSubject,
       this.refreshSubject,
     ]).pipe(
-      tap(() => (this.isLoading = true)),
       switchMap(([studentNumberFilter, dateFilter, page, pageSize]) => {
         const params = {
           pageNumber: page + 1,
@@ -89,11 +95,8 @@ export class ApprovalHistoryComponent implements OnInit {
           dateFilter,
           studentNumberFilter,
         };
-
         console.log('📤 Sending API request with params:', params);
-
         return this.requestHistoryService.getAllRequestHistory(params).pipe(
-          tap((res) => console.log('✅ Result from API:', res)),
           catchError(() =>
             of({
               items: [],
@@ -107,8 +110,15 @@ export class ApprovalHistoryComponent implements OnInit {
       tap((result) => {
         this.totalRecords = result.totalCount;
         this.isLoading = false;
-      })
+      }),
+      takeUntil(this.destroy$)
     );
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.filterService.resetFilter();
   }
 
   onPageChange(event: { first: number; rows: number }) {
@@ -116,14 +126,20 @@ export class ApprovalHistoryComponent implements OnInit {
     this.pageSizeSubject.next(event.rows);
   }
 
-  onFilterChange(value: string): void {
+  onStudentNumberFilterChange(value: string): void {
     this.first = 0;
     this.filterService.setFilter(value);
     this.pageSubject.next(0);
   }
-  onDateFilterChange(value: Date): void {
+
+  onDateFilterChange(value: Date | null): void {
     this.first = 0;
-    const formattedDate = value ? value.toISOString().split('T')[0] : '';
+    const formattedDate = value
+      ? `${value.getFullYear()}-${(value.getMonth() + 1)
+          .toString()
+          .padStart(2, '0')}-${value.getDate().toString().padStart(2, '0')}`
+      : undefined;
+
     this.dateFilterSubject.next(formattedDate);
     this.pageSubject.next(0);
   }
