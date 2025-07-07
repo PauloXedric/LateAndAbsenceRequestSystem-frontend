@@ -28,4 +28,5 @@
 .text-link-button:hover {
   text-decoration: underline;
   transform: scale(1.2);
+  color: gold;
 }

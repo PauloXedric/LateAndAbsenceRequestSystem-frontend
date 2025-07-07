@@ -33,6 +33,8 @@ import { SubjectsTableComponent } from '../_tables/subjects-table/subjects-table
 import { InstructorSubjectTableComponent } from '../_tables/instructor-subject-table/instructor-subject-table.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
+import { SelectModule } from 'primeng/select';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-instructor-courses',
@@ -50,7 +52,8 @@ import { CommonModule } from '@angular/common';
     InstructorSubjectTableComponent,
     FluidModule,
     MultiSelectModule,
-    DropdownModule,
+    SelectModule,
+    CardModule,
   ],
   standalone: true,
   providers: [TeacherService, SubjectService, MessageService],

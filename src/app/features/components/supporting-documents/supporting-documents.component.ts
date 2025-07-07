@@ -16,6 +16,8 @@ import { TokenLinkService } from '@core';
 import { DateFormatPipe } from '@shared/_pipes/date-format.pipe';
 import { ToastModule } from 'primeng/toast';
 import { RequestStatusEnum } from '@shared/_enums';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 type UploadField = 'imageProof' | 'parentsValidId' | 'medicalCertificate';
 
@@ -59,7 +61,10 @@ export class SupportingDocumentsComponent implements OnInit {
     private fb: FormBuilder,
     private messageService: MessageService,
     private requestService: RequestService,
-    private tokenLinkService: TokenLinkService
+    private tokenLinkService: TokenLinkService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -69,12 +74,19 @@ export class SupportingDocumentsComponent implements OnInit {
       medicalCertificate: [''],
     });
 
-    this.tokenLinkService.initializeToken();
+    const token = this.route.snapshot.queryParamMap.get('token');
+    if (token) {
+      this.tokenLinkService.setToken(token);
+      const cleanUrl = this.router.url.split('?')[0];
+      this.location.replaceState(cleanUrl);
+    }
+
     const decoded = this.tokenLinkService.decodeToken();
     if (!decoded) {
       console.error('No valid token found');
       return;
     }
+
     this.tokenData = decoded;
     this.isExpired = this.tokenLinkService.isTokenExpired();
   }

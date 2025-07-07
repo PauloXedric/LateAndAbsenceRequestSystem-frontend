@@ -84,7 +84,6 @@ export class RequestComponent implements OnInit {
       .getAllTeacherAssignedSubjects()
       .subscribe((data) => {
         this.teacherSubjectMap = data;
-        console.log('✅ Loaded teacher-subject map:', data);
       });
   }
 
@@ -133,7 +132,7 @@ export class RequestComponent implements OnInit {
 
     if (teacherEntry && teacherEntry.assignedSubjects) {
       this.filteredSubjects = teacherEntry.assignedSubjects
-        .split(',') // split string into array
+        .split(',')
         .map((subjectCode: string) => subjectCode.trim())
         .filter((code: string) => code.toLowerCase().includes(query));
     } else {

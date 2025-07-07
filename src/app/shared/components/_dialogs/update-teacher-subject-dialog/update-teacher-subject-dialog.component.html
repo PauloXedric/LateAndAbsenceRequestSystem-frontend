@@ -1,10 +1,22 @@
 <p-dialog
-  header="Edit"
   [(visible)]="visible"
-  [style]="{ width: '25rem' }"
+  modal="true"
+  closable="false"
+  [style]="{ width: '30rem' }"
   (onHide)="closeDialog()"
+  contentStyleClass="dialog-content"
 >
-  <form [formGroup]="form">
+  <div class="dialog-header">
+    <div class="dialog-header-title">
+      <i class="pi pi-pencil text-primary"></i>
+      <span>Edit Details</span>
+    </div>
+    <p class="dialog-subtitle">
+      Update info below. All changes are saved after clicking “Update”.
+    </p>
+  </div>
+
+  <form [formGroup]="form" class="edit-dialog-form">
     <div *ngFor="let field of fields" class="flex items-center gap-4 mb-4">
       <label class="font-semibold w-24">{{ field.label }}:</label>
       <input

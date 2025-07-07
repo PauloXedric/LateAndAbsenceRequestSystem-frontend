@@ -4,18 +4,15 @@
   width: 100%;
 }
 
-
 .content {
   width: 30%;
   background-color: #fff;
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: stretch; 
+  align-items: stretch;
   text-align: center;
 }
-
 
 .image-section {
   width: 70%;
@@ -29,14 +26,11 @@
   display: block;
 }
 
-
 .form-container {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  margin-top: 2rem;
 }
-
 
 .field {
   display: flex;
@@ -44,8 +38,38 @@
   align-items: flex-start;
   text-align: left;
 }
+.section-divider {
+  border: none;
+  height: 2px;
+  background-color: #ccc;
+  margin: 1rem auto;
+  width: 80%;
+}
 
+.logo {
+  width: 100px;
+  height: auto;
+  margin: 0 auto 1rem auto;
+  display: block;
+}
 
-.p-error {
-  color: red;
+.form-column p-inputGroup {
+  margin-bottom: 1.5rem;
+}
+
+.forgot-password-link {
+  font-size: 0.875rem;
+  color: tomato;
+  text-decoration: none;
+}
+
+.forgot-password-link:hover {
+  text-decoration: underline;
+}
+
+.copyright-text {
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: #888;
+  text-align: center;
 }

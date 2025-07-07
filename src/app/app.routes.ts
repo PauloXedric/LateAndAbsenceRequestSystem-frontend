@@ -30,16 +30,10 @@ export const routes: Routes = [
       { path: '', redirectTo: 'request', pathMatch: 'full' },
       { path: 'request', component: RequestComponent },
       { path: 'sign-in', component: SignInComponent },
-      { path: 'unathorized', component: RequestComponent },
-      { path: 'supporting-documents', component: SupportingDocumentsComponent },
+      { path: 'unauthorized', component: RequestComponent },
       { path: 'register', component: InvitedRegisterComponent },
     ],
   },
-  // {
-  //   path: 'supporting-documents',
-  //   component: SupportingDocumentsComponent,
-  //   canActivate: [tokenLinkGuard],
-  // },
   {
     path: '',
     component: PrivateLayoutComponent,
@@ -89,5 +83,17 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: '',
+    component: PrivateLayoutComponent,
+    children: [
+      {
+        path: 'supporting-documents',
+        component: SupportingDocumentsComponent,
+        canActivate: [tokenLinkGuard],
+      },
+    ],
+  },
+
   { path: '**', redirectTo: '' },
 ];

@@ -55,7 +55,7 @@
 
             <ng-container *ngSwitchCase="'proofImage'">
               <p-image
-                [src]="'http://localhost:51564' + item.proofImage"
+                [src]="fileBaseUrl + item.proofImage"
                 alt="Proof"
                 width="100"
                 [preview]="preview"
@@ -65,7 +65,7 @@
 
             <ng-container *ngSwitchCase="'parentValidImage'">
               <p-image
-                [src]="'http://localhost:51564' + item.parentValidImage"
+                [src]="fileBaseUrl + item.parentValidImage"
                 alt="Parent ID"
                 width="100"
                 [preview]="preview"
@@ -76,7 +76,7 @@
             <ng-container *ngSwitchCase="'medicalCertificate'">
               <p-image
                 *ngIf="item.medicalCertificate"
-                [src]="'http://localhost:51564' + item.medicalCertificate"
+                [src]="fileBaseUrl + item.medicalCertificate"
                 alt="Medical Cert"
                 width="100"
                 [preview]="preview"
@@ -115,5 +115,4 @@
     [(visible)]="isViewDialogVisible"
     [request]="selectedRequestToView"
   />
-  <app-confirmation-dialog />
 </div>

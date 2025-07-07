@@ -1,18 +1,33 @@
-<div class="card">
+<div class="history-card">
   <p-toolbar>
+    <div class="history-header">
+      <h1 class="history-title">Request History</h1>
+      <p class="history-subtitle">
+        View and filter all approval actions made by admins.
+      </p>
+    </div>
+
     <ng-template pTemplate="center">
-      <app-student-number-search-input
-        (filterChanged)="onStudentNumberFilterChange($event)"
-      />
-      <p-datepicker
-        [(ngModel)]="selectedDate"
-        (ngModelChange)="onDateFilterChange($event)"
-        [showIcon]="true"
-        [showButtonBar]="true"
-        dateFormat="yy-mm-dd"
-        [placeholder]="'Filter by date'"
-        [showClear]="true"
-      />
+      <div class="history-filters">
+        <div class="filter-input">
+          <app-student-number-search-input
+            (filterChanged)="onStudentNumberFilterChange($event)"
+          />
+        </div>
+
+        <div class="filter-input">
+          <p-datepicker
+            [(ngModel)]="selectedDate"
+            (ngModelChange)="onDateFilterChange($event)"
+            [showIcon]="true"
+            [showButtonBar]="true"
+            dateFormat="yy-mm-dd"
+            placeholder="Filter by date"
+            [showClear]="true"
+            class="w-full md:w-14rem"
+          />
+        </div>
+      </div>
     </ng-template>
   </p-toolbar>
 
@@ -48,7 +63,7 @@
     </ng-template>
 
     <ng-template pTemplate="summary">
-      <div class="text-sm text-gray-600 px-3 py-2">
+      <div class="table-summary">
         There
         {{ ((history$ | async)?.totalCount ?? 0) === 1 ? "is" : "are" }}
         currently {{ (history$ | async)?.totalCount ?? 0 }} history record{{

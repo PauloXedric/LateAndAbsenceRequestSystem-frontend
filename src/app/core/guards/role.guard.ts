@@ -20,7 +20,7 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
     !auth.isAuthenticated() ||
     !auth.hasRole(expectedRoles)
   ) {
-    router.navigate(['/unathorized']);
+    router.navigate(['/unauthorized']);
     return false;
   }
 

@@ -13,6 +13,7 @@ import {
   FilterService,
   RequestHistoryService,
   RequestService,
+  ToastService,
 } from '@shared/_services';
 import { ConfirmationDialogComponent } from '@shared/components/_dialogs/confirmation-dialog/confirmation-dialog.component';
 import { ViewRequestDialogComponent } from '@shared/components/_dialogs/view-request-dialog/view-request-dialog.component';
@@ -44,6 +45,7 @@ import { Image } from 'primeng/image';
 import { ApproverRolesEnum } from '@shared/_enums/approver-roles.enum';
 import { toRequestGenTokenModel } from '@shared/_mappers/request.mapper';
 import { RequestResultEnum } from '@shared/_enums';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-requests-table',
@@ -59,7 +61,6 @@ import { RequestResultEnum } from '@shared/_enums';
     Image,
     RequestTableButtonsComponent,
     ViewRequestDialogComponent,
-    ConfirmationDialogComponent,
     StudentNumberSearchInputComponent,
   ],
   templateUrl: './requests-table.component.html',
@@ -97,6 +98,7 @@ export class RequestsTableComponent {
   totalRecords = 0;
   isLoading = false;
   preview = true;
+  fileBaseUrl = environment.fileBaseUrl;
 
   get pageSize(): number {
     return this.pageSizeSubject.value;
@@ -107,13 +109,13 @@ export class RequestsTableComponent {
   constructor(
     private requestService: RequestService,
     private confirmationDialogService: ConfirmationDialogService,
+    private toastService: ToastService,
     private emailService: EmailService,
     private filterService: FilterService,
     private requestHistoryService: RequestHistoryService
   ) {}
 
   ngOnInit(): void {
-    console.log(this.statusId);
     this.filteredRequests$ = combineLatest([
       this.filterService.filter$.pipe(
         debounceTime(500),
@@ -172,17 +174,18 @@ export class RequestsTableComponent {
   }
 
   confirmStatusChange(status: RequestStatusEnum, label: RequestActionEnum) {
-    const response$ = new Subject<boolean>();
-    this.confirmationDialogService.confirmation({
-      header: `Confirm ${label}`,
-      message: `Are you sure you want to ${label.toLowerCase()} the selected request(s)?`,
-      actionLabel: label,
-      response$: response$,
-    });
-
-    response$.pipe(take(1)).subscribe((confirmed) => {
-      if (confirmed) this.executeStatusChange(status, label);
-    });
+    this.confirmationDialogService
+      .confirm$({
+        header: `Confirm ${label}`,
+        message: `Are you sure you want to ${label.toLowerCase()} the selected request(s)?`,
+        actionLabel: label,
+      })
+      .pipe(take(1))
+      .subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.executeStatusChange(status, label);
+        }
+      });
   }
 
   executeStatusChange(newStatusId: RequestStatusEnum, actionLabel: string) {
@@ -211,17 +214,21 @@ export class RequestsTableComponent {
                     : this.addRejectHistory,
               };
 
-              console.log(historyModel);
               return this.requestHistoryService
                 .addRequestHistory(historyModel)
                 .pipe(
                   tap(() => {
                     if (actionLabel === RequestActionEnum.Approve) {
-                      console.log('History recorded');
-                      // this.emailService.sendApprovalEmail(tokenModel, token, this.roles);
+                      this.emailService.sendApprovalEmail(
+                        tokenModel,
+                        token,
+                        this.roles
+                      );
                     } else {
-                      console.log('Rejection history recorded');
-                      // this.emailService.sendDeclineEmail(tokenModel, this.roles);
+                      this.emailService.sendDeclineEmail(
+                        tokenModel,
+                        this.roles
+                      );
                     }
                   })
                 );
@@ -236,10 +243,12 @@ export class RequestsTableComponent {
         this.isLoading = false;
         this.selectedRequestReadData = [];
         this.refreshSubject.next();
+        this.toastService.showSuccess(
+          `Requests ${actionLabel.toLowerCase()}d successfully.`
+        );
       },
       error: () => {
         this.isLoading = false;
-        console.error('Some requests failed to update.');
       },
     });
   }

@@ -11,7 +11,7 @@ import { RequestsTableComponent } from '@shared/components';
   selector: 'app-secretary-initial-request',
   standalone: true,
   imports: [RequestsTableComponent],
-  template: ` <h1>Secondary Request:</h1>
+  template: ` <h1>Initial Request:</h1>
     <app-requests-table
       [statusId]="RequestStatusEnum.WaitingForFirstSecretaryApproval"
       [nextApprovalStatus]="

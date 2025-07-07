@@ -79,7 +79,7 @@ input {
 }
 
 .header-logo {
-  height: 2.5rem;
+  height: 3.2rem;
   margin-right: 1rem;
 }
 
@@ -87,4 +87,11 @@ input {
   width: 70%;
   height: 40px;
   margin-left: 15%;
+}
+
+.copyright-text {
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: #888;
+  text-align: center;
 }

@@ -55,7 +55,7 @@ export class ApprovalHistoryComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   private pageSubject = new BehaviorSubject<number>(0);
-  private pageSizeSubject = new BehaviorSubject<number>(5);
+  private pageSizeSubject = new BehaviorSubject<number>(8);
   private refreshSubject = new BehaviorSubject<void>(undefined);
   private dateFilterSubject = new BehaviorSubject<string | undefined>(
     undefined

@@ -1,6 +1,6 @@
 <div class="content">
   <section class="spacer">
-    <img src="assets/images/dpcimage1.png" alt="Background Image" />
+    <img src="assets/images/psuImage1.png" alt="Background Image" />
   </section>
 
   <div #formSection>
@@ -9,7 +9,7 @@
         <ng-template #header>
           <div class="custom-card-header">
             <img
-              src="assets/images/dpcimage1.png"
+              src="assets/images/psuLogo.png"
               alt="Logo"
               class="header-logo"
             />
@@ -24,8 +24,8 @@
           <p>
             Please complete the form below to submit your official request.
             Ensure all required fields are filled out accurately. This
-            information will be reviewed and processed by the DPC administrative
-            staff.
+            information will be reviewed and processed by the Pampanga State
+            University - Porac Campus administrative staff.
           </p>
           <p-fluid>
             <div class="form-columns">
@@ -39,6 +39,7 @@
                       pInputText
                       id="studentNumber"
                       formControlName="studentNumber"
+                      pKeyFilter="num"
                       autocomplete="off"
                     />
                     <label for="studentNumber">Student Number</label>
@@ -165,6 +166,9 @@
             </div>
           </p-fluid>
         </form>
+        <p class="copyright-text">
+          &copy;2025 CupsLuck Team · Pampanga State University – Porac Campus
+        </p>
       </p-card>
     </div>
   </div>

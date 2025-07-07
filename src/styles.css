@@ -18,3 +18,9 @@ body {
 .p-button {
   width: 200px;
 }
+
+.form-button-centered.p-button {
+  width: 50%;
+  margin-left: 25%;
+  margin-top: 1.5rem;
+}

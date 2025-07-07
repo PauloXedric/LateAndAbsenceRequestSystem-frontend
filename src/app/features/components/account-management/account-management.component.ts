@@ -86,7 +86,7 @@ export class AccountManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.newUserForm = this.fb.group({
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       role: ['', Validators.required],
     });
 
@@ -129,11 +129,11 @@ export class AccountManagementComponent implements OnInit {
     this.emailService.generateInvitationLink(tokenModel).subscribe({
       next: (res) => {
         const inviteLink = res.inviteLink;
-        // this.emailService.sendInvitationEmail(
-        //   tokenModel.userEmail,
-        //   tokenModel.userRole,
-        //   inviteLink
-        // );
+        this.emailService.sendInvitationEmail(
+          tokenModel.userEmail,
+          tokenModel.userRole,
+          inviteLink
+        );
         this.toastService.showSuccess('Invitation sent successfully');
         this.newUserForm.reset();
       },

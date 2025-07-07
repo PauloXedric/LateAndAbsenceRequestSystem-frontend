@@ -1,24 +1,48 @@
 <p-dialog
-  header="Request Detail:"
   [(visible)]="visible"
   [modal]="true"
-  [style]="{ width: '30rem' }"
+  [style]="{ width: '35rem' }"
+  [contentStyle]="{ padding: '1.5rem 2rem' }"
   (onHide)="closeDialog()"
 >
-  <div *ngIf="request">
-    <p><strong>Student Number:</strong> {{ request.studentNumber }}</p>
-    <p><strong>Student Name:</strong> {{ request.studentName }}</p>
-    <p><strong>Course/Year/Section:</strong> {{ request.courseYearSection }}</p>
-    <p>
-      <strong>Date of Absence:</strong>
-      {{ request.dateOfAbsence | dateFormat }}
-    </p>
-    <p>
-      <strong>Date of Attendance:</strong>
-      {{ request.dateOfAttendance | dateFormat }}
-    </p>
-    <p><strong>Reason:</strong> {{ request.reason }}</p>
-  </div>
+  <ng-template pTemplate="header">
+    <div class="dialog-header">
+      <img src="assets/images/psuLogo.png" alt="Logo" class="header-logo" />
+      <div>
+        <h2 class="header-title">Request Details</h2>
+        <p class="header-subtitle">Pampanga State University - Porac Campus</p>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="body">
+    <div *ngIf="request" class="request-details">
+      <div class="detail-row">
+        <label>Student Number:</label>
+        <span>{{ request.studentNumber }}</span>
+      </div>
+      <div class="detail-row">
+        <label>Student Name:</label>
+        <span>{{ request.studentName }}</span>
+      </div>
+      <div class="detail-row">
+        <label>Course / Year / Section:</label>
+        <span>{{ request.courseYearSection }}</span>
+      </div>
+      <div class="detail-row">
+        <label>Date of Absence:</label>
+        <span>{{ request.dateOfAbsence | dateFormat }}</span>
+      </div>
+      <div class="detail-row">
+        <label>Date of Attendance:</label>
+        <span>{{ request.dateOfAttendance | dateFormat }}</span>
+      </div>
+      <div class="detail-row">
+        <label>Reason:</label>
+        <span>{{ request.reason }}</span>
+      </div>
+    </div>
+  </ng-template>
 
   <ng-template pTemplate="footer">
     <p-button label="Close" (click)="closeDialog()" />

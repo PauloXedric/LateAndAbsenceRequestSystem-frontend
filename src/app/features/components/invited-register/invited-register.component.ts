@@ -56,7 +56,6 @@ export class InvitedRegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.tokenLinkService.initializeToken();
     const decoded = this.tokenLinkService.decodeToken();
     if (!decoded) {
       console.error('No valid token found');

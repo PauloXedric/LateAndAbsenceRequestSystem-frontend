@@ -11,14 +11,20 @@
                 (ngSubmit)="onAssignSubjects()"
                 class="form-container"
               >
-                <h4>Assign:</h4>
+                <div class="form-header">
+                  <h4 class="form-title">Manage</h4>
+                  <p class="form-subtitle">
+                    Select an instructor and assign one or more subjects.
+                  </p>
+                </div>
+
                 <p-fluid>
                   <p-inputgroup>
                     <p-inputgroup-addon>
                       <i class="pi pi-user"></i>
                     </p-inputgroup-addon>
 
-                    <p-dropdown
+                    <p-select
                       formControlName="teacher"
                       [options]="teacherList"
                       optionLabel="teacherName"
@@ -26,35 +32,40 @@
                       (onChange)="onTeacherSelected($event.value)"
                     />
                   </p-inputgroup>
+
+                  <div class="card sm:flex sm:justify-center mb4">
+                    <p-multiSelect
+                      formControlName="subjects"
+                      [options]="subjectList"
+                      optionLabel="subjectName"
+                      display="chip"
+                      placeholder="Select Subjects"
+                      styleClass="w-full md:w-80"
+                      [filter]="true"
+                    >
+                      <ng-template let-subject pTemplate="item">
+                        {{ subject.subjectName }} ({{ subject.subjectCode }})
+                      </ng-template>
+                    </p-multiSelect>
+                  </div>
+
+                  <p-button
+                    label="Assign+"
+                    type="submit"
+                    [disabled]="assignForm.invalid"
+                    styleClass="form-button-centered"
+                  ></p-button>
                 </p-fluid>
-                <div class="card sm:flex sm:justify-center">
-                  <p-multiSelect
-                    formControlName="subjects"
-                    [options]="subjectList"
-                    optionLabel="subjectName"
-                    display="chip"
-                    placeholder="Select Subjects"
-                    styleClass="w-full md:w-80"
-                    [filter]="true"
-                  >
-                    <ng-template let-subject pTemplate="item">
-                      {{ subject.subjectName }} ({{ subject.subjectCode }})
-                    </ng-template>
-                  </p-multiSelect>
-                </div>
-                <p-button
-                  label="Assign+"
-                  type="submit"
-                  [disabled]="assignForm.invalid"
-                ></p-button>
               </form>
             </p-toolbar>
           </div>
 
           <div class="table-section">
-            <app-instructor-subject-table
-              (teacherSubjectSelected)="patchExistingValue($event)"
-            ></app-instructor-subject-table>
+            <p-card class="custom-card">
+              <app-instructor-subject-table
+                (teacherSubjectSelected)="patchExistingValue($event)"
+              ></app-instructor-subject-table>
+            </p-card>
           </div>
         </div>
       </p-accordion-content>
@@ -71,7 +82,12 @@
                 (ngSubmit)="addTeacher()"
                 class="form-container"
               >
-                <h4>Manage:</h4>
+                <div class="form-header">
+                  <h4 class="form-title">Manage</h4>
+                  <p class="form-subtitle">
+                    Add a new instructor with their code.
+                  </p>
+                </div>
                 <p-fluid>
                   <p-inputgroup>
                     <p-inputgroup-addon>
@@ -94,24 +110,27 @@
                       placeholder="Teacher Name"
                     />
                   </p-inputgroup>
-                </p-fluid>
 
-                <p-button
-                  label="Add New"
-                  type="submit"
-                  [disabled]="addTeacherForm.invalid"
-                ></p-button>
+                  <p-button
+                    label="Add New"
+                    type="submit"
+                    [disabled]="addTeacherForm.invalid"
+                    styleClass="form-button-centered"
+                  ></p-button>
+                </p-fluid>
               </form>
             </p-toolbar>
           </div>
 
           <div class="table-section">
-            <app-instructors-table
-              (teacherUpdated)="loadTeachers()"
-              (refreshInstructorSubject)="
-                instructorSubjectTableComponent.refresh()
-              "
-            ></app-instructors-table>
+            <p-card class="custom-card">
+              <app-instructors-table
+                (teacherUpdated)="loadTeachers()"
+                (refreshInstructorSubject)="
+                  instructorSubjectTableComponent.refresh()
+                "
+              ></app-instructors-table>
+            </p-card>
           </div>
         </div>
       </p-accordion-content>
@@ -128,7 +147,10 @@
                 (ngSubmit)="addSubject()"
                 class="form-container"
               >
-                <h4>Manage:</h4>
+                <div class="form-header">
+                  <h4 class="form-title">Manage</h4>
+                  <p class="form-subtitle">Add a new subject with its code.</p>
+                </div>
                 <p-fluid>
                   <p-inputgroup>
                     <p-inputgroup-addon>
@@ -151,24 +173,27 @@
                       placeholder="Subject Name"
                     />
                   </p-inputgroup>
-                </p-fluid>
 
-                <p-button
-                  label="Add Subject"
-                  type="submit"
-                  [disabled]="addSubjectForm.invalid"
-                ></p-button>
+                  <p-button
+                    label="Add Subject"
+                    type="submit"
+                    [disabled]="addSubjectForm.invalid"
+                    styleClass="form-button-centered"
+                  ></p-button>
+                </p-fluid>
               </form>
             </p-toolbar>
           </div>
 
           <div class="table-section">
-            <app-subjects-table
-              (subjectUpdated)="loadSubjects()"
-              (refreshInstructorSubject)="
-                instructorSubjectTableComponent.refresh()
-              "
-            ></app-subjects-table>
+            <p-card class="custom-card">
+              <app-subjects-table
+                (subjectUpdated)="loadSubjects()"
+                (refreshInstructorSubject)="
+                  instructorSubjectTableComponent.refresh()
+                "
+              ></app-subjects-table>
+            </p-card>
           </div>
         </div>
       </p-accordion-content>

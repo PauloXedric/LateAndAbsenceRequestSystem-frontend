@@ -1,15 +1,15 @@
+import {
+  CanActivateFn,
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+  Router,
+} from '@angular/router';
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
-import { TokenLinkService } from '@core';
 
-export const tokenLinkGuard: CanActivateFn = () => {
-  const service = inject(TokenLinkService);
-  const router = inject(Router);
-
-  if (!service.isTokenExpired()) {
-    return true;
-  }
-
-  router.navigate(['/request']);
-  return false;
+export const tokenLinkGuard: CanActivateFn = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+) => {
+  const token = route.queryParams['token'];
+  return token ? true : inject(Router).parseUrl('/request');
 };

@@ -1,49 +1,75 @@
 <div class="main-container">
-
   <div class="content">
-    <h3>DPC Late and Absence</h3>
+    <img src="assets/images/psuLogo.png" alt="PSU Logo" class="logo" />
+    <h3>PSU - Porac Campus</h3>
+    <h3>Late and Absence</h3>
     <h3>Request System</h3>
+    <br />
+    <hr class="section-divider" />
     <p>Sign in to your account</p>
 
-  <form [formGroup]="userLoginForm" (ngSubmit)="submitUserLogin()" class="form-container">
-      
-          <div class="field">
-            <label for="username" class="block" >Username:</label>
-            <input 
-              type="text" 
-              pInputText 
-              formControlName="username" 
-            />
-            <small 
-              class="p-error block" 
-              *ngIf="userLoginForm.get('username')?.invalid && userLoginForm.get('username')?.touched">
-               Username is required.
-            </small>
+    <form
+      [formGroup]="userLoginForm"
+      (ngSubmit)="submitUserLogin()"
+      class="form-container"
+    >
+      <p-fluid>
+        <div class="form-columns">
+          <div class="form-column" style="margin-top: 2.3rem">
+            <p-inputGroup>
+              <p-inputGroupAddon>
+                <i class="pi pi-user"></i>
+              </p-inputGroupAddon>
+              <p-floatLabel variant="on">
+                <input
+                  pInputText
+                  id="username"
+                  formControlName="username"
+                  autocomplete="off"
+                />
+                <label for="username">Username</label>
+              </p-floatLabel>
+            </p-inputGroup>
+
+            <p-inputGroup>
+              <p-inputGroupAddon><i class="pi pi-lock"></i></p-inputGroupAddon>
+              <p-floatLabel variant="on">
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  pInputText
+                  id="password"
+                  formControlName="password"
+                  autocomplete="off"
+                />
+                <label for="password">Password</label>
+              </p-floatLabel>
+              <p-inputGroupAddon (click)="togglePasswordVisibility()">
+                <i
+                  class="pi"
+                  [ngClass]="showPassword ? 'pi-eye-slash' : 'pi-eye'"
+                ></i>
+              </p-inputGroupAddon>
+            </p-inputGroup>
+
+            <div style="text-align: right; margin-top: -0.5rem">
+              <a href="#" class="forgot-password-link">Forgot Password?</a>
+            </div>
           </div>
+        </div>
+      </p-fluid>
 
-
-          <div class="field">
-            <label for="password" class="block" >Password:</label>
-            <input 
-              type="text" 
-              pInputText 
-              formControlName="password" 
-            />
-            <small
-              class="p-error block"
-              *ngIf="userLoginForm.get('password')?.invalid && userLoginForm.get('password')?.touched">
-              Password is required.
-            </small> 
-          </div>
-        
-        <p-button label="Sign In" type="submit" [disabled]="userLoginForm.invalid"/>  
-
+      <p-button
+        label="Sign In"
+        type="submit"
+        [disabled]="userLoginForm.invalid"
+      />
     </form>
-
-</div>
-
-
-  <div class="image-section">
-    <img src="assets/images/dpcimage1.png" alt="Background Image" />
+    <p class="copyright-text">
+      &copy;2025 CupsLuck Team · Pampanga State University – Porac Campus
+    </p>
   </div>
 
+  <div class="image-section">
+    <img src="assets/images/psuImage1.png" alt="Background Image" />
+  </div>
+</div>

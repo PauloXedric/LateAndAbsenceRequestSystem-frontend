@@ -1,45 +1,37 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
 import { jwtDecode } from 'jwt-decode';
 
 @Injectable({ providedIn: 'root' })
 export class TokenLinkService {
   private token: string | null = null;
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private location: Location
-  ) {}
+  setToken(token: string): void {
+    this.token = token;
+    sessionStorage.setItem('supporting-doc-token', token);
+  }
 
-  initializeToken(): void {
-    const tokenFromUrl = this.route.snapshot.queryParamMap.get('token');
-
-    if (tokenFromUrl) {
-      this.token = tokenFromUrl;
-
-      const cleanUrl = this.router.url.split('?')[0];
-      this.location.replaceState(cleanUrl);
-    }
+  getToken(): string | null {
+    return this.token || sessionStorage.getItem('supporting-doc-token');
   }
 
   decodeToken(): any | null {
     try {
-      return this.token ? jwtDecode(this.token) : null;
+      return this.getToken() ? jwtDecode(this.getToken()!) : null;
     } catch {
       return null;
     }
   }
 
   isTokenExpired(): boolean {
-    if (!this.token) return true;
-    const decoded: any = jwtDecode(this.token);
-    const now = Math.floor(Date.now() / 1000);
-    return decoded.exp < now;
-  }
+    const token = this.getToken();
+    if (!token) return true;
 
-  getToken(): string | null {
-    return this.token;
+    try {
+      const decoded: any = jwtDecode(token);
+      const now = Math.floor(Date.now() / 1000);
+      return decoded.exp < now;
+    } catch {
+      return true;
+    }
   }
 }
