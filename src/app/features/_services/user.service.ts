@@ -17,7 +17,11 @@ export class UserService {
   }
 
   getAllUsers(): Observable<UserListModel[]> {
-    return this.api.get<UserListModel[]>('UserAccount');
+    return this.api.get<UserListModel[]>('UserAccount/All');
+  }
+
+  checkUserAsync(username: string): Observable<boolean> {
+    return this.api.get<boolean>(`UserAccount/CheckUser/${username}`);
   }
 
   userUpdate(data: UserUpdateModel): Observable<ApiResponse> {

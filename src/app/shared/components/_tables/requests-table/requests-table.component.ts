@@ -72,6 +72,10 @@ import { environment } from 'environments/environment';
         max-width: 90vh !important;
         max-height: 90vh !important;
       }
+
+      ::ng-deep .p-image-toolbar {
+        margin-top: 2rem;
+      }
     `,
   ],
 })
@@ -219,16 +223,16 @@ export class RequestsTableComponent {
                 .pipe(
                   tap(() => {
                     if (actionLabel === RequestActionEnum.Approve) {
-                      this.emailService.sendApprovalEmail(
-                        tokenModel,
-                        token,
-                        this.roles
-                      );
+                      // this.emailService.sendApprovalEmail(
+                      //   tokenModel,
+                      //   token,
+                      //   this.roles
+                      // );
                     } else {
-                      this.emailService.sendDeclineEmail(
-                        tokenModel,
-                        this.roles
-                      );
+                      // this.emailService.sendDeclineEmail(
+                      //   tokenModel,
+                      //   this.roles
+                      // );
                     }
                   })
                 );

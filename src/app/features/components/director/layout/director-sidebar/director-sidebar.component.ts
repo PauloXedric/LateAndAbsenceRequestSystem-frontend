@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '@core';
+import { CopyrightComponent } from '@shared/components';
 import { ConfirmationService, PrimeIcons } from 'primeng/api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 @Component({
   selector: 'director-left-sidebar',
   standalone: true,
-  imports: [RouterModule, CommonModule, ConfirmPopupModule],
+  imports: [RouterModule, CommonModule, ConfirmPopupModule, CopyrightComponent],
   providers: [AuthService, ConfirmationService],
   templateUrl: './director-sidebar.component.html',
   styleUrl: './director-sidebar.component.css',

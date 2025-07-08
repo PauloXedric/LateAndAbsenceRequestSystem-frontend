@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '@core';
+import { CopyrightComponent } from '@shared/components';
 import { ConfirmationService, PrimeIcons } from 'primeng/api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 @Component({
   selector: 'chairperson-left-sidebar',
   standalone: true,
-  imports: [CommonModule, RouterModule, ConfirmPopupModule],
+  imports: [CommonModule, RouterModule, ConfirmPopupModule, CopyrightComponent],
   providers: [ConfirmationService, AuthService],
   templateUrl: './chairperson-sidebar.component.html',
   styleUrl: './chairperson-sidebar.component.css',

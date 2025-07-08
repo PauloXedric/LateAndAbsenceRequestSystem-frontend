@@ -23,6 +23,7 @@ import {
   TeacherAssignedSubjectsModel,
   TeacherReadModel,
 } from '@shared/_models';
+import { CopyrightComponent } from '@shared/components';
 
 @Component({
   selector: 'request-form',
@@ -41,6 +42,7 @@ import {
     FluidModule,
     TextareaModule,
     AutoCompleteModule,
+    CopyrightComponent,
   ],
   styleUrls: ['./request.component.css'],
 })

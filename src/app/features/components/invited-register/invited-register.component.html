@@ -7,13 +7,13 @@
 
     <ng-template #header>
       <div class="custom-card-header">
-        <img src="assets/images/dpcimage1.png" alt="Logo" class="header-logo" />
-        <span>DPC Late And Absence Request System</span>
+        <img src="assets/images/psuLogo.png" alt="Logo" class="header-logo" />
+        <span>PSU - Porac Campus Late And Absence Request System</span>
       </div>
     </ng-template>
 
-    <div *ngIf="tokenData && !isExpired">
-      <h3>Instructor Registration</h3>
+    <div *ngIf="tokenData && !isExpired && !isRegistered">
+      <h3>Admin Registration</h3>
       <div class="form-field">
         <form [formGroup]="registerForm" (ngSubmit)="submitForm()">
           <p-fluid class="mt-4">
@@ -121,17 +121,28 @@
               />
             </div>
           </p-fluid>
-          <p-button
-            label="Register"
-            type="submit"
-            [disabled]="registerForm.invalid"
-          ></p-button>
+          <div class="button-wrapper">
+            <p-button
+              label="Register"
+              type="submit"
+              [disabled]="registerForm.invalid"
+            ></p-button>
+          </div>
         </form>
       </div>
     </div>
 
-    <div *ngIf="!tokenData && !isExpired">
+    <div *ngIf="!tokenData && !isExpired" class="waiting-token">
       <p>Waiting for token...</p>
     </div>
+
+    <div
+      *ngIf="tokenData && !isExpired && isRegistered"
+      class="success-message"
+    >
+      <h3>Account already registered.</h3>
+      <p>Please wait for account activation by the Campus Director.</p>
+    </div>
+    <app-copyright></app-copyright>
   </p-card>
 </div>

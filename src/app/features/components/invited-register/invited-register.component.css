@@ -6,33 +6,90 @@
   background-color: #e9ecef;
 }
 
+p-card {
+  transform: scale(0.85);
+}
+
 .custom-card-header {
   display: flex;
   align-items: center;
-  height: 4rem;
+  height: 3.5rem;
   background-color: #770202;
   font-weight: 600;
   padding: 0 1rem;
   border-radius: 0.5rem 0.5rem 0 0;
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
 .header-logo {
-  height: 2.5rem;
+  height: 2.2rem;
   margin-right: 1rem;
 }
 
-.form-field p-inputgroup {
+h3 {
+  text-align: center;
+  font-size: 1.6rem;
   margin-bottom: 1.25rem;
+  color: #343a40;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.form-field {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #dee2e6;
+}
+
+.form-field p-inputgroup {
+  margin-bottom: 1.15rem;
+}
+
+.form-field input {
+  font-size: 1.1rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+}
+.p-inputgroup-addon {
+  background-color: #f8f9fa !important;
+  border-radius: 0.5rem 0 0 0.5rem;
+  color: #495057;
 }
 
 .password {
+  margin-bottom: 1.15rem;
+}
+
+.password p-password {
+  width: 100%;
+}
+.password .p-password-input {
+  font-size: 1.1rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+}
+
+.password-policy {
+  background-color: #fff5f5;
+  border-left: 4px solid #dc3545;
+  padding: 0.75rem 1rem;
+  margin-top: -0.25rem;
   margin-bottom: 1.25rem;
+  border-radius: 0.5rem;
 }
 
 .password-policy p {
-  margin: 0.25rem 0 0.75rem;
+  margin: 0;
   font-size: 0.85rem;
-  color: #e53935;
+  color: #c62828;
+  line-height: 1.4;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
 }

@@ -21,6 +21,10 @@ import { ToastModule } from 'primeng/toast';
 import { PasswordModule } from 'primeng/password';
 import { toUserRegisterModel } from '@shared/_mappers/user-register.mapper';
 import { UserService } from '@features/_services/user.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { DividerModule } from 'primeng/divider';
+import { CopyrightComponent } from '@shared/components';
 
 @Component({
   selector: 'app-invited-register',
@@ -37,6 +41,8 @@ import { UserService } from '@features/_services/user.service';
     ToastModule,
     CardModule,
     PasswordModule,
+    DividerModule,
+    CopyrightComponent,
   ],
   templateUrl: './invited-register.component.html',
   styleUrl: './invited-register.component.css',
@@ -47,15 +53,25 @@ export class InvitedRegisterComponent implements OnInit {
   value: string | undefined = 'Disabled';
   tokenData: any = null;
   isExpired = false;
+  isRegistered: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private tokenLinkService: TokenLinkService,
     private toastService: ToastService,
-    private userService: UserService
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
+    const token = this.route.snapshot.queryParamMap.get('token');
+    if (token) {
+      this.tokenLinkService.setToken(token);
+      const cleanUrl = this.router.url.split('?')[0];
+      this.location.replaceState(cleanUrl);
+    }
     const decoded = this.tokenLinkService.decodeToken();
     if (!decoded) {
       console.error('No valid token found');
@@ -63,6 +79,19 @@ export class InvitedRegisterComponent implements OnInit {
     }
     this.tokenData = decoded;
     this.isExpired = this.tokenLinkService.isTokenExpired();
+
+    if (this.tokenData?.userEmail) {
+      this.userService.checkUserAsync(this.tokenData.userEmail).subscribe({
+        next: (result) => {
+          this.isRegistered = result;
+          console.log(result);
+        },
+        error: (err) => {
+          console.error('Failed to check user existence.', err);
+        },
+      });
+    }
+
     this.registerForm = this.fb.group(
       {
         userCode: ['', Validators.required],
@@ -95,6 +124,7 @@ export class InvitedRegisterComponent implements OnInit {
       next: (res) => {
         this.toastService.showSuccess(res.message);
         this.registerForm.reset();
+        this.isRegistered = true;
       },
       error: (err) => {
         this.toastService.showError(

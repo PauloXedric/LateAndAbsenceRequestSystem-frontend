@@ -15,7 +15,10 @@ export class RequestService {
   getAllRequests(
     params: ReadRequestParams
   ): Observable<PaginatedResult<RequestReadModel>> {
-    return this.api.get<PaginatedResult<RequestReadModel>>('Request', params);
+    return this.api.get<PaginatedResult<RequestReadModel>>(
+      'Request/All',
+      params
+    );
   }
 
   updateRequestStatus(request: RequestUpdateModel) {

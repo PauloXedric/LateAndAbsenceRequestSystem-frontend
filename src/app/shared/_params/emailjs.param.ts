@@ -9,6 +9,7 @@ export interface EmailjsParams {
   teacher: string;
   subject: string;
   dateOfAbsence: string;
+  dateOfAttendance: string;
   reason: string;
   requesterEmail: string;
   approvedBy?: string;
@@ -31,6 +32,7 @@ export function buildEmailparams(
     teacher: request.teacher,
     subject: request.subjectCode,
     dateOfAbsence: request.dateOfAbsence,
+    dateOfAttendance: request.dateOfAttendance,
     reason: request.reason,
     requesterEmail,
     date,

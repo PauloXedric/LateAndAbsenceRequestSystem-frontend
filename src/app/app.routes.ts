@@ -31,7 +31,6 @@ export const routes: Routes = [
       { path: 'request', component: RequestComponent },
       { path: 'sign-in', component: SignInComponent },
       { path: 'unauthorized', component: RequestComponent },
-      { path: 'register', component: InvitedRegisterComponent },
     ],
   },
   {
@@ -90,6 +89,11 @@ export const routes: Routes = [
       {
         path: 'supporting-documents',
         component: SupportingDocumentsComponent,
+        canActivate: [tokenLinkGuard],
+      },
+      {
+        path: 'register',
+        component: InvitedRegisterComponent,
         canActivate: [tokenLinkGuard],
       },
     ],

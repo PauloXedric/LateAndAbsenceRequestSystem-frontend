@@ -37,7 +37,7 @@ export class DirectorRequestComponent {
   columns = [
     { field: 'studentNumber', header: 'Student Number' },
     { field: 'studentName', header: 'Student Name' },
-    { field: 'courseYearSection', header: 'Course/Year/Section' },
+    { field: 'reason', header: 'Reason' },
     { field: 'proofImage', header: 'Image Proof' },
     { field: 'parentValidImage', header: "Parent's ID" },
     { field: 'medicalCertificate', header: 'Med. Cert.' },

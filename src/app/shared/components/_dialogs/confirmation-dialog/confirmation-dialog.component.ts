@@ -14,7 +14,6 @@ import { ConfirmationService, MessageService } from 'primeng/api';
   imports: [ConfirmDialogModule, ToastModule],
   providers: [MessageService, ConfirmationService],
   templateUrl: './confirmation-dialog.component.html',
-  styleUrl: './confirmation-dialog.component.css',
 })
 export class ConfirmationDialogComponent implements OnInit {
   private responseSubject!: Subject<boolean>;

@@ -126,19 +126,33 @@ export class AccountManagementComponent implements OnInit {
       userRole: formValue.role,
     };
 
-    this.emailService.generateInvitationLink(tokenModel).subscribe({
-      next: (res) => {
-        const inviteLink = res.inviteLink;
-        this.emailService.sendInvitationEmail(
-          tokenModel.userEmail,
-          tokenModel.userRole,
-          inviteLink
-        );
-        this.toastService.showSuccess('Invitation sent successfully');
-        this.newUserForm.reset();
+    this.userService.checkUserAsync(tokenModel.userEmail).subscribe({
+      next: (userExists) => {
+        if (userExists) {
+          this.toastService.showError('Cannot invite existing users.');
+          return;
+        }
+
+        this.emailService.generateInvitationLink(tokenModel).subscribe({
+          next: (res) => {
+            const inviteLink = res.inviteLink;
+
+            this.emailService.sendInvitationEmail(
+              tokenModel.userEmail,
+              tokenModel.userRole,
+              inviteLink
+            );
+
+            this.toastService.showSuccess('Invitation sent successfully');
+            this.newUserForm.reset();
+          },
+          error: () => {
+            this.toastService.showError('Failed to generate invitation link');
+          },
+        });
       },
-      error: () => {
-        this.toastService.showError('Failed to send invitation');
+      error: (err) => {
+        this.toastService.showError(err.error?.message);
       },
     });
   }

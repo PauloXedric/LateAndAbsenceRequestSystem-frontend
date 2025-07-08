@@ -18,6 +18,9 @@ import { ToastModule } from 'primeng/toast';
 import { RequestStatusEnum } from '@shared/_enums';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { DividerModule } from 'primeng/divider';
+import { ToastService } from '@shared/_services';
+import { CopyrightComponent } from '@shared/components';
 
 type UploadField = 'imageProof' | 'parentsValidId' | 'medicalCertificate';
 
@@ -36,6 +39,8 @@ type UploadField = 'imageProof' | 'parentsValidId' | 'medicalCertificate';
     ButtonModule,
     DateFormatPipe,
     ToastModule,
+    DividerModule,
+    CopyrightComponent,
   ],
   providers: [MessageService],
 })
@@ -56,6 +61,7 @@ export class SupportingDocumentsComponent implements OnInit {
 
   tokenData: any = null;
   isExpired = false;
+  isSubmitted: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -64,7 +70,8 @@ export class SupportingDocumentsComponent implements OnInit {
     private tokenLinkService: TokenLinkService,
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -89,6 +96,19 @@ export class SupportingDocumentsComponent implements OnInit {
 
     this.tokenData = decoded;
     this.isExpired = this.tokenLinkService.isTokenExpired();
+
+    if (this.tokenData?.requestId) {
+      this.requestService
+        .getSubmittedStatus(this.tokenData.requestId)
+        .subscribe({
+          next: (result) => {
+            this.isSubmitted = result;
+          },
+          error: (err) => {
+            console.error('Failed to check submitted status', err);
+          },
+        });
+    }
   }
 
   selectedFiles: Record<UploadField, File | null> = {
@@ -123,6 +143,8 @@ export class SupportingDocumentsComponent implements OnInit {
     this.imageProofUploader?.clear();
     this.parentsValidIdUploader?.clear();
     this.medicalCertificateUploader?.clear();
+
+    this.toastService.showInfo('Supporting documents cleared.');
   }
 
   submitImages() {
@@ -164,20 +186,18 @@ export class SupportingDocumentsComponent implements OnInit {
     }
 
     this.requestService.addImageProofInRequest(formData).subscribe({
-      next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Uploaded',
-          detail: 'Files uploaded successfully',
-        });
-        this.clearAll();
+      next: (success) => {
+        if (success) {
+          this.toastService.showSuccess(
+            'Successfully added. Please wait for further approval.'
+          );
+          this.isSubmitted = true;
+        } else {
+          this.toastService.showError('Submission failed.');
+        }
       },
       error: (err) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Upload failed',
-        });
+        this.toastService.showError('An error occurred while submitting.');
         console.error(err);
       },
     });

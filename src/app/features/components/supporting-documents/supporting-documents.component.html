@@ -9,99 +9,121 @@
         <span>PSU - Porac Campus Late And Absence Request System</span>
       </div>
     </ng-template>
-    <div *ngIf="tokenData && !isExpired">
-      <h3>Request Detail:</h3>
-      <ul>
+    <div
+      *ngIf="tokenData && !isExpired && !isSubmitted"
+      class="request-section"
+    >
+      <h3 class="section-title">Request Details</h3>
+      <ul class="request-list">
         <li>
-          <strong>{{ tokenData.requestId }}</strong>
-        </li>
-        <li><strong>Student Number:</strong> {{ tokenData.studentNumber }}</li>
-        <li><strong>Student Name:</strong> {{ tokenData.studentName }}</li>
-        <li><strong>Teacher:</strong>{{ tokenData.teacher }}</li>
-        <li><strong>Subject:</strong> {{ tokenData.subject }}</li>
-        <li>
-          <strong>Date of Absence:</strong>
-          {{ tokenData.dateOfAbsence | dateFormat }}
+          <span class="label">Student Number:</span>
+          <span>{{ tokenData.studentNumber }}</span>
         </li>
         <li>
-          <strong>Date of Attendance:</strong>
-          {{ tokenData.dateOfAttendance | dateFormat }}
+          <span class="label">Student Name:</span>
+          <span>{{ tokenData.studentName }}</span>
         </li>
-        <li><strong>Reason:</strong> {{ tokenData.reason }}</li>
+        <li>
+          <span class="label">Teacher:</span>
+          <span>{{ tokenData.teacher }}</span>
+        </li>
+        <li>
+          <span class="label">Subject:</span>
+          <span>{{ tokenData.subject }}</span>
+        </li>
+        <li>
+          <span class="label">Date of Absence:</span>
+          <span>{{ tokenData.dateOfAbsence | dateFormat }}</span>
+        </li>
+        <li>
+          <span class="label">Date of Attendance:</span>
+          <span>{{ tokenData.dateOfAttendance | dateFormat }}</span>
+        </li>
+        <li>
+          <span class="label">Reason:</span> <span>{{ tokenData.reason }}</span>
+        </li>
       </ul>
+
       <p-card>
-        <form [formGroup]="formGroup">
-          <div class="flex flex-col items-center gap-2">
-            <label>Image Proof</label>
-            <p-fileupload
-              #imageProofUploader
-              mode="basic"
-              chooseLabel="Choose"
-              chooseIcon="pi pi-upload"
-              accept="image/*"
-              maxFileSize="1000000"
-              (onSelect)="handleFile($event, 'imageProof')"
-              customUpload
-            />
-            <p-image
-              *ngIf="imagePreviews.imageProof"
-              [src]="imagePreviews.imageProof"
-              alt="ImageProof"
-              width="250"
-              preview
-            ></p-image>
+        <ng-template pTemplate="header">
+          <div class="card-header">
+            <span class="card-title">Add Supporting Documents</span>
+          </div>
+        </ng-template>
+        <form [formGroup]="formGroup" class="upload-form">
+          <div class="upload-row">
+            <div class="upload-item">
+              <label>Image Proof</label>
+              <p-fileupload
+                #imageProofUploader
+                mode="basic"
+                chooseLabel="Choose"
+                chooseIcon="pi pi-upload"
+                accept="image/*"
+                maxFileSize="1000000"
+                (onSelect)="handleFile($event, 'imageProof')"
+                customUpload
+              />
+              <p-image
+                *ngIf="imagePreviews.imageProof"
+                [src]="imagePreviews.imageProof"
+                alt="ImageProof"
+                width="120"
+                preview
+              ></p-image>
+            </div>
+
+            <div class="upload-item">
+              <label>Parent's Valid ID</label>
+              <p-fileupload
+                #parentsValidIdUploader
+                mode="basic"
+                chooseLabel="Choose"
+                chooseIcon="pi pi-upload"
+                accept="image/*"
+                maxFileSize="1000000"
+                (onSelect)="handleFile($event, 'parentsValidId')"
+                customUpload
+              />
+              <p-image
+                *ngIf="imagePreviews.parentsValidId"
+                [src]="imagePreviews.parentsValidId"
+                alt="ParentsValidId"
+                width="120"
+                preview
+              ></p-image>
+            </div>
+
+            <div class="upload-item">
+              <label>Medical Certificate</label>
+              <p-fileupload
+                #medicalCertificateUploader
+                mode="basic"
+                chooseLabel="Choose"
+                chooseIcon="pi pi-upload"
+                accept="image/*"
+                maxFileSize="1000000"
+                (onSelect)="handleFile($event, 'medicalCertificate')"
+                customUpload
+              />
+              <p-image
+                *ngIf="imagePreviews.medicalCertificate"
+                [src]="imagePreviews.medicalCertificate"
+                alt="MedicalCertificate"
+                width="120"
+                preview
+              ></p-image>
+            </div>
           </div>
 
-          <div class="flex flex-col items-center gap-2">
-            <label>Parent's Valid ID</label>
-            <p-fileupload
-              #parentsValidIdUploader
-              mode="basic"
-              chooseLabel="Choose"
-              chooseIcon="pi pi-upload"
-              accept="image/*"
-              maxFileSize="1000000"
-              (onSelect)="handleFile($event, 'parentsValidId')"
-              customUpload
-            />
-            <p-image
-              *ngIf="imagePreviews.parentsValidId"
-              [src]="imagePreviews.parentsValidId"
-              alt="ParentsValidId"
-              width="250"
-              preview
-            ></p-image>
-          </div>
-
-          <div class="flex flex-col items-center gap-2">
-            <label>Medical Certificate</label>
-            <p-fileupload
-              #medicalCertificateUploader
-              mode="basic"
-              chooseLabel="Choose"
-              chooseIcon="pi pi-upload"
-              accept="image/*"
-              maxFileSize="1000000"
-              (onSelect)="handleFile($event, 'medicalCertificate')"
-              customUpload
-            />
-            <p-image
-              *ngIf="imagePreviews.medicalCertificate"
-              [src]="imagePreviews.medicalCertificate"
-              alt="MedicalCertificate"
-              width="250"
-              preview
-            ></p-image>
-          </div>
-
-          <p-button
-            label="Submit"
-            icon="pi pi-check"
-            (onClick)="submitImages()"
-            [disabled]="formGroup.invalid"
-            class="p-button-success"
-          ></p-button>
-          <div class="mt-4 flex gap-3">
+          <div class="button-group">
+            <p-button
+              label="Submit"
+              icon="pi pi-check"
+              (onClick)="submitImages()"
+              [disabled]="formGroup.invalid"
+              severity="success"
+            ></p-button>
             <p-button
               label="Clear"
               severity="secondary"
@@ -115,5 +137,11 @@
     <div *ngIf="!tokenData && !isExpired">
       <p>Waiting for token...</p>
     </div>
+
+    <div *ngIf="tokenData && !isExpired && isSubmitted" class="success-message">
+      <h3>Supporting Documents already submitted.</h3>
+      <p>Please wait for further approval.</p>
+    </div>
+    <app-copyright></app-copyright>
   </p-card>
 </div>

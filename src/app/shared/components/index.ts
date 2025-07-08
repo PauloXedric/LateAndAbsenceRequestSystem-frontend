@@ -14,6 +14,7 @@ export * from './_tables/requests-table/requests-table.component';
 export * from './_tables/subjects-table/subjects-table.component';
 
 export * from './approval-history/approval-history.component';
+export * from './copyright/copyright.component';
 export * from './instructor-courses/instructor-courses.component';
 export * from './request-table-buttons/request-table-buttons.component';
 export * from './student-number-search-input/student-number-search-input.component';

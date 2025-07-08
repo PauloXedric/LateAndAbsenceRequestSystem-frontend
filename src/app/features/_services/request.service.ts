@@ -17,7 +17,11 @@ export class RequestService {
     return this.api.post<ApiResponse>('Request', data);
   }
 
-  addImageProofInRequest(formData: FormData) {
-    return this.api.put('Request/AddImageProof', formData);
+  getSubmittedStatus(id: number): Observable<boolean> {
+    return this.api.get<boolean>(`Request/${id}`);
+  }
+
+  addImageProofInRequest(formData: FormData): Observable<boolean> {
+    return this.api.put<boolean>('Request/AddImageProof', formData);
   }
 }

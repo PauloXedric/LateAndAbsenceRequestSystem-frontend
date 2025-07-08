@@ -16,6 +16,7 @@ import { FluidModule } from 'primeng/fluid';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { CommonModule } from '@angular/common';
+import { CopyrightComponent } from '@shared/components';
 
 @Component({
   selector: 'app-sign-in',
@@ -28,6 +29,7 @@ import { CommonModule } from '@angular/common';
     FluidModule,
     InputGroupAddonModule,
     InputGroupModule,
+    CopyrightComponent,
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.css',
