@@ -20,6 +20,7 @@ import {
   DirectorNavigationComponent,
   DirectorRequestComponent,
   InvitedRegisterComponent,
+  ResetPasswordComponent,
 } from '@features/components';
 
 export const routes: Routes = [
@@ -31,6 +32,7 @@ export const routes: Routes = [
       { path: 'request', component: RequestComponent },
       { path: 'sign-in', component: SignInComponent },
       { path: 'unauthorized', component: RequestComponent },
+      { path: 'reset-password', component: ResetPasswordComponent },
     ],
   },
   {

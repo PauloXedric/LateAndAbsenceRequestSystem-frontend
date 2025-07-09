@@ -22,7 +22,7 @@ export function buildEmailparams(
   dlarsLink: string | null,
   options?: { declinedBy?: string; approvedBy?: string }
 ): EmailjsParams {
-  const requesterEmail = `${request.studentNumber}@dhvsu.edu.ph`;
+  const requesterEmail = `${request.studentNumber}@pampangastateu.edu.ph`;
   const date = formatDate(new Date());
 
   const params: EmailjsParams = {

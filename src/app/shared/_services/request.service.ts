@@ -16,12 +16,12 @@ export class RequestService {
     params: ReadRequestParams
   ): Observable<PaginatedResult<RequestReadModel>> {
     return this.api.get<PaginatedResult<RequestReadModel>>(
-      'Request/All',
+      'Request/all',
       params
     );
   }
 
   updateRequestStatus(request: RequestUpdateModel) {
-    return this.api.put(`Request/UpdateStatus`, request);
+    return this.api.put(`Request/update-status`, request);
   }
 }

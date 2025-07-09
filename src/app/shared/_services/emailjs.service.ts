@@ -11,10 +11,13 @@ import { ApproverRolesEnum } from '@shared/_enums';
   providedIn: 'root',
 })
 export class EmailService {
-  private readonly serviceId = 'service_r68oqkr';
+  private readonly firstServiceId = 'service_r68oqkr';
+  private readonly secondServiceId = 'service_6gotjev';
   private readonly approvalTemplateId = 'template_3osa1sn';
   private readonly declinedTemplateId = 'template_xa68myd';
-  private readonly publicKey = 'cFkp2u1DISUOMgVsm';
+  private readonly resetPasswordTemplateId = 'template_mkkg1wm';
+  private readonly firstPublicKey = 'cFkp2u1DISUOMgVsm';
+  private readonly secondPublicKey = 'w3lTt908ow_N8YTqu';
 
   constructor(private api: ApiService) {}
 
@@ -31,7 +34,12 @@ export class EmailService {
     const params = buildEmailparams(request, dlarsLink, { approvedBy });
 
     emailjs
-      .send(this.serviceId, this.approvalTemplateId, params, this.publicKey)
+      .send(
+        this.firstServiceId,
+        this.approvalTemplateId,
+        params,
+        this.firstPublicKey
+      )
       .then(
         (result: EmailJSResponseStatus) => {
           console.log(
@@ -55,7 +63,12 @@ export class EmailService {
     const params = buildEmailparams(request, null, { declinedBy });
 
     emailjs
-      .send(this.serviceId, this.declinedTemplateId, params, this.publicKey)
+      .send(
+        this.firstServiceId,
+        this.declinedTemplateId,
+        params,
+        this.firstPublicKey
+      )
       .then(
         (result: EmailJSResponseStatus) => {
           console.log(
@@ -90,7 +103,12 @@ export class EmailService {
     };
 
     emailjs
-      .send(this.serviceId, this.declinedTemplateId, params, this.publicKey)
+      .send(
+        this.firstServiceId,
+        this.declinedTemplateId,
+        params,
+        this.firstPublicKey
+      )
       .then(
         (result: EmailJSResponseStatus) => {
           console.log(
@@ -107,11 +125,41 @@ export class EmailService {
       );
   }
 
+  sendResetPasswordEmail(userEmail: string, token: string): void {
+    const resetLink = `${
+      environment.appBaseUrl
+    }/reset-password?token=${token}&email=${encodeURIComponent(userEmail)}`;
+
+    const params = {
+      requesterEmail: userEmail,
+      resetLink: resetLink,
+    };
+
+    emailjs
+      .send(
+        this.secondServiceId,
+        this.resetPasswordTemplateId,
+        params,
+        this.secondPublicKey
+      )
+      .then(
+        (result: EmailJSResponseStatus) => {
+          console.log(
+            `Reset password email sent to ${userEmail}:`,
+            result.status
+          );
+        },
+        (error) => {
+          console.error(`Failed to send reset email to ${userEmail}:`, error);
+        }
+      );
+  }
+
   generateNewToken(
     request: RequestGenTokenModel
   ): Observable<{ urlToken: string }> {
     return this.api.post<{ urlToken: string }>(
-      `Token/GenerateUrlToken`,
+      'Token/generate-url-token',
       request
     );
   }
@@ -120,7 +168,10 @@ export class EmailService {
     user: InvitationGenTokenModel
   ): Observable<{ inviteLink: string }> {
     return this.api
-      .post<{ invitationToken: string }>('Token/GenerateInvitationLink', user)
+      .post<{ invitationToken: string }>(
+        'Token/generate-invitation-token',
+        user
+      )
       .pipe(
         map((res) => ({
           inviteLink: `${environment.appBaseUrl}/register?token=${res.invitationToken}`,

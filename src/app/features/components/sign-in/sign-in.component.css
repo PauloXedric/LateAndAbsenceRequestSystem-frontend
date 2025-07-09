@@ -66,3 +66,42 @@
 .forgot-password-link:hover {
   text-decoration: underline;
 }
+.forgot-password-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.forgot-password-description p {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-field label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.form-field input {
+  width: 100%;
+}
+
+.p-error {
+  font-size: 0.75rem;
+  color: #e53935;
+  margin-top: 0.25rem;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}

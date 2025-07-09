@@ -11,12 +11,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '@core';
-import { ToastService } from '@shared/_services';
+import { EmailService, ToastService } from '@shared/_services';
 import { FluidModule } from 'primeng/fluid';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { CommonModule } from '@angular/common';
 import { CopyrightComponent } from '@shared/components';
+import { DialogModule } from 'primeng/dialog';
+import { UserService } from '@features/_services/user.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -30,24 +32,35 @@ import { CopyrightComponent } from '@shared/components';
     InputGroupAddonModule,
     InputGroupModule,
     CopyrightComponent,
+    DialogModule,
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.css',
 })
 export class SignInComponent implements OnInit {
   userLoginForm!: FormGroup;
+  forgotPasswordForm!: FormGroup;
+
+  visible = false;
+  position: 'top' = 'top';
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private userService: UserService,
+    private emailjsService: EmailService
   ) {}
 
   ngOnInit(): void {
     this.userLoginForm = this.fb.group({
-      username: ['', Validators.required],
+      username: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
+    });
+
+    this.forgotPasswordForm = this.fb.group({
+      username: ['', [Validators.required, Validators.email]],
     });
   }
 
@@ -90,5 +103,54 @@ export class SignInComponent implements OnInit {
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
+  }
+
+  onForgotPasswordClick(event: Event) {
+    event.preventDefault();
+    this.showDialog(this.position);
+  }
+
+  showDialog(position: typeof this.position) {
+    this.position = position;
+    this.visible = true;
+  }
+
+  sendResetLink(): void {
+    if (this.forgotPasswordForm.invalid) {
+      this.forgotPasswordForm.markAllAsTouched();
+      return;
+    }
+    const email = this.forgotPasswordForm.get('username')?.value;
+
+    this.userService.checkUserAsync(email).subscribe({
+      next: (userExists) => {
+        if (userExists) {
+          this.toastService.showSuccess(
+            'Reset password link sent! Please check your email inbox to proceed.'
+          );
+          const username = this.forgotPasswordForm.value;
+          console.log(username);
+          this.userService.requestResetPassword(username).subscribe({
+            next: (res) => {
+              const { token, username } = res;
+              this.emailjsService.sendResetPasswordEmail(username, token);
+            },
+          });
+
+          this.visible = false;
+        }
+        if (!userExists) {
+          this.toastService.showError(
+            'No account found with that email address.'
+          );
+        }
+        return;
+      },
+      error: () => {
+        this.toastService.showError(
+          'Something went wrong. Please try again later.'
+        );
+      },
+    });
   }
 }

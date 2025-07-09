@@ -12,6 +12,8 @@ export * from './invited-register/invited-register.component';
 
 export * from './request/request.component';
 
+export * from './reset-password/reset-password.component';
+
 export * from './secretary/layout/secretary-navigation/secretary-navigation.component';
 export * from './secretary/layout/secretary-sidebar/secretary-sidebar.component';
 export * from './secretary/request/secretary-initial-request/secretary-initial-request.component';

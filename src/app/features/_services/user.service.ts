@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@core';
-import { UserListModel } from '@features/_models/user-list.model';
-import { UserRegisterModel } from '@features/_models/user-register.model';
-import { UserUpdateModel } from '@features/_models/user-update.model';
+import {
+  ResetPasswordModel,
+  ResetPasswordRequestModel,
+  UserListModel,
+  UserRegisterModel,
+  UserUpdateModel,
+} from '@features/_models';
 import { ApiResponse } from '@shared/_models';
 import { Observable } from 'rxjs';
 
@@ -13,18 +17,31 @@ export class UserService {
   constructor(private api: ApiService) {}
 
   registerUSer(user: UserRegisterModel): Observable<ApiResponse> {
-    return this.api.post<ApiResponse>('UserAccount/RegisterUser', user);
+    return this.api.post<ApiResponse>('UserAccount/register-user', user);
   }
 
   getAllUsers(): Observable<UserListModel[]> {
-    return this.api.get<UserListModel[]>('UserAccount/All');
+    return this.api.get<UserListModel[]>('UserAccount/all');
   }
 
   checkUserAsync(username: string): Observable<boolean> {
-    return this.api.get<boolean>(`UserAccount/CheckUser/${username}`);
+    return this.api.get<boolean>(`UserAccount/check-user/${username}`);
   }
 
   userUpdate(data: UserUpdateModel): Observable<ApiResponse> {
     return this.api.put<ApiResponse>('UserAccount', data);
+  }
+
+  requestResetPassword(
+    username: ResetPasswordRequestModel
+  ): Observable<{ token: string; username: string }> {
+    return this.api.post<{ token: string; username: string }>(
+      'UserAccount/request-reset-password',
+      username
+    );
+  }
+
+  resetPassword(reset: ResetPasswordModel): Observable<ApiResponse> {
+    return this.api.post<ApiResponse>('UserAccount/reset-password', reset);
   }
 }

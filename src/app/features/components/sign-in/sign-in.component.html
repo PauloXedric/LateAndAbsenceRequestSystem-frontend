@@ -50,9 +50,14 @@
                 ></i>
               </p-inputGroupAddon>
             </p-inputGroup>
-
             <div style="text-align: right; margin-top: -0.5rem">
-              <a href="#" class="forgot-password-link">Forgot Password?</a>
+              <a
+                href=""
+                class="forgot-password-link"
+                (click)="onForgotPasswordClick($event)"
+              >
+                Forgot Password?
+              </a>
             </div>
           </div>
         </div>
@@ -64,10 +69,64 @@
         [disabled]="userLoginForm.invalid"
       />
     </form>
-    <app-copyright marginTop="4rem"></app-copyright>
+    <app-copyright marginTop="2rem"></app-copyright>
   </div>
 
   <div class="image-section">
     <img src="assets/images/psuImage1.png" alt="Background Image" />
   </div>
 </div>
+
+<p-dialog
+  header="Reset Your Password"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '28rem' }"
+  [breakpoints]="{ '960px': '90vw' }"
+>
+  <form
+    [formGroup]="forgotPasswordForm"
+    (ngSubmit)="sendResetLink()"
+    class="forgot-password-form"
+  >
+    <span class="p-text-secondary block mb-3">
+      Enter your registered email address. We’ll send you a reset link.
+    </span>
+
+    <div class="form-field">
+      <label for="email">Email Address:</label>
+      <input
+        id="email"
+        type="email"
+        pInputText
+        formControlName="username"
+        placeholder="you@example.com"
+        autocomplete="off"
+      />
+      <small
+        class="p-error"
+        *ngIf="
+          forgotPasswordForm.get('email')?.invalid &&
+          forgotPasswordForm.get('email')?.touched
+        "
+      >
+        A valid email is required.
+      </small>
+    </div>
+
+    <div class="dialog-actions">
+      <p-button
+        label="Cancel"
+        severity="secondary"
+        icon="pi pi-times"
+        (click)="visible = false"
+      ></p-button>
+      <p-button
+        label="Send Reset Link"
+        icon="pi pi-envelope"
+        type="submit"
+        [disabled]="forgotPasswordForm.invalid"
+      ></p-button>
+    </div>
+  </form>
+</p-dialog>

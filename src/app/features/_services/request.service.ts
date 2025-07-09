@@ -22,6 +22,6 @@ export class RequestService {
   }
 
   addImageProofInRequest(formData: FormData): Observable<boolean> {
-    return this.api.put<boolean>('Request/AddImageProof', formData);
+    return this.api.put<boolean>('Request/add-image-proof', formData);
   }
 }
