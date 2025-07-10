@@ -10,6 +10,7 @@ import {
   SupportingDocumentsComponent,
   InvitedRegisterComponent,
   ResetPasswordComponent,
+  AccountManagementComponent,
 } from '@features/components';
 
 import { authGuard, roleGuard, tokenLinkGuard } from '@core';
@@ -56,6 +57,11 @@ export const routes: Routes = [
           import('@features/components/_director/director.routes').then(
             (m) => m.default
           ),
+      },
+      {
+        path: RoutePathEnum.Developer,
+        data: { roles: [UserRoleEnum.Developer] },
+        component: AccountManagementComponent,
       },
     ],
   },
