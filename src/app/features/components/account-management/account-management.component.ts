@@ -183,7 +183,7 @@ export class AccountManagementComponent implements OnInit {
             status: updatedUser.status,
           };
 
-          this.userService.userUpdate(data).subscribe({
+          this.userService.updateUserStatusAndRole(data).subscribe({
             next: (res) => {
               this.toastService.showSuccess(res.message);
               delete this.clonedUsers[updatedUser.userCode];

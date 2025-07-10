@@ -49,6 +49,7 @@ import { IdentityTokenService } from '@core/services/identity-token.service'; //
 export class ResetPasswordComponent implements OnInit {
   resetForm!: FormGroup;
   isExpired = false;
+  success = false;
 
   constructor(
     private fb: FormBuilder,
@@ -61,16 +62,33 @@ export class ResetPasswordComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const token = this.route.snapshot.queryParamMap.get('token');
+    let rawToken = this.route.snapshot.queryParamMap.get('token');
     const email = this.route.snapshot.queryParamMap.get('email');
 
-    if (token && email) {
-      this.identityTokenService.setTokenAndEmail(token, email);
-      const cleanUrl = this.router.url.split('?')[0];
-      this.location.replaceState(cleanUrl);
-    }
+    if (rawToken && email) {
+      rawToken = decodeURIComponent(rawToken).replace(/ /g, '+');
 
-    this.isExpired = !this.identityTokenService.hasValidToken();
+      this.identityTokenService.setTokenAndEmail(rawToken, email);
+
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {},
+        replaceUrl: true,
+      });
+
+      this.userService
+        .validateResetToken({ token: rawToken, email })
+        .subscribe({
+          next: (isValid) => {
+            this.isExpired = !isValid;
+          },
+          error: () => {
+            this.isExpired = true;
+          },
+        });
+    } else {
+      this.isExpired = true;
+    }
 
     this.resetForm = this.fb.group(
       {
@@ -131,7 +149,6 @@ export class ResetPasswordComponent implements OnInit {
     const email = this.identityTokenService.getEmail();
 
     if (!email || !token) {
-      this.toastService.showError('Invalid or missing token/email.');
       return;
     }
 
@@ -140,11 +157,12 @@ export class ResetPasswordComponent implements OnInit {
       token: token,
       newPassword: password,
     };
-
+    console.log(resetData);
     this.userService.resetPassword(resetData).subscribe({
-      next: () => {
-        this.toastService.showSuccess('Password has been reset successfully.');
+      next: (res) => {
+        this.toastService.showSuccess(res.message);
         this.identityTokenService.clear();
+        this.success = true;
       },
       error: (err) => {
         this.toastService.showError(

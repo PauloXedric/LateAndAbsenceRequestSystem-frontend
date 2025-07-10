@@ -22,6 +22,6 @@ export class RequestService {
   }
 
   updateRequestStatus(request: RequestUpdateModel) {
-    return this.api.put(`Request/update-status`, request);
+    return this.api.patch(`Request/update-status`, request);
   }
 }

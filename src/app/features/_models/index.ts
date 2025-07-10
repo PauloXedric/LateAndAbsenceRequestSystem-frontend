@@ -5,3 +5,4 @@ export * from './user-list.model';
 export * from './user-login.model';
 export * from './user-register.model';
 export * from './user-update.model';
+export * from './reset-token-validation.model';

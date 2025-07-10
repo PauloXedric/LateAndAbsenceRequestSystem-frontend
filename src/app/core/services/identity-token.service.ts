@@ -28,4 +28,11 @@ export class IdentityTokenService {
     const email = this.getEmail();
     return !!token && !!email;
   }
+
+  trySetTokenAndEmail(token: string | null, email: string | null): void {
+    const alreadySet = this.hasValidToken();
+    if (!alreadySet && token && email) {
+      this.setTokenAndEmail(token, email);
+    }
+  }
 }

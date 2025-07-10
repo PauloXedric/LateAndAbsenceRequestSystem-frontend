@@ -34,6 +34,10 @@ export class ApiService {
     return this.http.put<T>(`${this.config.baseUrl}/${url}`, body);
   }
 
+  patch<T>(url: string, body: any) {
+    return this.http.patch<T>(`${this.config.baseUrl}/${url}`, body);
+  }
+
   delete<T>(url: string, options?: { params?: HttpParams }) {
     return this.http.delete<T>(`${this.config.baseUrl}/${url}`, options);
   }

@@ -22,6 +22,7 @@ import {
   InvitedRegisterComponent,
   ResetPasswordComponent,
 } from '@features/components';
+import { identityTokenGuard } from '@core/guards/identity-token.guard';
 
 export const routes: Routes = [
   {
@@ -32,7 +33,6 @@ export const routes: Routes = [
       { path: 'request', component: RequestComponent },
       { path: 'sign-in', component: SignInComponent },
       { path: 'unauthorized', component: RequestComponent },
-      { path: 'reset-password', component: ResetPasswordComponent },
     ],
   },
   {
@@ -97,6 +97,11 @@ export const routes: Routes = [
         path: 'register',
         component: InvitedRegisterComponent,
         canActivate: [tokenLinkGuard],
+      },
+      {
+        path: 'reset-password',
+        component: ResetPasswordComponent,
+        canActivate: [identityTokenGuard],
       },
     ],
   },

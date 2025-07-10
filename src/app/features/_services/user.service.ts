@@ -3,6 +3,7 @@ import { ApiService } from '@core';
 import {
   ResetPasswordModel,
   ResetPasswordRequestModel,
+  ResetTokenValidationModel,
   UserListModel,
   UserRegisterModel,
   UserUpdateModel,
@@ -28,7 +29,7 @@ export class UserService {
     return this.api.get<boolean>(`UserAccount/check-user/${username}`);
   }
 
-  userUpdate(data: UserUpdateModel): Observable<ApiResponse> {
+  updateUserStatusAndRole(data: UserUpdateModel): Observable<ApiResponse> {
     return this.api.put<ApiResponse>('UserAccount', data);
   }
 
@@ -38,6 +39,15 @@ export class UserService {
     return this.api.post<{ token: string; username: string }>(
       'UserAccount/request-reset-password',
       username
+    );
+  }
+
+  validateResetToken(
+    resetToken: ResetTokenValidationModel
+  ): Observable<boolean> {
+    return this.api.post<boolean>(
+      'UserAccount/validate-reset-token',
+      resetToken
     );
   }
 
