@@ -8,7 +8,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { UserRoleEnum } from '@features/_enums/roles.enum';
+import { UserRoleEnum } from '@core/enums/roles.enum';
 import { UserStatusEnum } from '@features/_enums/user-status.enum';
 import { UserListModel } from '@features/_models/user-list.model';
 import { InvitationGenTokenModel } from '@shared/_models';

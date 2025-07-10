@@ -19,6 +19,8 @@ import { CommonModule } from '@angular/common';
 import { CopyrightComponent } from '@shared/components';
 import { DialogModule } from 'primeng/dialog';
 import { UserService } from '@features/_services/user.service';
+import { UserRoleEnum } from '@core/enums/roles.enum';
+import { RoutePathEnum } from '@core/enums/route-path.enum';
 
 @Component({
   selector: 'app-sign-in',
@@ -75,14 +77,16 @@ export class SignInComponent implements OnInit {
     this.authService.login(credentials).subscribe({
       next: () => {
         const roles = this.authService.getUserRoles();
-        if (roles.includes('Secretary')) {
-          this.router.navigate(['/secretary']);
-        } else if (roles.includes('Chairperson')) {
-          this.router.navigate(['/chairperson']);
-        } else if (roles.includes('Director')) {
-          this.router.navigate(['/director']);
+        if (roles.includes(UserRoleEnum.Secretary)) {
+          this.router.navigate([RoutePathEnum.Secretary]);
+        } else if (roles.includes(UserRoleEnum.Chairperson)) {
+          this.router.navigate([RoutePathEnum.Chairperson]);
+        } else if (roles.includes(UserRoleEnum.Director)) {
+          this.router.navigate([RoutePathEnum.Director]);
+        } else if (roles.includes(UserRoleEnum.Developer)) {
+          this.router.navigate([RoutePathEnum.Developer]);
         } else {
-          this.router.navigate(['/unauthorized']);
+          this.router.navigate([RoutePathEnum.Unauthorized]);
         }
       },
       error: (err) => {

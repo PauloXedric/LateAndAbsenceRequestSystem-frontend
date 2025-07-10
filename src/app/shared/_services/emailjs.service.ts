@@ -6,6 +6,7 @@ import { buildEmailparams } from '@shared/_params';
 import { InvitationGenTokenModel, RequestGenTokenModel } from '@shared/_models';
 import { environment } from 'environments/environment';
 import { ApproverRolesEnum } from '@shared/_enums';
+import { RoutePathEnum } from '@core/enums/route-path.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +29,7 @@ export class EmailService {
   ): void {
     const dlarsLink =
       approvedBy === ApproverRolesEnum.Secretary
-        ? `${environment.appBaseUrl}/supporting-documents?token=${token}`
+        ? `${environment.appBaseUrl}/${RoutePathEnum.SupportingDocuments}?token=${token}`
         : null;
 
     const params = buildEmailparams(request, dlarsLink, { approvedBy });
@@ -126,9 +127,9 @@ export class EmailService {
   }
 
   sendResetPasswordEmail(userEmail: string, token: string): void {
-    const resetLink = `${
-      environment.appBaseUrl
-    }/reset-password?token=${token}&email=${encodeURIComponent(userEmail)}`;
+    const resetLink = `${environment.appBaseUrl}/${
+      RoutePathEnum.ResetPassword
+    }?token=${token}&email=${encodeURIComponent(userEmail)}`;
 
     const params = {
       requesterEmail: userEmail,

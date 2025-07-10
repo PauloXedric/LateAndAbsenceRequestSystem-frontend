@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '@core';
+import { RoutePathEnum } from '@core/enums/route-path.enum';
 
 export const authGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
@@ -8,6 +9,6 @@ export const authGuard: CanActivateFn = () => {
   if (auth.isAuthenticated()) {
     return true;
   }
-  router.navigate(['/sign-in']);
+  router.navigate([RoutePathEnum.SignIn]);
   return false;
 };

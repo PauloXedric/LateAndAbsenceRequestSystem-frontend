@@ -9,6 +9,7 @@ import { ApiService } from '@core';
 import { ApiResponse } from '@shared/_models';
 import { UserRegisterModel } from '@features/_models/user-register.model';
 import { UserListModel } from '@features/_models/user-list.model';
+import { RoutePathEnum } from '@core/enums/route-path.enum';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -37,7 +38,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem(this.tokenKey);
     this.isLoggedIn$.next(false);
-    this.router.navigate(['/sign-in']);
+    this.router.navigate([RoutePathEnum.SignIn]);
   }
 
   getToken(): string | null {

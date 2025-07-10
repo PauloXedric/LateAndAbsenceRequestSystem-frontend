@@ -1,38 +1,31 @@
 import { Routes } from '@angular/router';
 import {
-  ApprovalHistoryComponent,
-  InstructorCoursesComponent,
   PrivateLayoutComponent,
   PublicLayoutComponent,
 } from '@shared/components';
 
-import { authGuard, roleGuard, tokenLinkGuard } from '@core';
 import {
   RequestComponent,
-  SupportingDocumentsComponent,
-  SecretaryNavigationComponent,
-  SecretaryInitialRequestComponent,
-  SecretarySecondaryRequestComponent,
-  ChairpersonNavigationComponent,
-  ChairpersonRequestComponent,
-  AccountManagementComponent,
   SignInComponent,
-  DirectorNavigationComponent,
-  DirectorRequestComponent,
+  SupportingDocumentsComponent,
   InvitedRegisterComponent,
   ResetPasswordComponent,
 } from '@features/components';
+
+import { authGuard, roleGuard, tokenLinkGuard } from '@core';
 import { identityTokenGuard } from '@core/guards/identity-token.guard';
+import { UserRoleEnum } from '@core/enums/roles.enum';
+import { RoutePathEnum } from '@core/enums/route-path.enum';
 
 export const routes: Routes = [
   {
     path: '',
     component: PublicLayoutComponent,
     children: [
-      { path: '', redirectTo: 'request', pathMatch: 'full' },
-      { path: 'request', component: RequestComponent },
-      { path: 'sign-in', component: SignInComponent },
-      { path: 'unauthorized', component: RequestComponent },
+      { path: '', redirectTo: RoutePathEnum.Request, pathMatch: 'full' },
+      { path: RoutePathEnum.Request, component: RequestComponent },
+      { path: RoutePathEnum.SignIn, component: SignInComponent },
+      { path: RoutePathEnum.Unauthorized, component: RequestComponent },
     ],
   },
   {
@@ -41,65 +34,48 @@ export const routes: Routes = [
     canActivateChild: [authGuard, roleGuard],
     children: [
       {
-        path: 'secretary',
-        component: SecretaryNavigationComponent,
-        data: { roles: ['Secretary'] },
-        children: [
-          {
-            path: 'initial-request',
-            component: SecretaryInitialRequestComponent,
-          },
-          {
-            path: 'secondary-request',
-            component: SecretarySecondaryRequestComponent,
-          },
-          { path: '', redirectTo: 'initial-request', pathMatch: 'full' },
-        ],
+        path: RoutePathEnum.Secretary,
+        data: { roles: [UserRoleEnum.Secretary] },
+        loadChildren: () =>
+          import('@features/components/_secretary/secretary.routes').then(
+            (m) => m.default
+          ),
       },
       {
-        path: 'chairperson',
-        component: ChairpersonNavigationComponent,
-        data: { roles: ['Chairperson'] },
-        children: [
-          {
-            path: 'chairperson-request',
-            component: ChairpersonRequestComponent,
-          },
-          { path: 'instructors', component: InstructorCoursesComponent },
-          { path: 'history', component: ApprovalHistoryComponent },
-          { path: '', redirectTo: 'chairperson-request', pathMatch: 'full' },
-        ],
+        path: RoutePathEnum.Chairperson,
+        data: { roles: [UserRoleEnum.Chairperson] },
+        loadChildren: () =>
+          import('@features/components/_chairperson/chairperson.routes').then(
+            (m) => m.default
+          ),
       },
       {
-        path: 'director',
-        component: DirectorNavigationComponent,
-        data: { roles: ['Director'] },
-        children: [
-          { path: 'director-request', component: DirectorRequestComponent },
-          { path: 'instructors', component: InstructorCoursesComponent },
-          { path: 'history', component: ApprovalHistoryComponent },
-          { path: 'account-management', component: AccountManagementComponent },
-          { path: '', redirectTo: 'director-request', pathMatch: 'full' },
-        ],
+        path: RoutePathEnum.Director,
+        data: { roles: [UserRoleEnum.Director] },
+        loadChildren: () =>
+          import('@features/components/_director/director.routes').then(
+            (m) => m.default
+          ),
       },
     ],
   },
+
   {
     path: '',
     component: PrivateLayoutComponent,
     children: [
       {
-        path: 'supporting-documents',
+        path: RoutePathEnum.SupportingDocuments,
         component: SupportingDocumentsComponent,
         canActivate: [tokenLinkGuard],
       },
       {
-        path: 'register',
+        path: RoutePathEnum.Register,
         component: InvitedRegisterComponent,
         canActivate: [tokenLinkGuard],
       },
       {
-        path: 'reset-password',
+        path: RoutePathEnum.ResetPassword,
         component: ResetPasswordComponent,
         canActivate: [identityTokenGuard],
       },

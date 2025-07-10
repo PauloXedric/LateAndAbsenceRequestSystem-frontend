@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { AuthService } from '@core';
+import { RoutePathEnum } from '@core/enums/route-path.enum';
 
 export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const auth = inject(AuthService);
@@ -20,7 +21,7 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
     !auth.isAuthenticated() ||
     !auth.hasRole(expectedRoles)
   ) {
-    router.navigate(['/unauthorized']);
+    router.navigate([RoutePathEnum.Unauthorized]);
     return false;
   }
 

@@ -6,6 +6,7 @@ import {
 } from '@angular/router';
 import { inject } from '@angular/core';
 import { IdentityTokenService } from '@core/services/identity-token.service';
+import { RoutePathEnum } from '@core/enums/route-path.enum';
 
 export const identityTokenGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
@@ -20,5 +21,5 @@ export const identityTokenGuard: CanActivateFn = (
 
   return identityTokenService.hasValidToken()
     ? true
-    : router.parseUrl('/request');
+    : router.parseUrl(RoutePathEnum.Request);
 };
