@@ -54,4 +54,8 @@ export class UserService {
   resetPassword(reset: ResetPasswordModel): Observable<ApiResponse> {
     return this.api.post<ApiResponse>('UserAccount/reset-password', reset);
   }
+
+  deleteUser(email: string): Observable<ApiResponse> {
+    return this.api.delete<ApiResponse>(`UserAccount/${email}`);
+  }
 }

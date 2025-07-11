@@ -160,6 +160,16 @@
                     text
                     rounded
                   ></p-button>
+
+                  <p-button
+                    *ngIf="editingRowIndex === ri"
+                    pButton
+                    pCancelEditableRow
+                    icon="pi pi-trash"
+                    (click)="onRowDelete(ri)"
+                    text
+                    rounded
+                  ></p-button>
                 </div>
               </td>
             </tr>
@@ -168,4 +178,14 @@
       </div>
     </form>
   </p-card>
+  <p-button
+    *ngIf="authService.hasRole([UserRoleEnum.Developer])"
+    icon="pi pi-sign-out"
+    label="Logout"
+    (click)="confirmLogout($event)"
+    severity="danger"
+    [style]="{ 'margin-top': '2rem' }"
+  >
+  </p-button>
 </p-card>
+<p-confirmPopup></p-confirmPopup>

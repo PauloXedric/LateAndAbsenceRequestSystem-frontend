@@ -1,4 +1,4 @@
-import { UserRegisterModel } from '@features/_models/user-register.model';
+import { UserRegisterModel } from '@features/_models/user/user-register.model';
 
 export function toUserRegisterModel(form: any): UserRegisterModel {
   return {

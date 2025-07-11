@@ -3,6 +3,19 @@ import { Subject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmationDialogService {
+  confirm(arg0: {
+    target: EventTarget;
+    message: string;
+    icon: string;
+    acceptLabel: string;
+    rejectLabel: string;
+    acceptButtonProps: { severity: string; outlined: boolean };
+    rejectButtonProps: { severity: string; outlined: boolean };
+    accept: () => void;
+    reject: () => void;
+  }) {
+    throw new Error('Method not implemented.');
+  }
   private confirmationSubject = new Subject<ConfirmationData>();
 
   confirmationRequests$: Observable<ConfirmationData> =

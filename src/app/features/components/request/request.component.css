@@ -88,3 +88,93 @@ input {
   height: 40px;
   margin-left: 15%;
 }
+
+@media (max-width: 1024px) {
+  .content {
+    height: auto;
+    padding: 1rem;
+  }
+
+  .spacer {
+    height: 40vh;
+  }
+
+  .spacer img {
+    border-radius: 0 0 6px 6px;
+  }
+
+  .form-container {
+    padding: 1rem 2rem;
+    height: auto;
+  }
+
+  .form-columns {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .form-column {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .custom-card-header {
+    font-size: 2rem;
+  }
+
+  .header-logo {
+    height: 2.5rem;
+  }
+
+  :host ::ng-deep .p-button {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .custom-card-header {
+    font-size: 1.2rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .custom-card-header span {
+    font-size: 1.1rem;
+  }
+
+  .form-container p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  label {
+    font-size: 0.85rem;
+  }
+
+  input,
+  textarea {
+    font-size: 0.85rem;
+  }
+
+  .p-inputgroup-addon i {
+    font-size: 1rem;
+  }
+
+  :host ::ng-deep .p-button {
+    font-size: 0.9rem;
+    height: 36px;
+  }
+
+  :host ::ng-deep .p-card .p-card-body {
+    padding: 0 !important;
+  }
+}

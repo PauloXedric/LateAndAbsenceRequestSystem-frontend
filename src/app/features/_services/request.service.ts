@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '@core';
-import { RequestCreateModel } from '../_models/request-create.model';
+import { RequestCreateModel } from '../_models/request/request-create.model';
 import { Observable } from 'rxjs';
 import { ApiResponse } from '@shared/_models';
 

@@ -84,7 +84,6 @@ export class InvitedRegisterComponent implements OnInit {
       this.userService.checkUserAsync(this.tokenData.userEmail).subscribe({
         next: (result) => {
           this.isRegistered = result;
-          console.log(result);
         },
         error: (err) => {
           console.error('Failed to check user existence.', err);

@@ -10,14 +10,14 @@ import {
 } from '@angular/forms';
 import { UserRoleEnum } from '@core/enums/roles.enum';
 import { UserStatusEnum } from '@features/_enums/user-status.enum';
-import { UserListModel } from '@features/_models/user-list.model';
+import { UserListModel } from '@features/_models/user/user-list.model';
 import { InvitationGenTokenModel } from '@shared/_models';
 import {
   ConfirmationDialogService,
   EmailService,
   ToastService,
 } from '@shared/_services';
-import { SelectItem } from 'primeng/api';
+import { ConfirmationService, SelectItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { FluidModule } from 'primeng/fluid';
@@ -29,7 +29,9 @@ import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TagModule } from 'primeng/tag';
 import { UserService } from '@features/_services/user.service';
-import { UserUpdateModel } from '@features/_models/user-update.model';
+import { UserUpdateModel } from '@features/_models/user/user-update.model';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { AuthService } from '@core';
 
 @Component({
   selector: 'app-account-management',
@@ -48,7 +50,9 @@ import { UserUpdateModel } from '@features/_models/user-update.model';
     ReactiveFormsModule,
     SelectModule,
     TagModule,
+    ConfirmPopupModule,
   ],
+  providers: [ConfirmationService],
   templateUrl: './account-management.component.html',
   styleUrl: './account-management.component.css',
 })
@@ -60,6 +64,7 @@ export class AccountManagementComponent implements OnInit {
   userData: UserListModel[] = [];
   clonedUsers: { [key: string]: UserListModel } = {};
   editingRowIndex: number | null = null;
+  UserRoleEnum = UserRoleEnum;
 
   roles: SelectItem[] = [
     { label: UserRoleEnum.Secretary, value: UserRoleEnum.Secretary },
@@ -81,7 +86,9 @@ export class AccountManagementComponent implements OnInit {
     private emailService: EmailService,
     private userService: UserService,
     private toastService: ToastService,
-    private confirmationService: ConfirmationDialogService
+    private confirmationService: ConfirmationDialogService,
+    private confirm: ConfirmationService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -222,5 +229,55 @@ export class AccountManagementComponent implements OnInit {
 
   getUserFormGroup(index: number): FormGroup {
     return this.users.at(index) as FormGroup;
+  }
+
+  confirmLogout(event: Event): void {
+    this.confirm.confirm({
+      target: event.target as EventTarget,
+      message: 'Are you sure you want to logout?',
+      icon: 'pi pi-sign-out',
+      acceptLabel: 'Logout',
+      rejectLabel: 'Cancel',
+      acceptButtonProps: {
+        severity: 'danger',
+        outlined: true,
+      },
+      rejectButtonProps: {
+        severity: 'secondary',
+        outlined: true,
+      },
+      accept: () => {
+        this.authService.logout();
+      },
+      reject: () => {},
+    });
+  }
+
+  onRowDelete(ri: number): void {
+    const userForm = this.users.at(ri);
+    const email = userForm.value.email;
+
+    this.confirmationService
+      .confirm$({
+        header: 'Confirm Deletion',
+        message: `Are you sure you want to delete user "${email}"?`,
+        actionLabel: 'Delete',
+      })
+      .subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.userService.deleteUser(email).subscribe({
+            next: (res) => {
+              this.toastService.showInfo(res.message);
+              this.loadUserList();
+            },
+            error: (err) => {
+              this.toastService.showError(
+                err.error?.message ||
+                  'An error occurred while deleting the user.'
+              );
+            },
+          });
+        }
+      });
   }
 }

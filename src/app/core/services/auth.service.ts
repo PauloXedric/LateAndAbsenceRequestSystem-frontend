@@ -7,8 +7,8 @@ import { tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ApiService } from '@core';
 import { ApiResponse } from '@shared/_models';
-import { UserRegisterModel } from '@features/_models/user-register.model';
-import { UserListModel } from '@features/_models/user-list.model';
+import { UserRegisterModel } from '@features/_models/user/user-register.model';
+import { UserListModel } from '@features/_models/user/user-list.model';
 import { RoutePathEnum } from '@core/enums/route-path.enum';
 
 @Injectable({ providedIn: 'root' })

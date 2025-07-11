@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserLoginModel } from '../../_models/user-login.model';
+import { UserLoginModel } from '../../_models/user/user-login.model';
 import { Router } from '@angular/router';
 import {
   FormBuilder,

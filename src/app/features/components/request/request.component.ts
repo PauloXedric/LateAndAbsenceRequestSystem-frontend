@@ -10,7 +10,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { RequestService } from '@features/_services/request.service';
-import { RequestCreateModel } from '@features/_models/request-create.model';
+import { RequestCreateModel } from '@features/_models/request/request-create.model';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { KeyFilterModule } from 'primeng/keyfilter';
@@ -96,8 +96,6 @@ export class RequestComponent implements OnInit {
     }
 
     const newRequest: RequestCreateModel = this.requestForm.value;
-    console.log('Data being sent to backend:', newRequest);
-
     this.requestService.addNewRequest(newRequest).subscribe({
       next: (res) => {
         this.toastService.showSuccess(res.message);
@@ -120,8 +118,6 @@ export class RequestComponent implements OnInit {
     this.filteredTeachers = this.teacherSubjectMap
       .map((t) => t.teacherName)
       .filter((name) => name.toLowerCase().includes(query));
-
-    console.log('🔍 Filtered Teachers:', this.filteredTeachers);
   }
 
   searchSubjects(event: any): void {
@@ -140,7 +136,5 @@ export class RequestComponent implements OnInit {
     } else {
       this.filteredSubjects = [];
     }
-
-    console.log('📘 Filtered Subjects:', this.filteredSubjects);
   }
 }

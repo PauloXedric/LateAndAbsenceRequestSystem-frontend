@@ -182,7 +182,6 @@ export class SupportingDocumentsComponent implements OnInit {
       );
 
     for (const pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
     }
 
     this.requestService.addImageProofInRequest(formData).subscribe({
@@ -198,7 +197,6 @@ export class SupportingDocumentsComponent implements OnInit {
       },
       error: (err) => {
         this.toastService.showError('An error occurred while submitting.');
-        console.error(err);
       },
     });
   }
