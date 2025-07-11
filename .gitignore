@@ -48,5 +48,6 @@ src/environments/*
 src/assets/** 
 !src/assets/images/
 !src/assets/presets/
+!src/assets/sounds/
 !src/assets/images/.gitkeep
 !src/assets/presets/.gitkeep
