@@ -46,6 +46,7 @@ import { ApproverRolesEnum } from '@shared/_enums/approver-roles.enum';
 import { toRequestGenTokenModel } from '@shared/_mappers/request.mapper';
 import { RequestResultEnum } from '@shared/_enums';
 import { environment } from 'environments/environment';
+import { SignalrRequestService } from '@shared/_hubs/signalr-request.service';
 
 @Component({
   selector: 'app-requests-table',
@@ -116,10 +117,19 @@ export class RequestsTableComponent {
     private toastService: ToastService,
     private emailService: EmailService,
     private filterService: FilterService,
-    private requestHistoryService: RequestHistoryService
+    private requestHistoryService: RequestHistoryService,
+    private signarRequest: SignalrRequestService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    await this.signarRequest.startConnection();
+    await this.signarRequest.joinStatusGroup(this.statusId);
+
+    this.subscribeToNewRequests();
+    this.initRequestStream();
+  }
+
+  private initRequestStream(): void {
     this.filteredRequests$ = combineLatest([
       this.filterService.filter$.pipe(
         debounceTime(500),
@@ -154,6 +164,19 @@ export class RequestsTableComponent {
         this.isLoading = false;
       })
     );
+  }
+
+  private subscribeToNewRequests(): void {
+    this.signarRequest.onNewRequest((request: RequestReadModel) => {
+      this.toastService.showInfo(
+        `New request submitted by ${request.studentName}`
+      );
+
+      this.playNotificationSound().then(() => {
+        this.pageSubject.next(0);
+        this.refreshSubject.next();
+      });
+    });
   }
 
   onPageChange(event: { first: number; rows: number }) {
@@ -263,5 +286,14 @@ export class RequestsTableComponent {
 
   get isActionDisabled(): boolean {
     return this.selectedRequestReadData.length === 0;
+  }
+
+  private async playNotificationSound(): Promise<void> {
+    const audio = new Audio('assets/sounds/newRequestNotif.ogg');
+    try {
+      await audio.play();
+    } catch (err) {
+      console.warn('Notification sound failed to play:', err);
+    }
   }
 }

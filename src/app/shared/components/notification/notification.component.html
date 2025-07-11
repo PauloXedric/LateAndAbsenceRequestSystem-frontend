@@ -1,0 +1,32 @@
+<div
+  class="notification-container"
+  [class.disabled]="(newRequests$ | async)?.length === 0"
+>
+  <button
+    class="notification-bell"
+    pButton
+    type="button"
+    icon="pi pi-bell"
+    (click)="toggleNotifications()"
+    [disabled]="(newRequests$ | async)?.length === 0"
+  >
+    <span *ngIf="(newRequests$ | async)?.length" class="badge">
+      {{ (newRequests$ | async)?.length }}
+    </span>
+  </button>
+
+  <div class="notification-dropdown" *ngIf="showNotifications">
+    <ul>
+      <li *ngFor="let request of newRequests$ | async">
+        <div class="flex items-start gap-2">
+          <i class="pi pi-envelope text-primary" style="margin-top: 2px"></i>
+          <div>
+            <div class="notification-title">
+              New request from {{ request.studentName }}
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

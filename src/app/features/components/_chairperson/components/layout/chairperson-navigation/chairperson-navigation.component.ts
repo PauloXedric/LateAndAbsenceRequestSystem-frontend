@@ -3,7 +3,10 @@ import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { ChairpersonSidebarComponent } from '../chairperson-sidebar/chairperson-sidebar.component';
-import { MainComponent } from '@shared/components';
+import { MainComponent, NotificationComponent } from '@shared/components';
+import { Observable } from 'rxjs';
+import { RequestReadModel } from '@shared/_models';
+import { SignalrRequestService } from '@shared/_hubs/signalr-request.service';
 
 @Component({
   selector: 'app-chairperson-navigation',
@@ -13,6 +16,7 @@ import { MainComponent } from '@shared/components';
     RouterModule,
     ChairpersonSidebarComponent,
     MainComponent,
+    NotificationComponent,
   ],
   templateUrl: './chairperson-navigation.component.html',
   styleUrl: './chairperson-navigation.component.css',
@@ -20,6 +24,10 @@ import { MainComponent } from '@shared/components';
 export class ChairpersonNavigationComponent {
   isLeftSidebarCollapsed = signal<boolean>(false);
   screenWidth = signal<number>(window.innerWidth);
+  showNotifications = false;
+  newRequests$!: Observable<RequestReadModel[]>;
+
+  constructor(private signalrRequestService: SignalrRequestService) {}
 
   @HostListener('window:resize')
   onResize() {
@@ -31,6 +39,7 @@ export class ChairpersonNavigationComponent {
 
   ngOnInit(): void {
     this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
+    this.newRequests$ = this.signalrRequestService.newRequests$;
   }
 
   changeIsLeftSidebarCollapsed(isLeftSidebarCollapsed: boolean): void {
@@ -39,5 +48,17 @@ export class ChairpersonNavigationComponent {
 
   toggleSidebar(): void {
     this.isLeftSidebarCollapsed.set(!this.isLeftSidebarCollapsed());
+  }
+
+  toggleNotifications(): void {
+    this.showNotifications = !this.showNotifications;
+    if (!this.showNotifications) {
+      this.signalrRequestService.clearNewRequests();
+    }
+  }
+
+  closeNotifications(): void {
+    this.showNotifications = false;
+    this.signalrRequestService.clearNewRequests();
   }
 }

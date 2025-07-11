@@ -2,7 +2,11 @@ import { Component, HostListener, OnInit, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { SecretarySidebarComponent } from '../secretary-sidebar/secretary-sidebar.component';
-import { MainComponent } from '@shared/components';
+import { MainComponent, NotificationComponent } from '@shared/components';
+import { SignalrRequestService } from '@shared/_hubs/signalr-request.service';
+import { RequestReadModel } from '@shared/_models';
+import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-secretary-navigation',
@@ -12,6 +16,7 @@ import { MainComponent } from '@shared/components';
     RouterModule,
     MainComponent,
     SecretarySidebarComponent,
+    NotificationComponent,
   ],
   templateUrl: './secretary-navigation.component.html',
   styleUrl: './secretary-navigation.component.css',
@@ -19,6 +24,11 @@ import { MainComponent } from '@shared/components';
 export class SecretaryNavigationComponent {
   isLeftSidebarCollapsed = signal<boolean>(false);
   screenWidth = signal<number>(window.innerWidth);
+
+  showNotifications = false;
+  newRequests$!: Observable<RequestReadModel[]>;
+
+  constructor(private signalrRequestService: SignalrRequestService) {}
 
   @HostListener('window:resize')
   onResize() {
@@ -29,6 +39,7 @@ export class SecretaryNavigationComponent {
   }
 
   ngOnInit(): void {
+    this.newRequests$ = this.signalrRequestService.newRequests$;
     this.isLeftSidebarCollapsed.set(this.screenWidth() < 768);
   }
 
@@ -38,5 +49,17 @@ export class SecretaryNavigationComponent {
 
   toggleSidebar(): void {
     this.isLeftSidebarCollapsed.set(!this.isLeftSidebarCollapsed());
+  }
+
+  toggleNotifications(): void {
+    this.showNotifications = !this.showNotifications;
+    if (!this.showNotifications) {
+      this.signalrRequestService.clearNewRequests();
+    }
+  }
+
+  closeNotifications(): void {
+    this.showNotifications = false;
+    this.signalrRequestService.clearNewRequests();
   }
 }
