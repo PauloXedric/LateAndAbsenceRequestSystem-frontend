@@ -44,7 +44,7 @@ EmailJS is used for multiple notification workflows:
 
 ## Features Overview
 
-- Login/Register via JWT (admin and student)
+- Login/Register via JWT (admin)
 - Request submission and history
 - Upload supporting documents
 - Admin approval workflow with real-time updates
@@ -57,8 +57,7 @@ EmailJS is used for multiple notification workflows:
 
 ## Backend API
 
-This frontend connects to the [Late and Absence Request System - Backend](https://github.com/PauloXedric/LateAndAbsenceRequestSystem-frontend) (ASP.NET Core 9). All authentication, request processing, and admin logic are handled via secure API calls.
-
+This frontend connects to the [Late and Absence Request System - Backend](https://github.com/PauloXedric/LateAndAbsenceRequestSystem-backend) (ASP.NET Core 9). All authentication, request processing, and admin logic are handled via secure API calls.
 
 ---
 
