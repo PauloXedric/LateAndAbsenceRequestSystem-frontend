@@ -130,7 +130,6 @@ export class InstructorCoursesComponent implements OnInit {
       teacherCode: selectedTeacher.teacherCode,
       subjectCode: selectedSubjects.map((s: any) => s.subjectCode),
     };
-    console.log(assignFormValue);
     this.teacherSubjectService
       .assignedSubjectsToTeacher(assignFormValue)
       .subscribe({

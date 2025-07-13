@@ -11,6 +11,7 @@ import {
   InvitedRegisterComponent,
   ResetPasswordComponent,
   AccountManagementComponent,
+  CompletedRequestViewComponent,
 } from '@features/components';
 
 import { authGuard, roleGuard, tokenLinkGuard } from '@core';
@@ -84,6 +85,11 @@ export const routes: Routes = [
         path: RoutePathEnum.ResetPassword,
         component: ResetPasswordComponent,
         canActivate: [identityTokenGuard],
+      },
+      {
+        path: RoutePathEnum.CompletedRequest,
+        component: CompletedRequestViewComponent,
+        canActivate: [tokenLinkGuard],
       },
     ],
   },

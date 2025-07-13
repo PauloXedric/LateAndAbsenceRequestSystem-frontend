@@ -157,7 +157,6 @@ export class ResetPasswordComponent implements OnInit {
       token: token,
       newPassword: password,
     };
-    console.log(resetData);
     this.userService.resetPassword(resetData).subscribe({
       next: (res) => {
         this.toastService.showSuccess(res.message);

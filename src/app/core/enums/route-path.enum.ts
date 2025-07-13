@@ -22,4 +22,5 @@ export enum RoutePathEnum {
   SupportingDocuments = 'supporting-documents',
   Register = 'register',
   ResetPassword = 'reset-password',
+  CompletedRequest = 'request-approved',
 }

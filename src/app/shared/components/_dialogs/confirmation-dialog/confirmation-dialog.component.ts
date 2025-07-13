@@ -43,12 +43,6 @@ export class ConfirmationDialogComponent implements OnInit {
           accept: () => {
             this.responseSubject.next(true);
             this.responseSubject.complete();
-
-            // this.messageService.add({
-            //   severity: 'success',
-            //   summary: 'Success',
-            //   detail: `${data.actionLabel}d successfully`,
-            // });
           },
           reject: () => {
             this.responseSubject.next(false);

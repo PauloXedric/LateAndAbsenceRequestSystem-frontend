@@ -33,6 +33,7 @@
     (onPage)="onPageChange($event)"
     [tableStyle]="{ 'min-width': '60rem' }"
     stripedRows
+    [rowsPerPageOptions]="[5, 10, 15, 20, 25]"
   >
     <ng-template pTemplate="header">
       <tr>

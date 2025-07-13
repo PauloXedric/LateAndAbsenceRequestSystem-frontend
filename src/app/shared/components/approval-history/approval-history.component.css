@@ -15,13 +15,13 @@
 .history-title {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1f2937; /* gray-800 */
+  color: #1f2937;
   margin-bottom: 0.25rem;
 }
 
 .history-subtitle {
   font-size: 0.875rem;
-  color: #4b5563; /* gray-600 */
+  color: #4b5563;
 }
 
 .history-filters {
@@ -39,6 +39,6 @@
 
 .table-summary {
   font-size: 0.875rem;
-  color: #4b5563; /* gray-600 */
+  color: #4b5563;
   padding: 0.5rem 1rem;
 }

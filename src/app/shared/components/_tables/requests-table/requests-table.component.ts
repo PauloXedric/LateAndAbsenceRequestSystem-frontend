@@ -46,7 +46,7 @@ import { ApproverRolesEnum } from '@shared/_enums/approver-roles.enum';
 import { toRequestGenTokenModel } from '@shared/_mappers/request.mapper';
 import { RequestResultEnum } from '@shared/_enums';
 import { environment } from 'environments/environment';
-import { SignalrRequestService } from '@shared/_hubs/signalr-request.service';
+import { SignalrRequestService } from '@core/_hubs/signalr-request.service';
 
 @Component({
   selector: 'app-requests-table',
@@ -97,7 +97,7 @@ export class RequestsTableComponent {
   selectedRequestToView: RequestReadModel | null = null;
 
   private pageSubject = new BehaviorSubject<number>(0);
-  private pageSizeSubject = new BehaviorSubject<number>(7);
+  private pageSizeSubject = new BehaviorSubject<number>(5);
   private refreshSubject = new BehaviorSubject<void>(undefined);
 
   totalRecords = 0;

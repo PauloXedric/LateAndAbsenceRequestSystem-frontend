@@ -5,7 +5,7 @@ import { DirectorSidebarComponent } from '../director-sidebar/director-sidebar.c
 import { MainComponent, NotificationComponent } from '@shared/components';
 import { RequestReadModel } from '@shared/_models';
 import { Observable } from 'rxjs';
-import { SignalrRequestService } from '@shared/_hubs/signalr-request.service';
+import { SignalrRequestService } from '@core/_hubs/signalr-request.service';
 
 @Component({
   selector: 'app-director-navigation',

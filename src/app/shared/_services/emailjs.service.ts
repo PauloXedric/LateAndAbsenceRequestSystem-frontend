@@ -14,11 +14,13 @@ import { RoutePathEnum } from '@core/enums/route-path.enum';
 export class EmailService {
   private readonly firstServiceId = 'service_r68oqkr';
   private readonly secondServiceId = 'service_6gotjev';
+
   private readonly approvalTemplateId = 'template_3osa1sn';
   private readonly declinedTemplateId = 'template_xa68myd';
   private readonly resetPasswordTemplateId = 'template_mkkg1wm';
+
   private readonly firstPublicKey = 'cFkp2u1DISUOMgVsm';
-  private readonly secondPublicKey = 'w3lTt908ow_N8YTqu';
+  private readonly secondPublicKey = 'zyHtp5YTGqCpo-qlT';
 
   constructor(private api: ApiService) {}
 
@@ -32,7 +34,14 @@ export class EmailService {
         ? `${environment.appBaseUrl}/${RoutePathEnum.SupportingDocuments}?token=${token}`
         : null;
 
-    const params = buildEmailparams(request, dlarsLink, { approvedBy });
+    const completedRequest =
+      approvedBy === ApproverRolesEnum.Director
+        ? `${environment.appBaseUrl}/${RoutePathEnum.CompletedRequest}?token=${token}`
+        : null;
+
+    const params = buildEmailparams(request, dlarsLink, completedRequest, {
+      approvedBy,
+    });
 
     emailjs
       .send(
@@ -42,12 +51,7 @@ export class EmailService {
         this.firstPublicKey
       )
       .then(
-        (result: EmailJSResponseStatus) => {
-          console.log(
-            `Approval email sent to ${params.requesterEmail}:`,
-            result.status
-          );
-        },
+        (result: EmailJSResponseStatus) => {},
         (error) => {
           console.error(
             `Failed to send approval email to ${params.requesterEmail}:`,
@@ -61,7 +65,7 @@ export class EmailService {
     request: RequestGenTokenModel,
     declinedBy: ApproverRolesEnum
   ): void {
-    const params = buildEmailparams(request, null, { declinedBy });
+    const params = buildEmailparams(request, null, null, { declinedBy });
 
     emailjs
       .send(
@@ -71,12 +75,7 @@ export class EmailService {
         this.firstPublicKey
       )
       .then(
-        (result: EmailJSResponseStatus) => {
-          console.log(
-            `Decline email sent to ${params.requesterEmail}:`,
-            result.status
-          );
-        },
+        (result: EmailJSResponseStatus) => {},
         (error) => {
           console.error(
             `Failed to send rejection email to ${params.requesterEmail}:`,

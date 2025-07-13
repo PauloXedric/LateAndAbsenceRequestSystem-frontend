@@ -6,7 +6,7 @@ import { ChairpersonSidebarComponent } from '../chairperson-sidebar/chairperson-
 import { MainComponent, NotificationComponent } from '@shared/components';
 import { Observable } from 'rxjs';
 import { RequestReadModel } from '@shared/_models';
-import { SignalrRequestService } from '@shared/_hubs/signalr-request.service';
+import { SignalrRequestService } from '@core/_hubs/signalr-request.service';
 
 @Component({
   selector: 'app-chairperson-navigation',

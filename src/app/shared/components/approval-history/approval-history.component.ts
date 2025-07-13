@@ -95,7 +95,6 @@ export class ApprovalHistoryComponent implements OnInit, OnDestroy {
           dateFilter,
           studentNumberFilter,
         };
-        console.log('📤 Sending API request with params:', params);
         return this.requestHistoryService.getAllRequestHistory(params).pipe(
           catchError(() =>
             of({

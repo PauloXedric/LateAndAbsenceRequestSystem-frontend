@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { SecretarySidebarComponent } from '../secretary-sidebar/secretary-sidebar.component';
 import { MainComponent, NotificationComponent } from '@shared/components';
-import { SignalrRequestService } from '@shared/_hubs/signalr-request.service';
+import { SignalrRequestService } from '@core/_hubs/signalr-request.service';
 import { RequestReadModel } from '@shared/_models';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';

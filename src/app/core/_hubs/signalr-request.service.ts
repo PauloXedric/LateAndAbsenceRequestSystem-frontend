@@ -27,7 +27,6 @@ export class SignalrRequestService {
     try {
       await this.hubConnection.start();
       this.isConnected = true;
-      console.log('SignalR connection established.');
     } catch (err) {
       console.error('SignalR connection failed:', err);
     }
@@ -41,7 +40,6 @@ export class SignalrRequestService {
 
     try {
       await this.hubConnection.invoke('JoinStatusGroup', statusId);
-      console.log(`Joined status group: ${statusId}`);
     } catch (err) {
       console.error(`Failed to join group for status ${statusId}:`, err);
     }

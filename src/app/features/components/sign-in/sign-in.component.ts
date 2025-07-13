@@ -133,7 +133,6 @@ export class SignInComponent implements OnInit {
             'Reset password link sent! Please check your email inbox to proceed.'
           );
           const username = this.forgotPasswordForm.value;
-          console.log(username);
           this.userService.requestResetPassword(username).subscribe({
             next: (res) => {
               const { token, username } = res;

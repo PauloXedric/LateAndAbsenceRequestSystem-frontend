@@ -1,0 +1,80 @@
+<div class="card-wrapper">
+  <p-card>
+    <ng-template #header>
+      <div class="custom-card-header">
+        <img src="assets/images/psuLogo.png" alt="Logo" class="header-logo" />
+        <span>PSU - Porac Campus Late And Absence Request System</span>
+      </div>
+    </ng-template>
+
+    <div *ngIf="tokenData && !isExpired" class="request-section">
+      <h3 class="section-title">Request Overview</h3>
+      <ul class="request-list">
+        <li>
+          <span class="label">Student Number:</span>
+          <span>{{ tokenData.studentNumber }}</span>
+        </li>
+        <li>
+          <span class="label">Student Name:</span>
+          <span>{{ tokenData.studentName }}</span>
+        </li>
+        <li>
+          <span class="label">Teacher:</span>
+          <span>{{ tokenData.teacher }}</span>
+        </li>
+        <li>
+          <span class="label">Subject:</span>
+          <span>{{ tokenData.subject }}</span>
+        </li>
+        <li>
+          <span class="label">Date of Absence:</span>
+          <span>{{ tokenData.dateOfAbsence | dateFormat }}</span>
+        </li>
+        <li>
+          <span class="label">Date of Attendance:</span>
+          <span>{{ tokenData.dateOfAttendance | dateFormat }}</span>
+        </li>
+        <li>
+          <span class="label">Reason:</span> <span>{{ tokenData.reason }}</span>
+        </li>
+      </ul>
+
+      <h3 class="section-title">Approval Summary</h3>
+      <ul class="request-list">
+        <li>
+          <span class="label">Porac Campus Secretary:</span>
+          <span>Approved</span>
+        </li>
+        <li>
+          <span class="label">Porac Campus Chairperson:</span>
+          <span>Approved</span>
+        </li>
+        <li>
+          <span class="label">Porac Campus Director:</span>
+          <span>Approved</span>
+        </li>
+      </ul>
+
+      <div class="final-status">
+        <p-message
+          severity="success"
+          text="Your request has been fully approved. Please keep this as a record."
+        ></p-message>
+
+        <p class="validity-note">
+          This request summary link is only valid for 24 hours after generation.
+        </p>
+      </div>
+    </div>
+
+    <div *ngIf="isExpired" class="expired-message">
+      <h3>This link has expired.</h3>
+    </div>
+
+    <div *ngIf="!tokenData && !isExpired">
+      <p>Loading request...</p>
+    </div>
+
+    <app-copyright />
+  </p-card>
+</div>

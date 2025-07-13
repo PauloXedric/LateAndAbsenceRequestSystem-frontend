@@ -28,6 +28,7 @@ import { ButtonModule } from 'primeng/button';
     `
       :host ::ng-deep .p-button {
         width: 100px;
+        margin-right: 0.3rem;
       }
     `,
   ],

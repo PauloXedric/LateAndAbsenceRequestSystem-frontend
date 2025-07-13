@@ -20,6 +20,7 @@ export interface EmailjsParams {
 export function buildEmailparams(
   request: RequestGenTokenModel,
   dlarsLink: string | null,
+  completedRequest: string | null,
   options?: { declinedBy?: string; approvedBy?: string }
 ): EmailjsParams {
   const requesterEmail = `${request.studentNumber}@pampangastateu.edu.ph`;
@@ -42,6 +43,10 @@ export function buildEmailparams(
 
   if (dlarsLink) {
     params['dlarsLink'] = dlarsLink;
+  }
+
+  if (completedRequest) {
+    params['completedRequest'] = completedRequest;
   }
 
   return params;
