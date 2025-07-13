@@ -1,59 +1,72 @@
-# DLARS
+# Late and Absence Request System - Frontend (Angular)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.11.
+This is the frontend client for the Late and Absence Request System — a modern Angular application that allows students to submit absence/lateness requests and enables administrators to manage approvals, notifications, and request tracking in real time.
 
-## Development server
+> Institutional names have been omitted for privacy.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## Built With
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Angular 19**
+- **PrimeNG 19** – UI components
+- **JWT & Angular Guards** – Secure routes and API requests
+- **SignalR** – Real-time notifications
+- **EmailJS** – Frontend-triggered transactional emails
+- **RxJS & Forms** – Reactive and template-driven forms
+- **SCSS + PrimeFlex** – Styling and responsive layout
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## JWT Authentication & Guards
 
-```bash
-ng generate component component-name
-```
+- Uses `@auth0/angular-jwt` to attach JWTs to requests.
+- Route access is protected using Angular route guards.
+- Tokens are decoded and validated client-side for secure flow.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## EmailJS Integration
 
-## Building
+EmailJS is used for multiple notification workflows:
+1. **Student Notifications** – Students are notified at each step (approved and declined).
+2. **Supporting Document Uploads** – Students receive a secure JWT link via email to upload required documents.
+3. **Admin Password Reset** – Admins receive a password reset link triggered from the frontend.
+4. **Admin Registration** - Newly invited user will receive secure JWT link via email for registration.
 
-To build the project run:
+---
 
-```bash
-ng build
-```
+## Real-Time Features
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- **SignalR Integration** allows administrators to receive real-time notifications for new request submissions, synced across roles (Secretary, Chairperson, Director).
 
-## Running unit tests
+---
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Features Overview
 
-```bash
-ng test
-```
+- Login/Register via JWT (admin and student)
+- Request submission and history
+- Upload supporting documents
+- Admin approval workflow with real-time updates
+- Notification bell using SignalR
+- EmailJS-powered status updates and password resets
+- Password reset and account recovery
+- Filtering and table components using PrimeNG
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## Backend API
 
-```bash
-ng e2e
-```
+This frontend connects to the [Late and Absence Request System - Backend](https://github.com/PauloXedric/LateAndAbsenceRequestSystem-frontend) (ASP.NET Core 9). All authentication, request processing, and admin logic are handled via secure API calls.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
-## Additional Resources
+---
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Author
+
+**Paulo Xedric Lozano**  
+GitHub: [@PauloXedric](https://github.com/PauloXedric)  
+100% Designed, built, and maintained by me.
+
+
+
