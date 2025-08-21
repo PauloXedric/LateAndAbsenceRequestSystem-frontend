@@ -35,7 +35,7 @@ export const appConfig: ApplicationConfig = {
         config: {
           tokenGetter: tokenGetter,
           allowedDomains: [new URL(environment.apiBaseUrl).host],
-          disallowedRoutes: [`${environment.apiBaseUrl}/UserAccount/Login`],
+          disallowedRoutes: [`${environment.apiBaseUrl}/UserAccount/login`],
         },
       })
     ),
