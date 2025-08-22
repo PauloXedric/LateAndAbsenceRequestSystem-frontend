@@ -19,10 +19,7 @@ import { CardModule } from 'primeng/card';
 import { FluidModule } from 'primeng/fluid';
 import { TextareaModule } from 'primeng/textarea';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-import {
-  TeacherAssignedSubjectsModel,
-  TeacherReadModel,
-} from '@shared/_models';
+import { TeacherAssignedSubjectsModel } from '@shared/_models';
 import { CopyrightComponent } from '@shared/components';
 
 @Component({
@@ -81,6 +78,16 @@ export class RequestComponent implements OnInit {
       parentsCpNumber: ['', Validators.required],
       reason: ['', Validators.required],
     });
+
+    this.requestForm
+      .get('courseYearSection')
+      ?.valueChanges.subscribe((value) => {
+        if (value) {
+          this.requestForm
+            .get('courseYearSection')
+            ?.setValue(value.toUpperCase(), { emitEvent: false });
+        }
+      });
 
     this.teacherSubjectService
       .getAllTeacherAssignedSubjects()
