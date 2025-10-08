@@ -21,11 +21,14 @@ import { TextareaModule } from 'primeng/textarea';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { TeacherAssignedSubjectsModel } from '@shared/_models';
 import { CopyrightComponent } from '@shared/components';
+import { SmsService } from '@features/_services/sms.service';
+import { DateFormatPipe } from '@shared/_pipes/date-format.pipe';
 
 @Component({
   selector: 'request-form',
   standalone: true,
   templateUrl: './request.component.html',
+  providers: [DateFormatPipe],
   imports: [
     InputTextModule,
     FloatLabelModule,
@@ -59,7 +62,9 @@ export class RequestComponent implements OnInit {
     private fb: FormBuilder,
     private requestService: RequestService,
     private toastService: ToastService,
-    private teacherSubjectService: TeacherSubjectService
+    private teacherSubjectService: TeacherSubjectService,
+    private smsService: SmsService,
+    private dateFormatPipe: DateFormatPipe
   ) {}
 
   ngOnInit(): void {
@@ -103,9 +108,30 @@ export class RequestComponent implements OnInit {
     }
 
     const newRequest: RequestCreateModel = this.requestForm.value;
+
     this.requestService.addNewRequest(newRequest).subscribe({
       next: (res) => {
         this.toastService.showSuccess(res.message);
+
+        const formattedDate = this.dateFormatPipe.transform(new Date());
+
+        const message = `[PSU - Porac Campus Notification]
+
+Dear Parent/Guardian,
+
+This is to formally notify you that your child, ${newRequest.studentName}, has submitted a Lateness/Absence Request for the subject "${newRequest.subjectCode}" on ${formattedDate}.
+
+This message serves as the official record that you have been notified of this request, in compliance with school documentation requirements.`;
+
+        this.smsService.sendSms(newRequest.parentsCpNumber, message).subscribe({
+          next: (smsRes) => {
+            console.log('SMS sent:', smsRes);
+          },
+          error: (smsErr) => {
+            console.error('SMS sending failed:', smsErr);
+          },
+        });
+
         this.requestForm.reset();
       },
       error: (err) => {
@@ -113,7 +139,7 @@ export class RequestComponent implements OnInit {
           this.toastService.showWarn(err.error.message);
         } else {
           this.toastService.showError(
-            err.error?.message || 'Error occureed while adding subject.'
+            err.error?.message || 'Error occurred while adding request.'
           );
         }
       },
